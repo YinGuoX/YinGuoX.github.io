@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="King">
   <meta name="keywords" content="">
-  <title>跳跳马-Chess1.0 - 因果</title>
+  <title>跳跳马1.0 - 因果</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    1.8k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                       <i class="far fa-clock"></i>
                     
                     
-                    26
+                    27
                      分钟
                   </span>
                 
@@ -177,13 +177,20 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h2 id="QUESTION"><a href="#QUESTION" class="headerlink" title="QUESTION"></a>QUESTION</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据国际象棋的规则和棋盘大小，使用马的行走规则，将棋盘中的所有小兵都吃完<br>即通关计分。<br><img src="/img/loding.gif" srcset="/img/loading.gif" alt=""></p>
-<center>界面</center>
+              <h1 id="跳跳马1-0"><a href="#跳跳马1-0" class="headerlink" title="跳跳马1.0"></a>跳跳马1.0</h1><h2 id="1-游戏介绍"><a href="#1-游戏介绍" class="headerlink" title="1.游戏介绍:"></a>1.游戏介绍:</h2><hr>
+<p>根据国际象棋的规则和棋盘大小，并且遵守马的行走规则，使用马将棋盘中的所有小兵都吃完，即通关计分。<br>具体游戏界面如下图:<br><img src="/img/Chessimg/chess1.jpg" srcset="/img/loading.gif" alt=""></p>
+<center>游戏界面 </center>
 
-<hr>
-<h2 id="ANSWER"><a href="#ANSWER" class="headerlink" title="ANSWER"></a>ANSWER</h2><h3 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h3><p>关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注 : –来自: 《离散数学引论》<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈密顿图 : 存在一条哈密顿圈<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈密顿路 : 图中存在一条经过所有节点并且不重复的路</p>
-<h3 id="Think"><a href="#Think" class="headerlink" title="Think"></a>Think</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要思想 : 将马和小兵抽象成图上的结点，如果小兵与小兵之间或者小兵与马之间满足马的行走规则,则将其连线，从而形成一张图，进而转换成求图上的哈密顿路问题。</p>
-<h3 id="Show-Code"><a href="#Show-Code" class="headerlink" title="Show Code"></a>Show Code</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过节点间的度的关系进行判断，并且采用栈来存储之前遍历过的结点。<br>由于回溯存在问题，以下代码还待完善</p>
+
+<h2 id="2-实际问题"><a href="#2-实际问题" class="headerlink" title="2.实际问题:"></a>2.实际问题:</h2><hr>
+<p>随着通过的关卡越多，小兵的数量也越多，而马只要走错一步就直接结束游戏，因此在每一步都必须十分正确，所以有必要使用程序来辅助玩家选择最恰当的路径，进而通关</p>
+<h2 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3.解决方法:"></a>3.解决方法:</h2><hr>
+<h3 id="3-1使用到的相关知识"><a href="#3-1使用到的相关知识" class="headerlink" title="3.1使用到的相关知识:"></a>3.1使用到的相关知识:</h3><p>关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图</p>
+<blockquote>
+<p>《离散数学引论》:<br>哈密顿图 : 存在一条哈密顿圈<br>哈密顿路 : 图中存在一条经过所有节点并且不重复的路</p>
+</blockquote>
+<h3 id="3-2-主要思想"><a href="#3-2-主要思想" class="headerlink" title="3.2 主要思想:"></a>3.2 主要思想:</h3><p>将马和小兵抽象成图上的结点，如果小兵与小兵之间或者小兵与马之间满足马的行走规则,则将其连线，从而形成一张图，进而转换成求图上的哈密顿路问题。<br>如下图:<br><img src="/img/Chessimg/chess2.jpg" srcset="/img/loading.gif" alt=""><br>寻找一条哈密顿路:<br><img src="/img/Chessimg/chess3.jpg" srcset="/img/loading.gif" alt=""></p>
+<h2 id="4-代码实现"><a href="#4-代码实现" class="headerlink" title="4.代码实现:"></a>4.代码实现:</h2><p>使用邻接矩阵来存储图，采用BFS策略来进行路径的选择，通过节点间的度的关系来进行回溯约束，并且采用栈来存储之前遍历过的结点。</p>
 <pre><code>#include&lt;stdio.h&gt;
 #include&lt;stdlib.h&gt;
 //邻接矩阵结构
@@ -471,7 +478,8 @@ int main()
     PrintStack();
     return 0;
 }
-</code></pre>
+</code></pre><h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>代码功能没有实现，应该是回溯栈的选择和约束条件的问题，以后有机会在实现~</p>
+
             </div>
             <hr>
             <div>
@@ -504,6 +512,12 @@ int main()
                 <div class="post-prevnext row">
                   <div class="post-prev col-6">
                     
+                    
+                      <a href="/2020/04/09/Chess2.0/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">跳跳马2.0</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-6">
@@ -715,7 +729,7 @@ int main()
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "跳跳马-Chess1.0&nbsp;",
+        "跳跳马1.0&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 250,
