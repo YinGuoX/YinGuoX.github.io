@@ -4,6 +4,62 @@
   
   
   <entry>
+    <title>实用网站</title>
+    <link href="/2020/04/10/web1.0/"/>
+    <url>/2020/04/10/web1.0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Practical-websites"><a href="#Practical-websites" class="headerlink" title="Practical websites"></a>Practical websites</h1><hr><h3 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h3><h4 id="图片海报"><a href="#图片海报" class="headerlink" title="图片海报 :"></a>图片海报 :</h4><p>创客贴 : <a href="https://www.chuangkit.com/templatecenter" target="_blank" rel="noopener">https://www.chuangkit.com/templatecenter</a></p><h4 id="图片压缩"><a href="#图片压缩" class="headerlink" title="图片压缩 :"></a>图片压缩 :</h4><p>Recompressor : <a href="https://recompressor.com/" target="_blank" rel="noopener">https://recompressor.com/</a><br>Squoosh : <a href="https://squoosh.app/" target="_blank" rel="noopener">https://squoosh.app/</a><br>Tingpng : <a href="https://tinypng.com/" target="_blank" rel="noopener">https://tinypng.com/</a></p><h4 id="个人简历"><a href="#个人简历" class="headerlink" title="个人简历 :"></a>个人简历 :</h4><p>超级简历 :  <a href="https://www.wondercv.com/" target="_blank" rel="noopener">https://www.wondercv.com/</a></p><h4 id="写作"><a href="#写作" class="headerlink" title="写作 :"></a>写作 :</h4><p>Get写作 : <a href="https://getgetai.com/" target="_blank" rel="noopener">https://getgetai.com/</a><br>Markdown编辑器 : <a href="https://www.zybuluo.com" target="_blank" rel="noopener">https://www.zybuluo.com</a><br>英语写作 : <a href="http://www.1checker.com/" target="_blank" rel="noopener">http://www.1checker.com/</a></p><h4 id="绘图"><a href="#绘图" class="headerlink" title="绘图 :"></a>绘图 :</h4><p>Processon 支持流程图、思维导图\UML、网络拓扑图、组织结构图等 : <a href="https://www.processon.com/" target="_blank" rel="noopener">https://www.processon.com/</a></p><h3 id="Study"><a href="#Study" class="headerlink" title="Study"></a>Study</h3><h4 id="论文"><a href="#论文" class="headerlink" title="论文 :"></a>论文 :</h4><p>Communications of the ACM : <a href="https://cacm.acm.org/" target="_blank" rel="noopener">https://cacm.acm.org/</a><br>中国知网 : <a href="https://www.cnki.net/" target="_blank" rel="noopener">https://www.cnki.net/</a><br>笔杆查重 : <a href="https://www.bigan.net/" target="_blank" rel="noopener">https://www.bigan.net/</a><br>Paperpass : <a href="https://www.paperpass.com/" target="_blank" rel="noopener">https://www.paperpass.com/</a></p><h4 id="视频"><a href="#视频" class="headerlink" title="视频 :"></a>视频 :</h4><p>中国大学MOOC : <a href="https://www.icourse163.org/" target="_blank" rel="noopener">https://www.icourse163.org/</a><br>慕课网-程序员 :  <a href="https://www.imooc.com/" target="_blank" rel="noopener">https://www.imooc.com/</a><br>网易云课堂 : <a href="https://study.163.com/" target="_blank" rel="noopener">https://study.163.com/</a><br>网易公开课 : <a href="https://open.163.com/" target="_blank" rel="noopener">https://open.163.com/</a><br>爱课程 : <a href="https://sso.icourses.cn" target="_blank" rel="noopener">https://sso.icourses.cn</a><br>Coursera : <a href="https://www.coursera.org/" target="_blank" rel="noopener">https://www.coursera.org/</a><br>盗盗盗 : <a href="https://ctokey.com/" target="_blank" rel="noopener">https://ctokey.com/</a></p><h3 id="Internet"><a href="#Internet" class="headerlink" title="Internet"></a>Internet</h3><h4 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网:"></a>科学上网:</h4><p>DogCould : <a href="https://www.ggjs.xyz/" target="_blank" rel="noopener">https://www.ggjs.xyz/</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Gadgets</category>
+      
+      <category>Web</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Web</tag>
+      
+      <tag>Design</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>跳跳马3.0</title>
+    <link href="/2020/04/10/Chess3.0/"/>
+    <url>/2020/04/10/Chess3.0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="跳跳马3-0"><a href="#跳跳马3-0" class="headerlink" title="跳跳马3.0"></a>跳跳马3.0</h1><hr><p>进一步对跳跳马2.0程序输入和输出界面的优化:<br>1.添加了一些界面提示语句<br>2.进行了代码局部优化</p><h2 id="1-代码实现"><a href="#1-代码实现" class="headerlink" title="1.代码实现:"></a>1.代码实现:</h2><hr><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 64int IsSamePoint(int x,int b[],int n);int main(){    int a[N][N];    int b[N];//用来存储已经经过的点    int c[N];//记录上一个顶点的列号    int i,j,count=1,row,col,n;    printf(&quot;输入顶点数目:\n&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf(&quot;n=%d\n&quot;,n);    for(i=0;i&lt;n;i++)    {        b[i]=-1;        c[i]=-1;    }    b[0]=0;    c[0]=0;    for(i=0;i&lt;n;i++)    {        for(j=0;j&lt;n;j++)        {            a[i][j]=0;        }    }    do    {        printf(&quot;请输入对应的边(x y 1)(输入一半即可,-1表示结束):\n&quot;);        scanf(&quot;%d%d&quot;,&amp;i,&amp;j);        scanf(&quot;%d&quot;,&amp;a[i][j]);        //printf(&quot;(%d,%d)=%d\n&quot;,i,j,a[i][j]);        //printf(&quot;res=%d\n&quot;,res);        a[j][i]=a[i][j];    }while(i!=-1);    for(i=0;i&lt;n;i++)    {        for(j=0;j&lt;n;j++)        {            printf(&quot;%4d&quot;,a[i][j]);        }        printf(&quot;\n&quot;);    }    row=0;    col=1;    while(count&lt;n)    {        if(a[row][col]!=0&amp;&amp;IsSamePoint(col,b,n))        {            printf(&quot;(%d,%d)--&gt;(%d,0)\n&quot;,row,col,col);            b[count]=col;            count++;            row=col;            col=0;        }else        {            if(col&lt;n-1)            {                col++;            }else            {                //回溯                do{                    row=b[count-2];                    col=b[count-1]+1;                    printf(&quot;col=%d\n&quot;,col);                    b[count-1]=-1;                    count--;                }while(col&gt;=n);                printf(&quot;回溯到:(%d,%d)\n&quot;,row,col-1);                //printf(&quot;越界了\n&quot;);            }        }    }    for(i=0;i&lt;n;i++)    {        printf(&quot;%d  &quot;,b[i]);    }    return 0;}//在b中判断是否有与x相同的元素//有相同就返回0int IsSamePoint(int x,int b[],int n){    int i,flag=1;    for(i=0;i&lt;n;i++)    {        //printf(&quot;b=%d,x=%d\n&quot;,b[i],x);        if(b[i]==x)        {            flag=0;            return flag;        }    }    return flag;}</code></pre><h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>只是完成了最基本的可视化界面。<br>查询理论上可以继续优化:<br>主要思路:<br>1.可以尝试使用邻接表来存储，节约存储空间，但是回溯是一个问题。<br>2.可以尝试使用动态规划，理论上应该满足优化子结构和重叠子问题。<br>3.可以进一步优化输入输出，目标:上传图片，使其自动化处理棋盘和生成对应的图:</p><blockquote><p>Think:<br>图像处理、模式识别、数据可视化</p></blockquote><h4 id="未完待续-2020-4-10–-gt"><a href="#未完待续-2020-4-10–-gt" class="headerlink" title="未完待续(2020.4.10–&gt;)"></a>未完待续(2020.4.10–&gt;)</h4>]]></content>
+    
+    
+    <categories>
+      
+      <category>Practice</category>
+      
+      <category>Chess</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Chess</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>跳跳马2.0</title>
     <link href="/2020/04/09/Chess2.0/"/>
     <url>/2020/04/09/Chess2.0/</url>

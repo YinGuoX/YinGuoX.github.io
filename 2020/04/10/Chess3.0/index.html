@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="King">
   <meta name="keywords" content="">
-  <title>跳跳马2.0 - 因果</title>
+  <title>跳跳马3.0 - 因果</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 四月 9日 2020, 6:51 晚上
+                  星期五, 四月 10日 2020, 6:33 晚上
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    487 字
+                    586 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                       <i class="far fa-clock"></i>
                     
                     
-                    7
+                    9
                      分钟
                   </span>
                 
@@ -177,43 +177,48 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h1 id="跳跳马2-0"><a href="#跳跳马2-0" class="headerlink" title="跳跳马2.0"></a>跳跳马2.0</h1><hr>
-<p>依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。</p>
-<h2 id="1-解决方法"><a href="#1-解决方法" class="headerlink" title="1.解决方法:"></a>1.解决方法:</h2><hr>
-<h3 id="1-1-主要思想"><a href="#1-1-主要思想" class="headerlink" title="1.1 主要思想:"></a>1.1 主要思想:</h3><p>2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点</p>
-<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现:"></a>2.代码实现:</h2><hr>
-<p>可以正确执行！！！</p>
+              <h1 id="跳跳马3-0"><a href="#跳跳马3-0" class="headerlink" title="跳跳马3.0"></a>跳跳马3.0</h1><hr>
+<p>进一步对跳跳马2.0程序输入和输出界面的优化:<br>1.添加了一些界面提示语句<br>2.进行了代码局部优化</p>
+<h2 id="1-代码实现"><a href="#1-代码实现" class="headerlink" title="1.代码实现:"></a>1.代码实现:</h2><hr>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
-#define N 14
+#define N 64
 int IsSamePoint(int x,int b[],int n);
 int main()
 {
     int a[N][N];
     int b[N];//用来存储已经经过的点
     int c[N];//记录上一个顶点的列号
-    int i,j,count=1,row,col;
-    for(i=0;i&lt;N;i++)
+    int i,j,count=1,row,col,n;
+    printf(&quot;输入顶点数目:\n&quot;);
+    scanf(&quot;%d&quot;,&amp;n);
+    printf(&quot;n=%d\n&quot;,n);
+    for(i=0;i&lt;n;i++)
     {
         b[i]=-1;
-        c[N]=-1;
+        c[i]=-1;
     }
     b[0]=0;
     c[0]=0;
-    for(i=0;i&lt;N;i++)
+    for(i=0;i&lt;n;i++)
     {
-        for(j=0;j&lt;N;j++)
+        for(j=0;j&lt;n;j++)
         {
             a[i][j]=0;
         }
     }
     do
     {
-        scanf(&quot;%d%d%d&quot;,&amp;i,&amp;j,&amp;a[i][j]);
+        printf(&quot;请输入对应的边(x y 1)(输入一半即可,-1表示结束):\n&quot;);
+        scanf(&quot;%d%d&quot;,&amp;i,&amp;j);
+        scanf(&quot;%d&quot;,&amp;a[i][j]);
+        //printf(&quot;(%d,%d)=%d\n&quot;,i,j,a[i][j]);
+        //printf(&quot;res=%d\n&quot;,res);
+        a[j][i]=a[i][j];
     }while(i!=-1);
-    for(i=0;i&lt;N;i++)
+    for(i=0;i&lt;n;i++)
     {
-        for(j=0;j&lt;N;j++)
+        for(j=0;j&lt;n;j++)
         {
             printf(&quot;%4d&quot;,a[i][j]);
         }
@@ -221,9 +226,9 @@ int main()
     }
     row=0;
     col=1;
-    while(count&lt;N)
+    while(count&lt;n)
     {
-        if(a[row][col]!=0&amp;&amp;IsSamePoint(col,b,N))
+        if(a[row][col]!=0&amp;&amp;IsSamePoint(col,b,n))
         {
             printf(&quot;(%d,%d)--&gt;(%d,0)\n&quot;,row,col,col);
             b[count]=col;
@@ -232,7 +237,7 @@ int main()
             col=0;
         }else
         {
-            if(col&lt;N-1)
+            if(col&lt;n-1)
             {
                 col++;
             }else
@@ -244,14 +249,14 @@ int main()
                     printf(&quot;col=%d\n&quot;,col);
                     b[count-1]=-1;
                     count--;
-                }while(col&gt;=N);
+                }while(col&gt;=n);
                 printf(&quot;回溯到:(%d,%d)\n&quot;,row,col-1);
                 //printf(&quot;越界了\n&quot;);
             }
         }
 
     }
-    for(i=0;i&lt;N;i++)
+    for(i=0;i&lt;n;i++)
     {
         printf(&quot;%d  &quot;,b[i]);
     }
@@ -272,9 +277,11 @@ int IsSamePoint(int x,int b[],int n)
         }
     }
     return flag;
-}
-</code></pre><p>代码不足:对应的界面还未完善，只是实现了最核心的功能<br>代码的时间复杂度和空间复杂度应该可以进一步优化。</p>
-
+}</code></pre><h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>只是完成了最基本的可视化界面。<br>查询理论上可以继续优化:<br>主要思路:<br>1.可以尝试使用邻接表来存储，节约存储空间，但是回溯是一个问题。<br>2.可以尝试使用动态规划，理论上应该满足优化子结构和重叠子问题。<br>3.可以进一步优化输入输出，目标:上传图片，使其自动化处理棋盘和生成对应的图:</p>
+<blockquote>
+<p>Think:<br>图像处理、模式识别、数据可视化</p>
+</blockquote>
+<h4 id="未完待续-2020-4-10–-gt"><a href="#未完待续-2020-4-10–-gt" class="headerlink" title="未完待续(2020.4.10–&gt;)"></a>未完待续(2020.4.10–&gt;)</h4>
             </div>
             <hr>
             <div>
@@ -308,9 +315,9 @@ int IsSamePoint(int x,int b[],int n)
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/04/10/Chess3.0/">
+                      <a href="/2020/04/10/web1.0/">
                         <i class="fa fa-chevron-left"></i>
-                        <span class="hidden-mobile">跳跳马3.0</span>
+                        <span class="hidden-mobile">实用网站</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -318,8 +325,8 @@ int IsSamePoint(int x,int b[],int n)
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/04/08/Chess1.0/">
-                        <span class="hidden-mobile">跳跳马1.0</span>
+                      <a href="/2020/04/09/Chess2.0/">
+                        <span class="hidden-mobile">跳跳马2.0</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
@@ -524,7 +531,7 @@ int IsSamePoint(int x,int b[],int n)
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "跳跳马2.0&nbsp;",
+        "跳跳马3.0&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 250,
