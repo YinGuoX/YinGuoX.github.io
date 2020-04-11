@@ -4,6 +4,136 @@
   
   
   <entry>
+    <title>C语言改错T3</title>
+    <link href="/2020/04/11/CorrectionT3/"/>
+    <url>/2020/04/11/CorrectionT3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T3"><a href="#C语言改错T3" class="headerlink" title="C语言改错T3"></a>C语言改错T3</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><h3 id="分清"><a href="#分清" class="headerlink" title="分清:"></a>分清:</h3><p>1.指针数组:  int *p[4]<br><strong>常用于字符串交换,因为相比strcpy()更加节省时间和空间</strong><br><strong>故使用指针数组进行交换效率更高索引技术、索引排序</strong></p><blockquote><p>函数中使用:<br>void Fun(int *p[M]);<br>Fun(p);</p></blockquote><p>2.二维数组的 行指针 :  int (*p)[4] </p><blockquote><p>p[i]==*(p+i):也就是p[i]的地址！！！<br>p[i][j] == *(p[i]+j) == *(*(p+i)+j) == (*(a+i))[j]<br>&amp;p[i][j] == p[i]+j == *(p+i)+j<br>函数中使用:<br>void Fun(int (*p)[M]);<br>Fun(p);//p == p[0] == p[0]的地址</p></blockquote><p>3.二维数组的列指针 :  int *p; p=*a</p><blockquote><p>p=*a &lt;==&gt; p=a[0] &lt;==&gt; p=&amp;a[0][0]<br>a[i][j]=*(p+i*n+j)<br>&amp;a[i][j]=p+i*n+j<br>函数中使用:<br>void Fun(int *p);<br>Fun(*p);</p></blockquote><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/28.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:指针数组的妙用！！！</p><pre><code>#include&lt;stdio.h&gt;#include&lt;string.h&gt;void Input(char *p[], int n);void Sort(char *p[], int n);void Print(char *p[], int n);int main(){                    char str[20][40];    char *pstr[20];    int i, n;    printf(&quot;Input n(n&lt;=20):\n&quot;);    scanf(&quot;%d&quot;, &amp;n);    //注意要清空缓冲区里的空格    getchar();    for (i = 0; i &lt; n; i++)    {                  //指针数组要初始化        pstr[i] = str[i];           //2    }    Input(pstr, n);    Sort(pstr, n);    printf(&quot;Results:\n&quot;);    Print(pstr, n);    return 0;}                void Input(char *p[], int n){                    int i;    for (i = 0; i &lt; n; i++)    {                        gets(p[i]);    }}                void Sort(char *p[], int n){                    char *t;                              //1    int i, j;    for (i = 0; i &lt; n - 1; i++)    {                        //注:j=i+1而不是1        for (j = i + 1; j &lt; n; j++)        {                            if (strcmp(p[j], p[i]) &lt; 0)    //2            {                       //直接用指针数组来简化strcpy()                t = p[i];                p[i] = p[j];                p[j] = t;            }        }    }}                void Print(char *p[], int n){                    int i;    for (i = 0; i &lt; n; i++)    {                        printf(&quot;%s\n&quot;, p[i]);    }}               </code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言改错T2</title>
+    <link href="/2020/04/11/CorrectionT2/"/>
+    <url>/2020/04/11/CorrectionT2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T2"><a href="#C语言改错T2" class="headerlink" title="C语言改错T2"></a>C语言改错T2</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p>1.认真核对<strong>输入</strong>、<strong>输出</strong>格式<br><strong>换行、空格到底要不要???</strong>(没有特殊提示应该不用吧~now)</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/27.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>多了一个换行~</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int mon[][13]={    {0,31,28,31,30,31,30,31,31,30,31,30,31},    {0,31,29,31,30,31,30,31,31,30,31,30,31},};int  DayofYear(int year, int month, int day);void  MonthDay(int year, int yearDay, int *pMonth, int *pDay);int main(){    int choice,year,month,day,yearday,pmonth,pday;    printf(&quot;1. year/month/day -&gt; yearDay\n&quot;);    printf(&quot;2. yearDay -&gt; year/month/day\n&quot;);    printf(&quot;3. Exit\n&quot;);    //这里不用换行了！！！    printf(&quot;Please enter your choice:&quot;);    scanf(&quot;%d&quot;,&amp;choice);    switch(choice)    {    case 1:        printf(&quot;Please enter year, month, day:&quot;);        scanf(&quot;%d,%d,%d&quot;,&amp;year,&amp;month,&amp;day);        yearday=DayofYear(year,month,day);        printf(&quot;yearDay = %d\n&quot;,yearday);        break;    case 2:        printf(&quot;Please enter year, yearDay:&quot;);        scanf(&quot;%d,%d&quot;,&amp;year,&amp;yearday);        MonthDay(year,yearday,&amp;pmonth,&amp;pday);        printf(&quot;month = %d,day = %d\n&quot;,pmonth,pday);        break;    case 3:        return 0;    }    return 0;}int  DayofYear(int year, int month, int day){    int i,leap,d=day;    leap=year%100!=0&amp;&amp;year%4==0||year%400==0;    for(i=0;i&lt;month;i++)    {        d+=mon[leap][i];    }    return d;}void  MonthDay(int year, int yearDay, int *pMonth, int *pDay){    int i=0,leap;    leap=year%100!=0&amp;&amp;year%4==0||year%400==0;    while(1)    {        yearDay-=mon[leap][i];        i++;        if(yearDay&lt;mon[leap][i])        {            break;        }    }    *pMonth=i;    *pDay=yearDay;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T1</title>
+    <link href="/2020/04/11/CprogrammingT1/"/>
+    <url>/2020/04/11/CprogrammingT1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T1"><a href="#C语言编程T1" class="headerlink" title="C语言编程T1"></a>C语言编程T1</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一:"></a>思路一:</h3><p>采用gets()/scanf()直接输入字符串<br>1.考虑符号和数字的分离、判断输入是否正确<br>2.采用栈或者队列来进行运算<br>综上所述:较为复杂！！！</p><h3 id="思路二"><a href="#思路二" class="headerlink" title="思路二:"></a>思路二:</h3><p>采用getchar()直接输入字符<br>1.一个一个字符输入，故要进行分类计算(if),判断何时计算、何时停止<br>2.通过代码顺序实现类似栈的操作<br>可以一试！！！</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/24.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心 : 在得到第二个运算符时，计算前一个运算符!!!</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int main(void){    int num, num1, op;    char ch;    //用来计算最先输入的数    num = 0;//第一个数    num1 = 0;//第二个数    op = &#39;+&#39;;    do    {        ch = getchar();        if (ch &gt;= &#39;0&#39; &amp;&amp; ch &lt;= &#39;9&#39;)        {        //将输入的字符12转换成数字12            num1 = num1 * 10 + (ch - &#39;0&#39;);        }        else        {        //计算前一个运算符!!!            if (op == &#39;+&#39;)            {                num = num + num1;            }            else if (op == &#39;-&#39;)            {                num = num - num1;            }            else if (op == &#39;*&#39;)            {                num = num * num1;            }            else if (op == &#39;/&#39;)            {                num = num / num1;            }            else            {                printf(&quot;错误的运算符：%c&quot;, op);                exit(0);            }         //不得不说...神奇         op = ch;         //初始化         num1 = 0;        }    }while (ch != &#39;=&#39;);    printf(&quot;%d&quot;, num);    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言改错T1</title>
+    <link href="/2020/04/10/CorrectionT1/"/>
+    <url>/2020/04/10/CorrectionT1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T1"><a href="#C语言改错T1" class="headerlink" title="C语言改错T1"></a>C语言改错T1</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p>1.认真核对<strong>输入</strong>、<strong>输出</strong>格式<br>2.严格根据题目约束条件、<strong>理论结合实际</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/23.1.png" srcset="/img/loading.gif" alt=""><br><img src="/img/c_correction/23.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 100int main(){    char str1[N],str2[N];    int i,j;    printf(&quot;\n输入字符串：&quot;  );    gets(str1);    i=j=0;    for(i=0;str1[i]!=&#39;\0&#39;;i++)    {    //什么叫元音字母！！！        if(str1[i]==&#39;e&#39;||str1[i]==&#39;o&#39;||str1[i]==&#39;a&#39;||str1[i]==&#39;i&#39;||str1[i]==&#39;u&#39;)        {            str2[j]=str1[i];            j++;        }    }    str2[j]=&#39;\0&#39;;    //还要输出这个！！！    printf(&quot;%s&quot;,str1);    printf(&quot;\n字符串中的元音字母是%s&quot;,str2);    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>实用网站</title>
     <link href="/2020/04/10/web1.0/"/>
     <url>/2020/04/10/web1.0/</url>
@@ -64,7 +194,7 @@
     <link href="/2020/04/09/Chess2.0/"/>
     <url>/2020/04/09/Chess2.0/</url>
     
-    <content type="html"><![CDATA[<h1 id="跳跳马2-0"><a href="#跳跳马2-0" class="headerlink" title="跳跳马2.0"></a>跳跳马2.0</h1><hr><p>依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。</p><h2 id="1-解决方法"><a href="#1-解决方法" class="headerlink" title="1.解决方法:"></a>1.解决方法:</h2><hr><h3 id="1-1-主要思想"><a href="#1-1-主要思想" class="headerlink" title="1.1 主要思想:"></a>1.1 主要思想:</h3><p>2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点</p><h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现:"></a>2.代码实现:</h2><hr><p>可以正确执行！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 14int IsSamePoint(int x,int b[],int n);int main(){    int a[N][N];    int b[N];//用来存储已经经过的点    int c[N];//记录上一个顶点的列号    int i,j,count=1,row,col;    for(i=0;i&lt;N;i++)    {        b[i]=-1;        c[N]=-1;    }    b[0]=0;    c[0]=0;    for(i=0;i&lt;N;i++)    {        for(j=0;j&lt;N;j++)        {            a[i][j]=0;        }    }    do    {        scanf(&quot;%d%d%d&quot;,&amp;i,&amp;j,&amp;a[i][j]);    }while(i!=-1);    for(i=0;i&lt;N;i++)    {        for(j=0;j&lt;N;j++)        {            printf(&quot;%4d&quot;,a[i][j]);        }        printf(&quot;\n&quot;);    }    row=0;    col=1;    while(count&lt;N)    {        if(a[row][col]!=0&amp;&amp;IsSamePoint(col,b,N))        {            printf(&quot;(%d,%d)--&gt;(%d,0)\n&quot;,row,col,col);            b[count]=col;            count++;            row=col;            col=0;        }else        {            if(col&lt;N-1)            {                col++;            }else            {                //回溯                do{                    row=b[count-2];                    col=b[count-1]+1;                    printf(&quot;col=%d\n&quot;,col);                    b[count-1]=-1;                    count--;                }while(col&gt;=N);                printf(&quot;回溯到:(%d,%d)\n&quot;,row,col-1);                //printf(&quot;越界了\n&quot;);            }        }    }    for(i=0;i&lt;N;i++)    {        printf(&quot;%d  &quot;,b[i]);    }    return 0;}//在b中判断是否有与x相同的元素//有相同就返回0int IsSamePoint(int x,int b[],int n){    int i,flag=1;    for(i=0;i&lt;n;i++)    {        //printf(&quot;b=%d,x=%d\n&quot;,b[i],x);        if(b[i]==x)        {            flag=0;            return flag;        }    }    return flag;}</code></pre><p>代码不足:对应的界面还未完善，只是实现了最核心的功能<br>代码的时间复杂度和空间复杂度应该可以进一步优化。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="跳跳马2-0"><a href="#跳跳马2-0" class="headerlink" title="跳跳马2.0"></a>跳跳马2.0</h1><hr><p>依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。</p><h2 id="1-解决方法"><a href="#1-解决方法" class="headerlink" title="1.解决方法:"></a>1.解决方法:</h2><hr><h3 id="1-1-主要思想"><a href="#1-1-主要思想" class="headerlink" title="1.1 主要思想:"></a>1.1 主要思想:</h3><p>2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点</p><h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现:"></a>2.代码实现:</h2><hr><p>可以正确执行！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 14int IsSamePoint(int x,int b[],int n);int main(){    int a[N][N];    int b[N];//用来存储已经经过的点    int c[N];//记录上一个顶点的列号    int i,j,count=1,row,col;    for(i=0;i&lt;N;i++)    {        b[i]=-1;        c[N]=-1;    }    b[0]=0;    c[0]=0;    for(i=0;i&lt;N;i++)    {        for(j=0;j&lt;N;j++)        {            a[i][j]=0;        }    }    do    {        scanf(&quot;%d%d%d&quot;,&amp;i,&amp;j,&amp;a[i][j]);    }while(i!=-1);    for(i=0;i&lt;N;i++)    {        for(j=0;j&lt;N;j++)        {            printf(&quot;%4d&quot;,a[i][j]);        }        printf(&quot;\n&quot;);    }    row=0;    col=1;    while(count&lt;N)    {        if(a[row][col]!=0&amp;&amp;IsSamePoint(col,b,N))        {            printf(&quot;(%d,%d)--&gt;(%d,0)\n&quot;,row,col,col);            b[count]=col;            count++;            row=col;            col=0;        }else        {            if(col&lt;N-1)            {                col++;            }else            {                //回溯                do{                    row=b[count-2];                    col=b[count-1]+1;                    printf(&quot;col=%d\n&quot;,col);                    b[count-1]=-1;                    count--;                }while(col&gt;=N);                printf(&quot;回溯到:(%d,%d)\n&quot;,row,col-1);                //printf(&quot;越界了\n&quot;);            }        }    }    for(i=0;i&lt;N;i++)    {        printf(&quot;%d  &quot;,b[i]);    }    return 0;}//在b中判断是否有与x相同的元素//有相同就返回0int IsSamePoint(int x,int b[],int n){    int i,flag=1;    for(i=0;i&lt;n;i++)    {        //printf(&quot;b=%d,x=%d\n&quot;,b[i],x);        if(b[i]==x)        {            flag=0;            return flag;        }    }    return flag;}</code></pre><h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>对应的界面还未完善，只是实现了最核心的功能<br>代码的时间复杂度和空间复杂度应该可以进一步优化。</p>]]></content>
     
     
     <categories>
