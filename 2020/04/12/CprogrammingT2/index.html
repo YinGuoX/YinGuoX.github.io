@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="King">
   <meta name="keywords" content="">
-  <title>分类 - Cprogramming - 因果</title>
+  <title>C语言编程T2 - 因果</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -41,7 +41,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 77vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -109,7 +109,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/bg_1.png') no-repeat center center;
+         style="background: url('/img/textbg.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center">
@@ -118,6 +118,43 @@
               
             </span>
 
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期日, 四月 12日 2020, 7:42 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    277 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    4
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
             
           </div>
 
@@ -129,43 +166,144 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-<!--  <p class="h4">共计 2 篇文章</p>-->
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/04/12/CprogrammingT2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T2</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
-    
-    <a href="/2020/04/11/CprogrammingT1/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T1</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="C语言编程T2"><a href="#C语言编程T2" class="headerlink" title="C语言编程T2"></a>C语言编程T2</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="判断素数可以通过sqrt-或者x-2来降低循环次数"><a href="#判断素数可以通过sqrt-或者x-2来降低循环次数" class="headerlink" title="判断素数可以通过sqrt()或者x/2来降低循环次数"></a>判断素数可以通过sqrt()或者x/2来降低循环次数</h3><h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一:"></a>思路一:</h3><p>采用long long或者unsigned long 来存储2的i次幂<br>计算2的i次幂可以迭代计算,节省时间</p>
+<h3 id="思路二"><a href="#思路二" class="headerlink" title="思路二:"></a>思路二:</h3><p>采用double来存储2的i次幂<br>注 :</p>
+<ol>
+<li><p>pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！<br>所以常使用while循环迭代计算</p>
+</li>
+<li><p>浮点型(float,double)不可以进行取余运算<br>故判断是否整除可以通过整型的除法特性计算(1/2==0)<br>即:x/i == (long long)(x/i)</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/33.png" srcset="/img/loading.gif" alt=""></p>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>切记 : pow()的精度误差，一般在int型中不用！！！</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+int IsPrime(double x);
+int main()
+{
+  int i,count=0,n;
+  double s=0;
+  printf(&quot;Input n:\n&quot;);
+  scanf(&quot;%d&quot;,&amp;n);
+  for(i=2;i&lt;=n;i++)
+  {
+      s=pow(2,i)-1;
+      if(IsPrime(s)==1)
+      {
+          printf(&quot;2^%d-1=%.0f\n&quot;,i,s);
+          count++;
+      }
+  }
 
+  printf(&quot;count=%d\n&quot;,count);
+  return 0;
+}
+int IsPrime(double x)
+{
+  int i;
+  for(i=2;i&lt;sqrt(x);i++)
+  {
+      if(x/i == (long long)(x/i))
+      {
+          return 0;
+      }
+  }
+  return 1;
+}
+</code></pre></li>
+</ol>
+<p>```</p>
 
-              </div>
             </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/">Programming</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/C/">C</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/C/Cprogramming/">Cprogramming</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/11/CorrectionT3/">
+                        <span class="hidden-mobile">C语言改错T3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+
+                </div>
+              
           </div>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
   </main>
 
@@ -267,6 +405,34 @@
 
 
 
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
 
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
@@ -285,6 +451,20 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
 
 
   <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
@@ -292,7 +472,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "分类 - Cprogramming&nbsp;",
+        "C语言编程T2&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 250,
@@ -337,6 +517,20 @@
   </script>
 
 
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 

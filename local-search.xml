@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>C语言编程T2</title>
+    <link href="/2020/04/12/CprogrammingT2/"/>
+    <url>/2020/04/12/CprogrammingT2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T2"><a href="#C语言编程T2" class="headerlink" title="C语言编程T2"></a>C语言编程T2</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="判断素数可以通过sqrt-或者x-2来降低循环次数"><a href="#判断素数可以通过sqrt-或者x-2来降低循环次数" class="headerlink" title="判断素数可以通过sqrt()或者x/2来降低循环次数"></a>判断素数可以通过sqrt()或者x/2来降低循环次数</h3><h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一:"></a>思路一:</h3><p>采用long long或者unsigned long 来存储2的i次幂<br>计算2的i次幂可以迭代计算,节省时间</p><h3 id="思路二"><a href="#思路二" class="headerlink" title="思路二:"></a>思路二:</h3><p>采用double来存储2的i次幂<br>注 :</p><ol><li><p>pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！<br>所以常使用while循环迭代计算</p></li><li><p>浮点型(float,double)不可以进行取余运算<br>故判断是否整除可以通过整型的除法特性计算(1/2==0)<br>即:x/i == (long long)(x/i)</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/33.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>切记 : pow()的精度误差，一般在int型中不用！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;math.h&gt;int IsPrime(double x);int main(){  int i,count=0,n;  double s=0;  printf(&quot;Input n:\n&quot;);  scanf(&quot;%d&quot;,&amp;n);  for(i=2;i&lt;=n;i++)  {      s=pow(2,i)-1;      if(IsPrime(s)==1)      {          printf(&quot;2^%d-1=%.0f\n&quot;,i,s);          count++;      }  }  printf(&quot;count=%d\n&quot;,count);  return 0;}int IsPrime(double x){  int i;  for(i=2;i&lt;sqrt(x);i++)  {      if(x/i == (long long)(x/i))      {          return 0;      }  }  return 1;}</code></pre></li></ol><p>```</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言改错T3</title>
     <link href="/2020/04/11/CorrectionT3/"/>
     <url>/2020/04/11/CorrectionT3/</url>
