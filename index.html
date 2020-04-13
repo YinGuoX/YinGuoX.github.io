@@ -147,6 +147,123 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/13/CprogrammingT4/">
+        <p class="h4 index-header">C语言编程T4(妙)</p>
+      </a>
+
+      <a href="/2020/04/13/CprogrammingT4/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T4(妙)思路:知规律，且有限，可迭代暴力破解
+思路一:回溯只要将2、3、4、5放在不同位置,满足约束条件即可又因2,3,4,5有规律,可递增尝试，递减回溯所以找到回溯判定条件以及相应操作即可此法较复杂
+思路二:穷举(正向思维)因为只要将2、3、4、5放在四个不同位置，且其有规律故采用四层或者三层for循环即可遍历所有可能解所有只要输出满足约束条件的解即可
+答案:核心:何时回溯、何时穷举！！！
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 10
+
+int main()
+{
+    int i[N];
+    </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/13/CprogrammingT3/">
+        <p class="h4 index-header">C语言编程T3(妙)</p>
+      </a>
+
+      <a href="/2020/04/13/CprogrammingT3/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T3(妙)思路:思路一:暴力破解(正向思维)不断尝试各种数字,逐一尝试但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量故不可使用穷举法
+思路二:回溯(逆向思维)从后往前观察思考，找到其规律采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解
+答案:核心:找规律 : 正向、逆向、解中有规律
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 10
+
+int main()
+{
+    int i[N];
+    int sum,n,total,k,flag=0,count=0;
+  </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/13/CorrectionT4/">
+        <p class="h4 index-header">C语言改错T4</p>
+      </a>
+
+      <a href="/2020/04/13/CorrectionT4/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T4易错点:指针数组要初始化指针都要初始化认真检查代码正确性:for(里面),数组交换位置,while();
+题目:
+答案:#include  &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define   MAX_LEN  10
+#define   N         150
+void SortString(char *ptr[], int n);
+main()
+{
+    int    i, n;
+    char   str[N][MAX_LEN],*pStr[N];
+    printf(&quot;How many countries</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/12/CprogrammingT2/">
         <p class="h4 index-header">C语言编程T2</p>
       </a>
@@ -406,130 +523,19 @@ int main()
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/09/Chess2.0/">
-        <p class="h4 index-header">跳跳马2.0</p>
-      </a>
-
-      <a href="/2020/04/09/Chess2.0/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">跳跳马2.0
-依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。
-1.解决方法:
-1.1 主要思想:2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点
-2.代码实现:
-可以正确执行！！！
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 14
-int IsSamePoint(int x,int b[],int n);
-int main()
-{
-    int </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-09&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/08/Chess1.0/">
-        <p class="h4 index-header">跳跳马1.0</p>
-      </a>
-
-      <a href="/2020/04/08/Chess1.0/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">跳跳马1.01.游戏介绍:
-根据国际象棋的规则和棋盘大小，并且遵守马的行走规则，使用马将棋盘中的所有小兵都吃完，即通关计分。具体游戏界面如下图:
-游戏界面 
 
 
-2.实际问题:
-随着通过的关卡越多，小兵的数量也越多，而马只要走错一步就直接结束游戏，因此在每一步都必须十分正确，所以有必要使用程序来辅助玩家选择最恰当的路径，进而通关
-3.解决方法:
-3.1使用到的相关知识:关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图
-
-《离散数学引论》:哈密顿图 : 存在一条哈密顿圈哈密顿路 : 图中存在一条经过所有节点并且不重复的路
-
-3.2 主要思想:将马和小兵抽象成图上的结点，如果小兵与小兵之间</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-08&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2020/04/07/first/" target="_self">
-          <img src="/img/avatar.png" srcset="/img/loading.gif" alt="TestMarkdown"
-               class="index-img img-fluid rounded index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/04/07/first/">
-        <p class="h4 index-header">TestMarkdown</p>
-      </a>
-
-      <a href="/2020/04/07/first/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">这是H1标题&nbsp;&nbsp;如何缩进,这是空格….以下可写内容分割线
-
-这是H2标题直接写？？？
-这是H3标题(故标题以此类推)$ hexo new &quot;My New Post&quot;
-代码部分这样写?添加链接More info: MyGitHub添加图片
-如何居中
-
-记得后要空一行
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-07&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fas fa-angle-double-right"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 

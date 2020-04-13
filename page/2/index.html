@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="King">
   <meta name="keywords" content="">
-  <title>标签 - Programming - 因果</title>
+  <title>因果</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -41,7 +41,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -122,6 +122,10 @@
           </div>
 
           
+            <div class="scroll-down-bar">
+              <i class="fas fa-angle-down scroll-down-arrow"></i>
+            </div>
+          
         </div>
       </div>
     </div>
@@ -131,69 +135,150 @@
     
       <div class="container nopadding-md">
         <div class="py-5" id="board"
-          >
+          style=margin-top:0>
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="list-group">
-<!--  <p class="h4">共计 8 篇文章</p>-->
-  <hr>
-  
+
+  <div class="row mx-auto index-card">
     
-      
-      <p class="h5">2020</p>
     
-    <a href="/2020/04/13/CprogrammingT4/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T4(妙)</span>
-      <span style="float: right;">04-13</span>
-    </a>
-  
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/09/Chess2.0/">
+        <p class="h4 index-header">跳跳马2.0</p>
+      </a>
+
+      <a href="/2020/04/09/Chess2.0/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">跳跳马2.0
+依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。
+1.解决方法:
+1.1 主要思想:2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点
+2.代码实现:
+可以正确执行！！！
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 14
+int IsSamePoint(int x,int b[],int n);
+int main()
+{
+    int </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-09&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
     
-    <a href="/2020/04/13/CprogrammingT3/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T3(妙)</span>
-      <span style="float: right;">04-13</span>
-    </a>
-  
     
-    <a href="/2020/04/13/CorrectionT4/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T4</span>
-      <span style="float: right;">04-13</span>
-    </a>
-  
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/08/Chess1.0/">
+        <p class="h4 index-header">跳跳马1.0</p>
+      </a>
+
+      <a href="/2020/04/08/Chess1.0/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">跳跳马1.01.游戏介绍:
+根据国际象棋的规则和棋盘大小，并且遵守马的行走规则，使用马将棋盘中的所有小兵都吃完，即通关计分。具体游戏界面如下图:
+游戏界面 
+
+
+2.实际问题:
+随着通过的关卡越多，小兵的数量也越多，而马只要走错一步就直接结束游戏，因此在每一步都必须十分正确，所以有必要使用程序来辅助玩家选择最恰当的路径，进而通关
+3.解决方法:
+3.1使用到的相关知识:关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图
+
+《离散数学引论》:哈密顿图 : 存在一条哈密顿圈哈密顿路 : 图中存在一条经过所有节点并且不重复的路
+
+3.2 主要思想:将马和小兵抽象成图上的结点，如果小兵与小兵之间</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-08&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
     
-    <a href="/2020/04/12/CprogrammingT2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T2</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
     
-    <a href="/2020/04/11/CorrectionT3/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T3</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/04/07/first/" target="_self">
+          <img src="/img/avatar.png" srcset="/img/loading.gif" alt="TestMarkdown"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
     
-    <a href="/2020/04/11/CorrectionT2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T2</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
-    
-    <a href="/2020/04/11/CprogrammingT1/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言编程T1</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
-    
-    <a href="/2020/04/10/CorrectionT1/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T1</span>
-      <span style="float: right;">04-10</span>
-    </a>
-  
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/04/07/first/">
+        <p class="h4 index-header">TestMarkdown</p>
+      </a>
+
+      <a href="/2020/04/07/first/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">这是H1标题&nbsp;&nbsp;如何缩进,这是空格….以下可写内容分割线
+
+这是H2标题直接写？？？
+这是H3标题(故标题以此类推)$ hexo new &quot;My New Post&quot;
+代码部分这样写?添加链接More info: MyGitHub添加图片
+如何居中
+
+记得后要空一行
 </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-07&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
@@ -328,7 +413,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "标签 - Programming&nbsp;",
+        "一啄一饮 自有定数&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 250,

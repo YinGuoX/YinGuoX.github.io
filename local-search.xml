@@ -4,6 +4,101 @@
   
   
   <entry>
+    <title>C语言编程T4(妙)</title>
+    <link href="/2020/04/13/CprogrammingT4/"/>
+    <url>/2020/04/13/CprogrammingT4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T4-妙"><a href="#C语言编程T4-妙" class="headerlink" title="C语言编程T4(妙)"></a>C语言编程T4(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>知规律，且有限，可迭代暴力破解</p><h3 id="思路一-回溯"><a href="#思路一-回溯" class="headerlink" title="思路一:回溯"></a>思路一:回溯</h3><p>只要将2、3、4、5放在不同位置,满足约束条件即可<br>又因2,3,4,5有规律,可递增尝试，递减回溯<br>所以找到回溯判定条件以及相应操作即可<br>此法较复杂</p><h3 id="思路二-穷举-正向思维"><a href="#思路二-穷举-正向思维" class="headerlink" title="思路二:穷举(正向思维)"></a>思路二:穷举(正向思维)</h3><p>因为只要将2、3、4、5放在四个不同位置，且其有规律<br>故采用四层或者三层for循环即可遍历所有可能解<br>所有只要输出满足约束条件的解即可<br><img src="/img/c_correction/45.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>何时回溯、何时穷举！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 10int main(){    int i[N];    int sum,n,total,k,flag=0,count=0;    printf(&quot;Please enter requried terms (&lt;=10):&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf( &quot;                             their sum:&quot;);    scanf(&quot;%d&quot;,&amp;total);    sum=0;    k=n;    //从后往前推导    i[n]=1;    printf(&quot;There are following possible series:\n&quot;);    while(1)    {        if(sum+i[k]&lt;total)        {            if(k&lt;=1)            {                i[1]=total-sum;                flag=1;            }            else            {                sum+=i[k];                k--;                //从最小值开始往前赋值                i[k]=i[k+1];                continue;                //继续while循环判断            }        }        //sum在中间已经大于可total        else if(sum+i[k]&gt;total||k!=1)        {            //想办法回溯            //减去上一个sum加的i[k]            sum-=i[++k];            flag=0;        }        else//sum+i[k]==total&amp;&amp;k==1        {            flag=1;        }        if(flag)        {             printf(&quot;[%d]:&quot;,++count);            for(flag=1;flag&lt;=n;++flag)                printf(&quot;%d&quot;,i[flag]);            printf(&quot;\n&quot;);        }        //判断i[n]是否已经变化到极致        if(++k&gt;n)        {            break;        }        //往后回溯        sum-=i[k];        //不断试探        i[k]++;    }    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T3(妙)</title>
+    <link href="/2020/04/13/CprogrammingT3/"/>
+    <url>/2020/04/13/CprogrammingT3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T3-妙"><a href="#C语言编程T3-妙" class="headerlink" title="C语言编程T3(妙)"></a>C语言编程T3(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="思路一-暴力破解-正向思维"><a href="#思路一-暴力破解-正向思维" class="headerlink" title="思路一:暴力破解(正向思维)"></a>思路一:暴力破解(正向思维)</h3><p>不断尝试各种数字,逐一尝试<br>但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量<br>故不可使用穷举法</p><h3 id="思路二-回溯-逆向思维"><a href="#思路二-回溯-逆向思维" class="headerlink" title="思路二:回溯(逆向思维)"></a>思路二:回溯(逆向思维)</h3><p><strong>从后往前观察思考，找到其规律</strong><br>采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解<br><img src="/img/c_correction/42.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>找规律 : 正向、逆向、解中有规律</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 10int main(){    int i[N];    int sum,n,total,k,flag=0,count=0;    printf(&quot;Please enter requried terms (&lt;=10):&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf( &quot;                             their sum:&quot;);    scanf(&quot;%d&quot;,&amp;total);    sum=0;    k=n;    //从后往前推导    i[n]=1;    printf(&quot;There are following possible series:\n&quot;);    while(1)    {        if(sum+i[k]&lt;total)        {            if(k&lt;=1)            {                i[1]=total-sum;                flag=1;            }            else            {                sum+=i[k];                k--;                //从最小值开始往前赋值                i[k]=i[k+1];                continue;                //继续while循环判断            }        }        //sum在中间已经大于可total        else if(sum+i[k]&gt;total||k!=1)        {            //想办法回溯            //减去上一个sum加的i[k]            sum-=i[++k];            flag=0;        }        else//sum+i[k]==total&amp;&amp;k==1        {            flag=1;        }        if(flag)        {             printf(&quot;[%d]:&quot;,++count);            for(flag=1;flag&lt;=n;++flag)                printf(&quot;%d&quot;,i[flag]);            printf(&quot;\n&quot;);        }        //判断i[n]是否已经变化到极致        if(++k&gt;n)        {            break;        }        //往后回溯        sum-=i[k];        //不断试探        i[k]++;    }    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言改错T4</title>
+    <link href="/2020/04/13/CorrectionT4/"/>
+    <url>/2020/04/13/CorrectionT4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T4"><a href="#C语言改错T4" class="headerlink" title="C语言改错T4"></a>C语言改错T4</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p>指针数组要初始化<br><strong>指针都要初始化</strong><br>认真检查代码正确性:for(里面),数组交换位置,while();</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/39.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include  &lt;stdio.h&gt;#include &lt;string.h&gt;#define   MAX_LEN  10#define   N         150void SortString(char *ptr[], int n);main(){    int    i, n;    char   str[N][MAX_LEN],*pStr[N];    printf(&quot;How many countries?\n&quot;);    scanf(&quot;%d&quot;,&amp;n);    getchar();    printf(&quot;Input their names:\n&quot;);    for (i=0; i&lt;n; i++)    {        pStr[i]=str[i];        gets(pStr[i]);        //printf(&quot;sr=%s\n&quot;,pStr[i]);    }    SortString(pStr,n);    printf(&quot;Sorted results:\n&quot;);    for (i=0; i&lt;n; i++)    {        puts(pStr[i]);    }}void SortString(char *ptr[], int n){    int    i, j;    char  *temp;    for (i=0; i&lt;n-1; i++)    {        for (j = i+1; j&lt;n; j++)        {            if (strcmp(ptr[i],ptr[j])&gt;0)            {                temp = ptr[i];                ptr[i] = ptr[j];                ptr[j] = temp;            }        }    }}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言编程T2</title>
     <link href="/2020/04/12/CprogrammingT2/"/>
     <url>/2020/04/12/CprogrammingT2/</url>
