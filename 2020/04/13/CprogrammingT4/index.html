@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    394 字
+                    334 字
                   </span>
                 
 
@@ -183,70 +183,43 @@
 <h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>何时回溯、何时穷举！！！</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
-#define N 10
-
+//强行穷举!!!
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 6
 int main()
 {
-    int i[N];
-    int sum,n,total,k,flag=0,count=0;
-    printf(&quot;Please enter requried terms (&lt;=10):&quot;);
-    scanf(&quot;%d&quot;,&amp;n);
-    printf( &quot;                             their sum:&quot;);
-    scanf(&quot;%d&quot;,&amp;total);
-    sum=0;
-    k=n;
-    //从后往前推导
-    i[n]=1;
-    printf(&quot;There are following possible series:\n&quot;);
-    while(1)
-    {
+    int i, j, k, m, n, num;
+    int a[N];
+    a[0] = 1;
+    a[5] = 6;
+    num = 0;
+    printf(&quot;The possible table satisfied above conditions are:\n&quot;);
+    for (i = 2; i &lt;= 5; i++)
+        for (j = 2; j &lt;= 5; j++)
+            for (n = 2; n &lt;= 5; n++)
+                for (m = 2; m &lt;= 5; m++)
+                {
+                    a[1] = i;
+                    a[2] = j;
+                    a[3] = n;
+                    a[4] = m;
 
-        if(sum+i[k]&lt;total)
-        {
-            if(k&lt;=1)
-            {
-                i[1]=total-sum;
-                flag=1;
-            }
-            else
-            {
-                sum+=i[k];
-                k--;
-                //从最小值开始往前赋值
-                i[k]=i[k+1];
-                continue;
-                //继续while循环判断
-            }
-        }
-        //sum在中间已经大于可total
-        else if(sum+i[k]&gt;total||k!=1)
-        {
-            //想办法回溯
-            //减去上一个sum加的i[k]
-            sum-=i[++k];
-            flag=0;
-        }
-        else//sum+i[k]==total&amp;&amp;k==1
-        {
-            flag=1;
-        }
-        if(flag)
-        {
-             printf(&quot;[%d]:&quot;,++count);
-            for(flag=1;flag&lt;=n;++flag)
-                printf(&quot;%d&quot;,i[flag]);
-            printf(&quot;\n&quot;);
-        }
-        //判断i[n]是否已经变化到极致
-        if(++k&gt;n)
-        {
-            break;
-        }
-        //往后回溯
-        sum-=i[k];
-        //不断试探
-        i[k]++;
-    }
+                    if (a[2] &gt; a[1] &amp;&amp; a[4] &gt; a[3] &amp;&amp; a[4] &gt; a[1] &amp;&amp; a[1] != a[3] &amp;&amp; a[2] != a[3] &amp;&amp; a[2] != a[4])
+                    {
+                        num++;
+                        printf(&quot;\nNo.:%d&quot;, num);
+
+                        for (k = 0; k &lt; 6; k++)
+                        {
+                            if (k % 3 == 0)
+                                printf(&quot;\n&quot;);
+                            printf(&quot;%3d&quot;, a[k]);
+                        }
+
+                    }
+                }
+
     return 0;
 }
 
@@ -278,6 +251,8 @@ int main()
                     
                       <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
                     
+                      <a class="hover-with-bg" href="/tags/Cprogramming/">Cprogramming</a>
+                    
                   </span>
                 
               </p>
@@ -288,6 +263,12 @@ int main()
                 <div class="post-prevnext row">
                   <div class="post-prev col-6">
                     
+                    
+                      <a href="/2020/04/15/CprogrammingT5/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">C语言编程T5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-6">

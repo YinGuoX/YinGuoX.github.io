@@ -146,6 +146,84 @@
   <div class="row mx-auto index-card">
     
     
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/04/15/Whimsy1/" target="_self">
+          <img src="/img/idea.jpg" srcset="/img/loading.gif" alt="Inspiration1.0"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/04/15/Whimsy1/">
+        <p class="h4 index-header">Inspiration1.0</p>
+      </a>
+
+      <a href="/2020/04/15/Whimsy1/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">InspirationThis is my idea,I hope one day i can fulfil it.
+
+Project And Description过年前后金价会上升 : 可建立对应信息库+求解最大子序列背诵提醒 : 根据记忆曲线(艾宾浩斯遗忘曲线)提醒用户背诵对应内容云网盘 : 通过云服务器构建一个类似属于自己的网盘高校图表 : 面对高考生的高校报考信息推荐，Python爬虫+大数据(高校分数线+报录比)+Python可视化(生成对应的报表+不同维度)彩虹屁生成器 : 花式夸人+英语夸人，自然语言处理
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/15/CprogrammingT5/">
+        <p class="h4 index-header">C语言编程T5</p>
+      </a>
+
+      <a href="/2020/04/15/CprogrammingT5/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T5思路:找规律，一一列举即可注:是否满足所有情况!!!要从最小值开始列举不然有可能运算不了全部解
+题目:
+答案:核心:找最小、才能求解全部情况
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 100
+//要从最小的开始计算
+int IsInArray(int a[],int n,int x);
+void ClearArray(int a[],int n,int x);
+int GetMinArray(int a[],int n);
+int main()
+{
+    int i,n,a[N]={-1},chan</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
     <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/13/CprogrammingT4/">
         <p class="h4 index-header">C语言编程T4(妙)</p>
@@ -163,12 +241,9 @@
 答案:核心:何时回溯、何时穷举！！！
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
-#define N 10
-
-int main()
-{
-    int i[N];
-    </div>
+//强行穷举!!!
+#include &lt;stdio.h&gt;
+#include &</div>
         </div>
       </a>
 
@@ -198,6 +273,7 @@ int main()
         <div class="index-excerpt" >
           <div class="index-text mb-1">C语言编程T3(妙)思路:思路一:暴力破解(正向思维)不断尝试各种数字,逐一尝试但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量故不可使用穷举法
 思路二:回溯(逆向思维)从后往前观察思考，找到其规律采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解
+题目:
 答案:核心:找规律 : 正向、逆向、解中有规律
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -206,8 +282,7 @@ int main()
 int main()
 {
     int i[N];
-    int sum,n,total,k,flag=0,count=0;
-  </div>
+    int sum,n,total,k,flag=0,count=0</div>
         </div>
       </a>
 
@@ -274,7 +349,8 @@ main()
           
         
         <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T2思路:判断素数可以通过sqrt()或者x/2来降低循环次数思路一:采用long long或者unsigned long 来存储2的i次幂计算2的i次幂可以迭代计算,节省时间
+          <div class="index-text mb-1">C语言编程T2##思路:
+判断素数可以通过sqrt()或者x/2来降低循环次数思路一:采用long long或者unsigned long 来存储2的i次幂计算2的i次幂可以迭代计算,节省时间
 思路二:采用double来存储2的i次幂注 :
 
 pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！所以常使用while循环迭代计算
@@ -282,7 +358,7 @@ pow()返回的double型，所以将其转换为int型时容易有精度误差，
 浮点型(float,double)不可以进行取余运算故判断是否整除可以通过整型的除法特性计算(1/2==0)即:x/i == (long long)(x/i)
 题目:
 答案:切记 : pow()的精度误差，一般在int型中不用！！！
-#in</div>
+</div>
         </div>
       </a>
 
@@ -437,79 +513,6 @@ int main()
     {
     //什么叫元音字母！！！
        </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-10&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/10/web1.0/">
-        <p class="h4 index-header">实用网站</p>
-      </a>
-
-      <a href="/2020/04/10/web1.0/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">Practical websites
-Design图片海报 :创客贴 : https://www.chuangkit.com/templatecenter
-图片压缩 :Recompressor : https://recompressor.com/Squoosh : https://squoosh.app/Tingpng : https://tinypng.com/
-个人简历 :超级简历 :  https://www.wondercv.com/
-写作 :Get写作 : https://getgetai.com/Markdown编辑器 : https://www.zybuluo.com英语写作 </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-10&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/10/Chess3.0/">
-        <p class="h4 index-header">跳跳马3.0</p>
-      </a>
-
-      <a href="/2020/04/10/Chess3.0/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">跳跳马3.0
-进一步对跳跳马2.0程序输入和输出界面的优化:1.添加了一些界面提示语句2.进行了代码局部优化
-1.代码实现:
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 64
-int IsSamePoint(int x,int b[],int n);
-int main()
-{
-    int a[N][N];
-    int b[N];//用来存储已经经过的点
-    int c[N];//记录上一个顶点的列号
-    int i,j,count=1,row,col,n;
-    printf(&quot;输入顶点数</div>
         </div>
       </a>
 

@@ -4,11 +4,40 @@
   
   
   <entry>
-    <title>C语言编程T4(妙)</title>
-    <link href="/2020/04/13/CprogrammingT4/"/>
-    <url>/2020/04/13/CprogrammingT4/</url>
+    <title>Inspiration1.0</title>
+    <link href="/2020/04/15/Whimsy1/"/>
+    <url>/2020/04/15/Whimsy1/</url>
     
-    <content type="html"><![CDATA[<h1 id="C语言编程T4-妙"><a href="#C语言编程T4-妙" class="headerlink" title="C语言编程T4(妙)"></a>C语言编程T4(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>知规律，且有限，可迭代暴力破解</p><h3 id="思路一-回溯"><a href="#思路一-回溯" class="headerlink" title="思路一:回溯"></a>思路一:回溯</h3><p>只要将2、3、4、5放在不同位置,满足约束条件即可<br>又因2,3,4,5有规律,可递增尝试，递减回溯<br>所以找到回溯判定条件以及相应操作即可<br>此法较复杂</p><h3 id="思路二-穷举-正向思维"><a href="#思路二-穷举-正向思维" class="headerlink" title="思路二:穷举(正向思维)"></a>思路二:穷举(正向思维)</h3><p>因为只要将2、3、4、5放在四个不同位置，且其有规律<br>故采用四层或者三层for循环即可遍历所有可能解<br>所有只要输出满足约束条件的解即可<br><img src="/img/c_correction/45.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>何时回溯、何时穷举！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 10int main(){    int i[N];    int sum,n,total,k,flag=0,count=0;    printf(&quot;Please enter requried terms (&lt;=10):&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf( &quot;                             their sum:&quot;);    scanf(&quot;%d&quot;,&amp;total);    sum=0;    k=n;    //从后往前推导    i[n]=1;    printf(&quot;There are following possible series:\n&quot;);    while(1)    {        if(sum+i[k]&lt;total)        {            if(k&lt;=1)            {                i[1]=total-sum;                flag=1;            }            else            {                sum+=i[k];                k--;                //从最小值开始往前赋值                i[k]=i[k+1];                continue;                //继续while循环判断            }        }        //sum在中间已经大于可total        else if(sum+i[k]&gt;total||k!=1)        {            //想办法回溯            //减去上一个sum加的i[k]            sum-=i[++k];            flag=0;        }        else//sum+i[k]==total&amp;&amp;k==1        {            flag=1;        }        if(flag)        {             printf(&quot;[%d]:&quot;,++count);            for(flag=1;flag&lt;=n;++flag)                printf(&quot;%d&quot;,i[flag]);            printf(&quot;\n&quot;);        }        //判断i[n]是否已经变化到极致        if(++k&gt;n)        {            break;        }        //往后回溯        sum-=i[k];        //不断试探        i[k]++;    }    return 0;}</code></pre>]]></content>
+    <content type="html"><![CDATA[<h1 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h1><p><strong>This is my idea,I hope one day i can fulfil it.</strong></p><hr><h2 id="Project-And-Description"><a href="#Project-And-Description" class="headerlink" title="Project And Description"></a>Project And Description</h2><p>过年前后金价会上升 : 可建立对应信息库+求解最大子序列<br>背诵提醒 : 根据记忆曲线(艾宾浩斯遗忘曲线)提醒用户背诵对应内容<br>云网盘 : 通过云服务器构建一个类似属于自己的网盘<br>高校图表 : 面对高考生的高校报考信息推荐，Python爬虫+大数据(高校分数线+报录比)+Python可视化(生成对应的报表+不同维度)<br>彩虹屁生成器 : 花式夸人+英语夸人，自然语言处理</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Whimsy</category>
+      
+      <category>Procject</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Project</tag>
+      
+      <tag>Inspiration</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T5</title>
+    <link href="/2020/04/15/CprogrammingT5/"/>
+    <url>/2020/04/15/CprogrammingT5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T5"><a href="#C语言编程T5" class="headerlink" title="C语言编程T5"></a>C语言编程T5</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>找规律，一一列举即可<br><strong>注:是否满足所有情况!!!</strong><br>要从最小值开始列举<br>不然有可能运算不了全部解</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/60.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>找最小、才能求解全部情况</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 100//要从最小的开始计算int IsInArray(int a[],int n,int x);void ClearArray(int a[],int n,int x);int GetMinArray(int a[],int n);int main(){    int i,n,a[N]={-1},change=0,j,m=0;    printf(&quot;Input n:&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf(&quot;Input card numbers:&quot;);    for(i=0;i&lt;n;i++)    {        scanf(&quot;%d&quot;,&amp;a[i]);    }    for(i=0;i&lt;n;i++)    {        m=GetMinArray(a,n);        //printf(&quot;a[m]=%d\n&quot;,m);        if(m!=-1&amp;&amp;IsInArray(a,n,m+1)&amp;&amp;IsInArray(a,n,m+2))        {            ClearArray(a,n,m+2);            ClearArray(a,n,m+1);            ClearArray(a,n,m);            /*for(j=0;j&lt;n;j++)            {                printf(&quot;%d &quot;,a[j]);            }            printf(&quot;\n&quot;);*/            change++;        }    }    printf(&quot;Exchanged:%d\n&quot;,change);    return 0;}int IsInArray(int a[],int n,int x){    int i;    for(i=0;i&lt;n;i++)    {        if(a[i]==x)        {            return 1;        }    }    return 0;}void ClearArray(int a[],int n,int x){    int i;    for(i=0;i&lt;n;i++)    {        if(a[i]==x)        {            a[i]=-1;            break;        }    }}int GetMinArray(int a[],int n){    int i,j,min=-1;    for(i=0;i&lt;n;i++)    {        if(a[i]!=-1)        {            min=a[i];           // printf(&quot;min=%d\n&quot;,min);            for(j=0;j&lt;n;j++)            {                if(a[j]!=-1&amp;&amp;min&gt;a[j])                {                    min=a[j];                }            }        }        else        {            i++;        }    }    return min;}</code></pre>]]></content>
     
     
     <categories>
@@ -27,6 +56,41 @@
       <tag>C</tag>
       
       <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T4(妙)</title>
+    <link href="/2020/04/13/CprogrammingT4/"/>
+    <url>/2020/04/13/CprogrammingT4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T4-妙"><a href="#C语言编程T4-妙" class="headerlink" title="C语言编程T4(妙)"></a>C语言编程T4(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>知规律，且有限，可迭代暴力破解</p><h3 id="思路一-回溯"><a href="#思路一-回溯" class="headerlink" title="思路一:回溯"></a>思路一:回溯</h3><p>只要将2、3、4、5放在不同位置,满足约束条件即可<br>又因2,3,4,5有规律,可递增尝试，递减回溯<br>所以找到回溯判定条件以及相应操作即可<br>此法较复杂</p><h3 id="思路二-穷举-正向思维"><a href="#思路二-穷举-正向思维" class="headerlink" title="思路二:穷举(正向思维)"></a>思路二:穷举(正向思维)</h3><p>因为只要将2、3、4、5放在四个不同位置，且其有规律<br>故采用四层或者三层for循环即可遍历所有可能解<br>所有只要输出满足约束条件的解即可<br><img src="/img/c_correction/45.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>何时回溯、何时穷举！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;//强行穷举!!!#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 6int main(){    int i, j, k, m, n, num;    int a[N];    a[0] = 1;    a[5] = 6;    num = 0;    printf(&quot;The possible table satisfied above conditions are:\n&quot;);    for (i = 2; i &lt;= 5; i++)        for (j = 2; j &lt;= 5; j++)            for (n = 2; n &lt;= 5; n++)                for (m = 2; m &lt;= 5; m++)                {                    a[1] = i;                    a[2] = j;                    a[3] = n;                    a[4] = m;                    if (a[2] &gt; a[1] &amp;&amp; a[4] &gt; a[3] &amp;&amp; a[4] &gt; a[1] &amp;&amp; a[1] != a[3] &amp;&amp; a[2] != a[3] &amp;&amp; a[2] != a[4])                    {                        num++;                        printf(&quot;\nNo.:%d&quot;, num);                        for (k = 0; k &lt; 6; k++)                        {                            if (k % 3 == 0)                                printf(&quot;\n&quot;);                            printf(&quot;%3d&quot;, a[k]);                        }                    }                }    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
       
     </tags>
     
@@ -39,7 +103,7 @@
     <link href="/2020/04/13/CprogrammingT3/"/>
     <url>/2020/04/13/CprogrammingT3/</url>
     
-    <content type="html"><![CDATA[<h1 id="C语言编程T3-妙"><a href="#C语言编程T3-妙" class="headerlink" title="C语言编程T3(妙)"></a>C语言编程T3(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="思路一-暴力破解-正向思维"><a href="#思路一-暴力破解-正向思维" class="headerlink" title="思路一:暴力破解(正向思维)"></a>思路一:暴力破解(正向思维)</h3><p>不断尝试各种数字,逐一尝试<br>但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量<br>故不可使用穷举法</p><h3 id="思路二-回溯-逆向思维"><a href="#思路二-回溯-逆向思维" class="headerlink" title="思路二:回溯(逆向思维)"></a>思路二:回溯(逆向思维)</h3><p><strong>从后往前观察思考，找到其规律</strong><br>采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解<br><img src="/img/c_correction/42.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>找规律 : 正向、逆向、解中有规律</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 10int main(){    int i[N];    int sum,n,total,k,flag=0,count=0;    printf(&quot;Please enter requried terms (&lt;=10):&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf( &quot;                             their sum:&quot;);    scanf(&quot;%d&quot;,&amp;total);    sum=0;    k=n;    //从后往前推导    i[n]=1;    printf(&quot;There are following possible series:\n&quot;);    while(1)    {        if(sum+i[k]&lt;total)        {            if(k&lt;=1)            {                i[1]=total-sum;                flag=1;            }            else            {                sum+=i[k];                k--;                //从最小值开始往前赋值                i[k]=i[k+1];                continue;                //继续while循环判断            }        }        //sum在中间已经大于可total        else if(sum+i[k]&gt;total||k!=1)        {            //想办法回溯            //减去上一个sum加的i[k]            sum-=i[++k];            flag=0;        }        else//sum+i[k]==total&amp;&amp;k==1        {            flag=1;        }        if(flag)        {             printf(&quot;[%d]:&quot;,++count);            for(flag=1;flag&lt;=n;++flag)                printf(&quot;%d&quot;,i[flag]);            printf(&quot;\n&quot;);        }        //判断i[n]是否已经变化到极致        if(++k&gt;n)        {            break;        }        //往后回溯        sum-=i[k];        //不断试探        i[k]++;    }    return 0;}</code></pre>]]></content>
+    <content type="html"><![CDATA[<h1 id="C语言编程T3-妙"><a href="#C语言编程T3-妙" class="headerlink" title="C语言编程T3(妙)"></a>C语言编程T3(妙)</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="思路一-暴力破解-正向思维"><a href="#思路一-暴力破解-正向思维" class="headerlink" title="思路一:暴力破解(正向思维)"></a>思路一:暴力破解(正向思维)</h3><p>不断尝试各种数字,逐一尝试<br>但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量<br>故不可使用穷举法</p><h3 id="思路二-回溯-逆向思维"><a href="#思路二-回溯-逆向思维" class="headerlink" title="思路二:回溯(逆向思维)"></a>思路二:回溯(逆向思维)</h3><p><strong>从后往前观察思考，找到其规律</strong><br>采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/42.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>核心:<br>找规律 : 正向、逆向、解中有规律</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 10int main(){    int i[N];    int sum,n,total,k,flag=0,count=0;    printf(&quot;Please enter requried terms (&lt;=10):&quot;);    scanf(&quot;%d&quot;,&amp;n);    printf( &quot;                             their sum:&quot;);    scanf(&quot;%d&quot;,&amp;total);    sum=0;    k=n;    //从后往前推导    i[n]=1;    printf(&quot;There are following possible series:\n&quot;);    while(1)    {        if(sum+i[k]&lt;total)        {            if(k&lt;=1)            {                i[1]=total-sum;                flag=1;            }            else            {                sum+=i[k];                k--;                //从最小值开始往前赋值                i[k]=i[k+1];                continue;                //继续while循环判断            }        }        //sum在中间已经大于可total        else if(sum+i[k]&gt;total||k!=1)        {            //想办法回溯            //减去上一个sum加的i[k]            sum-=i[++k];            flag=0;        }        else//sum+i[k]==total&amp;&amp;k==1        {            flag=1;        }        if(flag)        {             printf(&quot;[%d]:&quot;,++count);            for(flag=1;flag&lt;=n;++flag)                printf(&quot;%d&quot;,i[flag]);            printf(&quot;\n&quot;);        }        //判断i[n]是否已经变化到极致        if(++k&gt;n)        {            break;        }        //往后回溯        sum-=i[k];        //不断试探        i[k]++;    }    return 0;}</code></pre>]]></content>
     
     
     <categories>
@@ -58,6 +122,8 @@
       <tag>C</tag>
       
       <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
       
     </tags>
     
@@ -103,7 +169,7 @@
     <link href="/2020/04/12/CprogrammingT2/"/>
     <url>/2020/04/12/CprogrammingT2/</url>
     
-    <content type="html"><![CDATA[<h1 id="C语言编程T2"><a href="#C语言编程T2" class="headerlink" title="C语言编程T2"></a>C语言编程T2</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><h3 id="判断素数可以通过sqrt-或者x-2来降低循环次数"><a href="#判断素数可以通过sqrt-或者x-2来降低循环次数" class="headerlink" title="判断素数可以通过sqrt()或者x/2来降低循环次数"></a>判断素数可以通过sqrt()或者x/2来降低循环次数</h3><h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一:"></a>思路一:</h3><p>采用long long或者unsigned long 来存储2的i次幂<br>计算2的i次幂可以迭代计算,节省时间</p><h3 id="思路二"><a href="#思路二" class="headerlink" title="思路二:"></a>思路二:</h3><p>采用double来存储2的i次幂<br>注 :</p><ol><li><p>pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！<br>所以常使用while循环迭代计算</p></li><li><p>浮点型(float,double)不可以进行取余运算<br>故判断是否整除可以通过整型的除法特性计算(1/2==0)<br>即:x/i == (long long)(x/i)</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/33.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>切记 : pow()的精度误差，一般在int型中不用！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;math.h&gt;int IsPrime(double x);int main(){  int i,count=0,n;  double s=0;  printf(&quot;Input n:\n&quot;);  scanf(&quot;%d&quot;,&amp;n);  for(i=2;i&lt;=n;i++)  {      s=pow(2,i)-1;      if(IsPrime(s)==1)      {          printf(&quot;2^%d-1=%.0f\n&quot;,i,s);          count++;      }  }  printf(&quot;count=%d\n&quot;,count);  return 0;}int IsPrime(double x){  int i;  for(i=2;i&lt;sqrt(x);i++)  {      if(x/i == (long long)(x/i))      {          return 0;      }  }  return 1;}</code></pre></li></ol><p>```</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="C语言编程T2"><a href="#C语言编程T2" class="headerlink" title="C语言编程T2"></a>C语言编程T2</h1><p>##思路:</p><h3 id="判断素数可以通过sqrt-或者x-2来降低循环次数"><a href="#判断素数可以通过sqrt-或者x-2来降低循环次数" class="headerlink" title="判断素数可以通过sqrt()或者x/2来降低循环次数"></a>判断素数可以通过sqrt()或者x/2来降低循环次数</h3><h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一:"></a>思路一:</h3><p>采用long long或者unsigned long 来存储2的i次幂<br>计算2的i次幂可以迭代计算,节省时间</p><h3 id="思路二"><a href="#思路二" class="headerlink" title="思路二:"></a>思路二:</h3><p>采用double来存储2的i次幂<br>注 :</p><ol><li><p>pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！<br>所以常使用while循环迭代计算</p></li><li><p>浮点型(float,double)不可以进行取余运算<br>故判断是否整除可以通过整型的除法特性计算(1/2==0)<br>即:x/i == (long long)(x/i)</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/33.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>切记 : pow()的精度误差，一般在int型中不用！！！</p><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;math.h&gt;int IsPrime(double x);int main(){  int i,count=0,n;  double s=0;  printf(&quot;Input n:\n&quot;);  scanf(&quot;%d&quot;,&amp;n);  for(i=2;i&lt;=n;i++)  {      s=pow(2,i)-1;      if(IsPrime(s)==1)      {          printf(&quot;2^%d-1=%.0f\n&quot;,i,s);          count++;      }  }  printf(&quot;count=%d\n&quot;,count);  return 0;}int IsPrime(double x){  int i;  for(i=2;i&lt;sqrt(x);i++)  {      if(x/i == (long long)(x/i))      {          return 0;      }  }  return 1;}</code></pre></li></ol><p>```</p>]]></content>
     
     
     <categories>
@@ -122,6 +188,8 @@
       <tag>C</tag>
       
       <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
       
     </tags>
     
@@ -219,6 +287,8 @@
       <tag>C</tag>
       
       <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
       
     </tags>
     
