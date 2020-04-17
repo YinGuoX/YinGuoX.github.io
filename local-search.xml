@@ -4,6 +4,72 @@
   
   
   <entry>
+    <title>C语言改错T5</title>
+    <link href="/2020/04/17/CorrectionT5/"/>
+    <url>/2020/04/17/CorrectionT5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T5"><a href="#C语言改错T5" class="headerlink" title="C语言改错T5"></a>C语言改错T5</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p>分清:<br>dstStr是目的，即要输出的<br>srcStr是源<br>故字符串是dstStr+srcStr,即srcStr在dstStr后面<br><strong>指针地址的变化与指针指向值的变化！！！</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/79.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;string.h&gt;#define N 80void MyStrcat(char *dstStr, char *srcStr);main() {    char s[N], t[N];    printf(&quot;Input a string:\n&quot;);    gets(s);    printf(&quot;Input another string:\n&quot;);    gets(t);    MyStrcat(s, t);    printf(&quot;Concatenate results:%s\n&quot;, s);}void MyStrcat(char *dstStr, char *srcStr) {    while (*dstStr != &#39;\0&#39;)    {        dstStr++;    }    while (*srcStr != &#39;\0&#39;)    {        *dstStr = *srcStr;        srcStr++;        dstStr++;    }    //分清楚指针改变地址和改变其指向的值    *dstStr=&#39;\0&#39;;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T6</title>
+    <link href="/2020/04/17/CprogrammingT6/"/>
+    <url>/2020/04/17/CprogrammingT6/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T6"><a href="#C语言编程T6" class="headerlink" title="C语言编程T6"></a>C语言编程T6</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>变量迭代，阶乘计算int型可能会溢出，最好使用double。<br><strong>注:考虑到各种情况，包括:取0、-1等边界测试时，其余输出是否会有矛盾!!!</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/77.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;math.h&gt;//考虑为0的情况int main(){    double x,t,t1=1,sum=0,t2,esp;    int n=3,count=1;    printf(&quot;Enter x &amp; eps:&quot;);    scanf(&quot;%lf%lf&quot;,&amp;x,&amp;esp);    if(x!=0)    {        t2=sum=x;        do        {            t1=-t1*n*(n-1);            n+=2;            t2=t2*x*x;            t=t2/t1;            sum+=t;            count++;        }while(fabs(t)&gt;=esp);    }    printf(&quot;sin(%f)=%f\n&quot;,x,sin(x));    printf(&quot;%d,sin(%f)=%f\n&quot;,count,x,sum);    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Inspiration1.0</title>
     <link href="/2020/04/15/Whimsy1/"/>
     <url>/2020/04/15/Whimsy1/</url>

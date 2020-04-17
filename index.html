@@ -146,6 +146,83 @@
   <div class="row mx-auto index-card">
     
     
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/17/CorrectionT5/">
+        <p class="h4 index-header">C语言改错T5</p>
+      </a>
+
+      <a href="/2020/04/17/CorrectionT5/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T5易错点:分清:dstStr是目的，即要输出的srcStr是源故字符串是dstStr+srcStr,即srcStr在dstStr后面指针地址的变化与指针指向值的变化！！！
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define N 80
+void MyStrcat(char *dstStr, char *srcStr);
+main() {
+    char s[N], t[N];
+    printf(&quot;Input a string:\n&quot;);
+    gets(s);
+    prin</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-17&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/17/CprogrammingT6/">
+        <p class="h4 index-header">C语言编程T6</p>
+      </a>
+
+      <a href="/2020/04/17/CprogrammingT6/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T6思路:变量迭代，阶乘计算int型可能会溢出，最好使用double。注:考虑到各种情况，包括:取0、-1等边界测试时，其余输出是否会有矛盾!!!
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+//考虑为0的情况
+int main()
+{
+    double x,t,t1=1,sum=0,t2,esp;
+    int n=3,count=1;
+    printf(&quot;Enter x &amp; eps:&quot;);
+    scanf(&quot;%</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-17&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/04/15/Whimsy1/" target="_self">
           <img src="/img/idea.jpg" srcset="/img/loading.gif" alt="Inspiration1.0"
@@ -438,87 +515,6 @@ void  MonthDay(int year</div>
       <div class="index-btm">
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/11/CprogrammingT1/">
-        <p class="h4 index-header">C语言编程T1</p>
-      </a>
-
-      <a href="/2020/04/11/CprogrammingT1/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T1思路:思路一:采用gets()/scanf()直接输入字符串1.考虑符号和数字的分离、判断输入是否正确2.采用栈或者队列来进行运算综上所述:较为复杂！！！
-思路二:采用getchar()直接输入字符1.一个一个字符输入，故要进行分类计算(if),判断何时计算、何时停止2.通过代码顺序实现类似栈的操作可以一试！！！
-题目:
-答案:核心 : 在得到第二个运算符时，计算前一个运算符!!!
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-
-int main(void)
-{
-    int num, num1, op;
-    char</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/10/CorrectionT1/">
-        <p class="h4 index-header">C语言改错T1</p>
-      </a>
-
-      <a href="/2020/04/10/CorrectionT1/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言改错T1易错点:1.认真核对输入、输出格式2.严格根据题目约束条件、理论结合实际
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 100
-int main()
-{
-    char str1[N],str2[N];
-    int i,j;
-    printf(&quot;\n输入字符串：&quot;  );
-    gets(str1);
-    i=j=0;
-    for(i=0;str1[i]!=&#39;\0&#39;;i++)
-    {
-    //什么叫元音字母！！！
-       </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-10&nbsp;&nbsp;
         
         
         
