@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="King">
   <meta name="keywords" content="">
-  <title>分类 - Correction - 因果</title>
+  <title>C语言编程T8 - 因果</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -41,7 +41,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 77vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -109,7 +109,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/bg_1.png') no-repeat center center;
+         style="background: url('/img/textbg.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center">
@@ -118,6 +118,43 @@
               
             </span>
 
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 四月 18日 2020, 8:23 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    198 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    3
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
             
           </div>
 
@@ -129,67 +166,150 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-<!--  <p class="h4">共计 6 篇文章</p>-->
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/04/19/CorrectionT6/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T6</span>
-      <span style="float: right;">04-19</span>
-    </a>
-  
-    
-    <a href="/2020/04/17/CorrectionT5/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T5</span>
-      <span style="float: right;">04-17</span>
-    </a>
-  
-    
-    <a href="/2020/04/13/CorrectionT4/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T4</span>
-      <span style="float: right;">04-13</span>
-    </a>
-  
-    
-    <a href="/2020/04/11/CorrectionT3/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T3</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
-    
-    <a href="/2020/04/11/CorrectionT2/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T2</span>
-      <span style="float: right;">04-11</span>
-    </a>
-  
-    
-    <a href="/2020/04/10/CorrectionT1/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C语言改错T1</span>
-      <span style="float: right;">04-10</span>
-    </a>
-  
-</div>
 
-
-
-              </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="C语言编程T8"><a href="#C语言编程T8" class="headerlink" title="C语言编程T8"></a>C语言编程T8</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>认真审题、<strong>注意英语的语法规范，1st,11th,21st…</strong><br>判断错误输入最好判断<strong>全面</strong></p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/87.1.png" srcset="/img/loading.gif" alt=""><br><img src="/img/c_correction/87.png" srcset="/img/loading.gif" alt=""></p>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+char month[13][20]=
+{
+  &quot;none&quot;,&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;,
+  &quot;July&quot;,&quot;August&quot;,&quot;September&quot;,&quot;October&quot;,&quot;November&quot;,&quot;December&quot;
+};
+int main()
+{
+    int year,day,mon;
+    printf(&quot;Enter date (mm/dd/yy):&quot;);
+    scanf(&quot;%d/%d/%d&quot;,&amp;mon,&amp;day,&amp;year);
+    if(day&gt;31||day&lt;1||mon&gt;12||mon&lt;1)
+    {
+        printf(&quot;Input error!\n&quot;);
+    }
+    else
+    {
+        printf(&quot;Dated this %d&quot;,day);
+        switch(day)
+        {
+            case 1:
+            case 21:
+            case 31:
+                printf( &quot;st&quot;);
+                break;
+            case 2:
+            case 22:
+                printf( &quot;nd&quot;);
+                break;
+            case 3:
+            case 23:
+                printf( &quot;rd&quot;);
+                break;
+            default:
+                printf( &quot;th&quot;);
+        }
+        printf(&quot; day of %s&quot;,month[mon]);
+        printf(&quot;, 19%.2d.\n&quot;,year);
+    }
+    return 0;
+}
+</code></pre>
             </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/">Programming</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/C/">C</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/C/Cprogramming/">Cprogramming</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Cprogramming/">Cprogramming</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/04/19/CorrectionT6/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">C语言改错T6</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/18/CprogrammingT7/">
+                        <span class="hidden-mobile">C语言编程T7</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+
+                </div>
+              
           </div>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
   </main>
 
@@ -291,6 +411,34 @@
 
 
 
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
 
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
@@ -309,6 +457,20 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
 
 
   <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
@@ -316,7 +478,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "分类 - Correction&nbsp;",
+        "C语言编程T8&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 250,
@@ -361,6 +523,20 @@
   </script>
 
 
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 

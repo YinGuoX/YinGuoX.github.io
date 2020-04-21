@@ -4,6 +4,138 @@
   
   
   <entry>
+    <title>C语言编程T9</title>
+    <link href="/2020/04/21/CprogrammingT9/"/>
+    <url>/2020/04/21/CprogrammingT9/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T9"><a href="#C语言编程T9" class="headerlink" title="C语言编程T9"></a>C语言编程T9</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>认真审题、<strong>注意英语的语法规范，i have a apple….太难了，注意名称前可能有冠词！！！</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/108.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>##include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 100int Length(char p[]);int IsAllDigit(char p[]);int main(){    char str[N];    int is;    printf(&quot;Please input a string:&quot;);    gets(str);    printf(&quot;The string has %d characters.\n&quot;,Length(str));    is=IsAllDigit(str);    if(is)    {        printf(&quot;The string is a digit string.&quot;);    }    else    {        printf(&quot;The string is not a digit string.&quot;);    }    return 0;}int Length(char p[]){    int i;    for(i=0;p[i]!=&#39;\0&#39;;i++);    return i;}int IsAllDigit(char p[]){    int i;    for(i=0;p[i]!=&#39;\0&#39;;i++)    {        if(p[i]&lt;&#39;0&#39;||p[i]&gt;&#39;9&#39;)        {            return 0;        }    }    return 1;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言改错T6</title>
+    <link href="/2020/04/19/CorrectionT6/"/>
+    <url>/2020/04/19/CorrectionT6/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T6"><a href="#C语言改错T6" class="headerlink" title="C语言改错T6"></a>C语言改错T6</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p>字符串赋值:<strong>‘\0’也占字符数组一个字节</strong><br>char str[6]={‘C’,‘h’,‘i’,‘n’,‘a’,‘\0’};<br>char str[]={‘C’,‘h’,‘i’,‘n’,‘a’,‘\0’};<br>char str[]=”China”;<br>char *ptr=”China”;</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/92.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><p>strcpy()也可以用来字符串赋值</p><pre><code>#include &lt;stdio.h&gt;main(){    int i = 0;    char str[6] = {&#39;C&#39;, &#39;h&#39;, &#39;i&#39;, &#39;n&#39;, &#39;a&#39;, &#39;\0&#39;}, str1[6] , *ptr, *ptr1, *ptr2 ;    while (str[i] != &#39;\0&#39;)    {        putchar(str[i]);        i++;    }    ptr=str;    scanf(&quot;%s&quot;, ptr);    puts(ptr);    ptr1 = str;    puts(ptr1);    ptr2 = &quot;China&quot;;    puts(ptr2);    char str2[] = &quot;China&quot;;    printf(&quot;%s&quot;, str2);}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T8</title>
+    <link href="/2020/04/18/CprogrammingT8/"/>
+    <url>/2020/04/18/CprogrammingT8/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T8"><a href="#C语言编程T8" class="headerlink" title="C语言编程T8"></a>C语言编程T8</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>认真审题、<strong>注意英语的语法规范，1st,11th,21st…</strong><br>判断错误输入最好判断<strong>全面</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/87.1.png" srcset="/img/loading.gif" alt=""><br><img src="/img/c_correction/87.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;char month[13][20]={  &quot;none&quot;,&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;,  &quot;July&quot;,&quot;August&quot;,&quot;September&quot;,&quot;October&quot;,&quot;November&quot;,&quot;December&quot;};int main(){    int year,day,mon;    printf(&quot;Enter date (mm/dd/yy):&quot;);    scanf(&quot;%d/%d/%d&quot;,&amp;mon,&amp;day,&amp;year);    if(day&gt;31||day&lt;1||mon&gt;12||mon&lt;1)    {        printf(&quot;Input error!\n&quot;);    }    else    {        printf(&quot;Dated this %d&quot;,day);        switch(day)        {            case 1:            case 21:            case 31:                printf( &quot;st&quot;);                break;            case 2:            case 22:                printf( &quot;nd&quot;);                break;            case 3:            case 23:                printf( &quot;rd&quot;);                break;            default:                printf( &quot;th&quot;);        }        printf(&quot; day of %s&quot;,month[mon]);        printf(&quot;, 19%.2d.\n&quot;,year);    }    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T7</title>
+    <link href="/2020/04/18/CprogrammingT7/"/>
+    <url>/2020/04/18/CprogrammingT7/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T7"><a href="#C语言编程T7" class="headerlink" title="C语言编程T7"></a>C语言编程T7</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>认真审题、<strong>看清题目要求和计算公式</strong><br>求对角线之和,注意可能会重叠</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/82.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#define N 5int main(){    int a[N][N],i,j,s=0,t;    printf(&quot;Input a 5*5 matrix\n&quot;);    for(i=0;i&lt;N;i++)    {        for(j=0;j&lt;N;j++)        {            scanf(&quot;%d&quot;,&amp;a[i][j]);        }        s+=a[i][i]+a[i][N-i-1];    }    /*for(i=0;i&lt;N;i++)    {    }*/    printf(&quot;sum=%5d\n&quot;,s-a[2][2]);    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言改错T5</title>
     <link href="/2020/04/17/CorrectionT5/"/>
     <url>/2020/04/17/CorrectionT5/</url>
