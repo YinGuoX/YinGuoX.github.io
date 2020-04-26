@@ -147,6 +147,128 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/26/CprogrammingT15/">
+        <p class="h4 index-header">C语言编程T15</p>
+      </a>
+
+      <a href="/2020/04/26/CprogrammingT15/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T15思路:字符串遇到 多空格、结尾空格、开头空格如何解决if判断要全面！！！
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 80
+//多空格和结尾如何解决
+int CountWords(char str[]);
+int main()
+{
+    char str[N+1];
+   printf(&quot;Input a string:\n&quot;);
+   gets(str);
+   printf(&quot;Number of words=%d\n&quot;,CountWords(s</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/26/CprogrammingT14/">
+        <p class="h4 index-header">C语言编程T14</p>
+      </a>
+
+      <a href="/2020/04/26/CprogrammingT14/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T14思路:相等情况？？？每行情况？？？所以要有两个标记量
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define M 2
+#define N 6
+int main()
+{
+    int i,j,a[M][N],flag=0,flagz=0,max,min,row,col,k;
+    for(i=0;i&lt;M;i++)
+    {
+        for(j=0;j&lt;N;j++)
+        {
+            scanf(&quot;%d&quot;,&amp;a[i][j]);
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/26/CprogrammingT13/">
+        <p class="h4 index-header">C语言编程T13</p>
+      </a>
+
+      <a href="/2020/04/26/CprogrammingT13/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T13思路:四舍五入的函数是round()向下取整的函数是floor()注意 : 题目要求
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+#define N 100
+int main()
+{
+    int saraly,houres,t,t1,i=0,g[N]={0};
+    float sh=0;
+    scanf(&quot;%d %d&quot;,&amp;saraly,&amp;houres);
+    sh=(float)saraly/houres;
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/25/CprogrammingT12/">
         <p class="h4 index-header">C语言编程T12</p>
       </a>
@@ -159,8 +281,7 @@
         <div class="index-excerpt" >
           <div class="index-text mb-1">C语言编程T12思路:约束条件很重要，不要越界！！！
 题目:
-答案:/*
-#include &lt;stdio.h&gt;
+答案:#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 int Isprime(long x);
 int main()
@@ -171,7 +292,7 @@ int main()
     //这里可以约束
     for(i=c;i&lt;=d-2;i++)
     {
-    </div>
+       </div>
         </div>
       </a>
 
@@ -201,8 +322,7 @@ int main()
         <div class="index-excerpt" >
           <div class="index-text mb-1">C语言编程T11思路:定积分的几何意义！！！
 题目:
-答案:/*
-#include &lt;stdio.h&gt;
+答案:#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 float Integral(float (*f)(float), float a, float b);
 float y1(float x);
@@ -214,7 +334,7 @@ int main()
 }
 float y1(float x)
 {
-  </div>
+    /</div>
         </div>
       </a>
 
@@ -242,7 +362,7 @@ float y1(float x)
           
         
         <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T10思路:floor()函数的应用:取整函数！！！
+          <div class="index-text mb-1">C语言编程T10思路:floor()函数的应用:向下取整函数！！！
 题目:
 答案:#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
@@ -254,7 +374,7 @@ float t(float x, int n)
     int i;
     for (x1 = x, i = 0; i &lt; n - 1; i++)
         x1 *= 10.0;
-    printf(&quot;x1=%f\n</div>
+    printf(&quot;x1=%f</div>
         </div>
       </a>
 
@@ -414,121 +534,6 @@ int main()
       <div class="index-btm">
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-18&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/17/CorrectionT5/">
-        <p class="h4 index-header">C语言改错T5</p>
-      </a>
-
-      <a href="/2020/04/17/CorrectionT5/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言改错T5易错点:分清:dstStr是目的，即要输出的srcStr是源故字符串是dstStr+srcStr,即srcStr在dstStr后面指针地址的变化与指针指向值的变化！！！
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#define N 80
-void MyStrcat(char *dstStr, char *srcStr);
-main() {
-    char s[N], t[N];
-    printf(&quot;Input a string:\n&quot;);
-    gets(s);
-    prin</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-17&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/17/CprogrammingT6/">
-        <p class="h4 index-header">C语言编程T6</p>
-      </a>
-
-      <a href="/2020/04/17/CprogrammingT6/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T6思路:变量迭代，阶乘计算int型可能会溢出，最好使用double。注:考虑到各种情况，包括:取0、-1等边界测试时，其余输出是否会有矛盾!!!
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;math.h&gt;
-//考虑为0的情况
-int main()
-{
-    double x,t,t1=1,sum=0,t2,esp;
-    int n=3,count=1;
-    printf(&quot;Enter x &amp; eps:&quot;);
-    scanf(&quot;%</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-17&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2020/04/15/Whimsy1/" target="_self">
-          <img src="/img/idea.jpg" srcset="/img/loading.gif" alt="Inspiration1.0"
-               class="index-img img-fluid rounded index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/04/15/Whimsy1/">
-        <p class="h4 index-header">Inspiration1.0</p>
-      </a>
-
-      <a href="/2020/04/15/Whimsy1/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">InspirationThis is my idea,I hope one day i can fulfil it.
-
-Project And Description过年前后金价会上升 : 可建立对应信息库+求解最大子序列背诵提醒 : 根据记忆曲线(艾宾浩斯遗忘曲线)提醒用户背诵对应内容云网盘 : 通过云服务器构建一个类似属于自己的网盘高校图表 : 面对高考生的高校报考信息推荐，Python爬虫+大数据(高校分数线+报录比)+Python可视化(生成对应的报表+不同维度)彩虹屁生成器 : 花式夸人+英语夸人，自然语言处理
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15&nbsp;&nbsp;
         
         
         
