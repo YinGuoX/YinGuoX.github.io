@@ -146,6 +146,127 @@
   <div class="row mx-auto index-card">
     
     
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/10/Chess3.0/">
+        <p class="h4 index-header">跳跳马3.0</p>
+      </a>
+
+      <a href="/2020/04/10/Chess3.0/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">跳跳马3.0
+进一步对跳跳马2.0程序输入和输出界面的优化:1.添加了一些界面提示语句2.进行了代码局部优化
+1.代码实现:
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 64
+int IsSamePoint(int x,int b[],int n);
+int main()
+{
+    int a[N][N];
+    int b[N];//用来存储已经经过的点
+    int c[N];//记录上一个顶点的列号
+    int i,j,count=1,row,col,n;
+    printf(&quot;输入顶点数</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-10&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/09/Chess2.0/">
+        <p class="h4 index-header">跳跳马2.0</p>
+      </a>
+
+      <a href="/2020/04/09/Chess2.0/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">跳跳马2.0
+依旧是采用跳跳马1.0的思想；将棋盘中的马与小兵抽象成结点，结点的可达关系作为对应结点的边。
+1.解决方法:
+1.1 主要思想:2.0用邻接矩阵来存储图，使用BFS(Breadth First Search)策略，并且采用数组来存储上一步经过的结点，故只要不满足约束条件时，利用此数组即可回溯到上一结点
+2.代码实现:
+可以正确执行！！！
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 14
+int IsSamePoint(int x,int b[],int n);
+int main()
+{
+    int </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-09&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/08/Chess1.0/">
+        <p class="h4 index-header">跳跳马1.0</p>
+      </a>
+
+      <a href="/2020/04/08/Chess1.0/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">跳跳马1.01.游戏介绍:
+根据国际象棋的规则和棋盘大小，并且遵守马的行走规则，使用马将棋盘中的所有小兵都吃完，即通关计分。具体游戏界面如下图:
+游戏界面 
+
+
+2.实际问题:
+随着通过的关卡越多，小兵的数量也越多，而马只要走错一步就直接结束游戏，因此在每一步都必须十分正确，所以有必要使用程序来辅助玩家选择最恰当的路径，进而通关
+3.解决方法:
+3.1使用到的相关知识:关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图
+
+《离散数学引论》:哈密顿图 : 存在一条哈密顿圈哈密顿路 : 图中存在一条经过所有节点并且不重复的路
+
+3.2 主要思想:将马和小兵抽象成图上的结点，如果小兵与小兵之间</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-08&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/04/07/first/" target="_self">
           <img src="/img/avatar.png" srcset="/img/loading.gif" alt="TestMarkdown"

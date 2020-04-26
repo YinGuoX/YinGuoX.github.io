@@ -147,6 +147,131 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/25/CprogrammingT12/">
+        <p class="h4 index-header">C语言编程T12</p>
+      </a>
+
+      <a href="/2020/04/25/CprogrammingT12/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T12思路:约束条件很重要，不要越界！！！
+题目:
+答案:/*
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int Isprime(long x);
+int main()
+{
+    long int c,d,total=0,i;
+    printf(&quot;please input c,d(c&gt;2):\n&quot;);
+    scanf( &quot;%ld,%ld&quot;,&amp;c,&amp;d);
+    //这里可以约束
+    for(i=c;i&lt;=d-2;i++)
+    {
+    </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-25&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/24/CprogrammingT11/">
+        <p class="h4 index-header">C语言编程T11</p>
+      </a>
+
+      <a href="/2020/04/24/CprogrammingT11/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T11思路:定积分的几何意义！！！
+题目:
+答案:/*
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+float Integral(float (*f)(float), float a, float b);
+float y1(float x);
+float y2(float x);
+int main()
+{
+    printf(&quot;y1=%f\ny2=%f\n&quot;,Integral(y1,0,1),Integral(y2,0,3));
+    return 0;
+}
+float y1(float x)
+{
+  </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-24&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/23/CprogrammingT10/">
+        <p class="h4 index-header">C语言编程T10</p>
+      </a>
+
+      <a href="/2020/04/23/CprogrammingT10/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T10思路:floor()函数的应用:取整函数！！！
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+float a[5] = {2.33, 2.56, 2.65, 2.66, 2.30};
+float t(float x, int n);
+float t(float x, int n)
+{
+    float x1, x2;
+    int i;
+    for (x1 = x, i = 0; i &lt; n - 1; i++)
+        x1 *= 10.0;
+    printf(&quot;x1=%f\n</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-23&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/21/CprogrammingT9/">
         <p class="h4 index-header">C语言编程T9</p>
       </a>
@@ -404,121 +529,6 @@ Project And Description过年前后金价会上升 : 可建立对应信息库+�
       <div class="index-btm">
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/15/CprogrammingT5/">
-        <p class="h4 index-header">C语言编程T5</p>
-      </a>
-
-      <a href="/2020/04/15/CprogrammingT5/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T5思路:找规律，一一列举即可注:是否满足所有情况!!!要从最小值开始列举不然有可能运算不了全部解
-题目:
-答案:核心:找最小、才能求解全部情况
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 100
-//要从最小的开始计算
-int IsInArray(int a[],int n,int x);
-void ClearArray(int a[],int n,int x);
-int GetMinArray(int a[],int n);
-int main()
-{
-    int i,n,a[N]={-1},chan</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/13/CprogrammingT4/">
-        <p class="h4 index-header">C语言编程T4(妙)</p>
-      </a>
-
-      <a href="/2020/04/13/CprogrammingT4/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T4(妙)思路:知规律，且有限，可迭代暴力破解
-思路一:回溯只要将2、3、4、5放在不同位置,满足约束条件即可又因2,3,4,5有规律,可递增尝试，递减回溯所以找到回溯判定条件以及相应操作即可此法较复杂
-思路二:穷举(正向思维)因为只要将2、3、4、5放在四个不同位置，且其有规律故采用四层或者三层for循环即可遍历所有可能解所有只要输出满足约束条件的解即可
-答案:核心:何时回溯、何时穷举！！！
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-//强行穷举!!!
-#include &lt;stdio.h&gt;
-#include &</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/13/CprogrammingT3/">
-        <p class="h4 index-header">C语言编程T3(妙)</p>
-      </a>
-
-      <a href="/2020/04/13/CprogrammingT3/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T3(妙)思路:思路一:暴力破解(正向思维)不断尝试各种数字,逐一尝试但是由于n不确定,所以不知道要嵌套多少for和准备多少临时变量故不可使用穷举法
-思路二:回溯(逆向思维)从后往前观察思考，找到其规律采用数组,从后往前,逐一尝试,不符或者满足则采用不同的回溯，直至得出所有解
-题目:
-答案:核心:找规律 : 正向、逆向、解中有规律
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 10
-
-int main()
-{
-    int i[N];
-    int sum,n,total,k,flag=0,count=0</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
         
         
         

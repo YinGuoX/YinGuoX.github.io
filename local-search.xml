@@ -4,6 +4,105 @@
   
   
   <entry>
+    <title>C语言编程T12</title>
+    <link href="/2020/04/25/CprogrammingT12/"/>
+    <url>/2020/04/25/CprogrammingT12/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T12"><a href="#C语言编程T12" class="headerlink" title="C语言编程T12"></a>C语言编程T12</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p><strong>约束条件很重要，不要越界！！！</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/149.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>/*#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int Isprime(long x);int main(){    long int c,d,total=0,i;    printf(&quot;please input c,d(c&gt;2):\n&quot;);    scanf( &quot;%ld,%ld&quot;,&amp;c,&amp;d);    //这里可以约束    for(i=c;i&lt;=d-2;i++)    {        //这里也可以约束        if(Isprime(i)&amp;&amp;Isprime(i+2))        {            printf(&quot;(%ld,%ld)\n&quot;,i,i+2);            total++;            i=i+2;        }    }    printf(&quot;total=%d\n&quot;,total);    return 0;}int Isprime(long x){    int i=2;    for(i=2;i&lt;x;i++)    {        if(x%i==0)        {            return 0;        }    }    return 1;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T11</title>
+    <link href="/2020/04/24/CprogrammingT11/"/>
+    <url>/2020/04/24/CprogrammingT11/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T11"><a href="#C语言编程T11" class="headerlink" title="C语言编程T11"></a>C语言编程T11</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p><img src="/img/c_correction/141.1.png" srcset="/img/loading.gif" alt=""><br>定积分的几何意义！！！</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/141.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>/*#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;float Integral(float (*f)(float), float a, float b);float y1(float x);float y2(float x);int main(){    printf(&quot;y1=%f\ny2=%f\n&quot;,Integral(y1,0,1),Integral(y2,0,3));    return 0;}float y1(float x){    //printf(&quot;y1=%f\n&quot;,1+x*x);    return 1+x*x;}float y2(float x){    return x/(1+x*x);}float Integral(float (*f)(float), float a, float b){    int n=100;    int i=1;    double s=0;    for(i=1;i&lt;=100;i++)    {        s+=((b-a)/n)*f(i*(b-a)/n);        //printf(&quot;s=%f\n&quot;,s);    }    return s;}*/#include &lt;stdio.h&gt;float Fun1(float x);float Fun2(float x);float Integral(float (*f)(float), float a, float b);int main(){    float y1, y2;    y1 = Integral(Fun1, 0.0, 1.0);    y2 = Integral(Fun2, 0.0, 3.0);    printf(&quot;y1=%f\ny2=%f\n&quot;, y1, y2);    return 0;}/*  函数功能：计算函数1+x*x的函数值 */float Fun1(float x){    return  1 + x * x;}/*  函数功能：计算函数x/(1+x*x)的函数值 */float Fun2(float x){    return x / (1 + x * x);}/*    函数功能：用梯形法计算函数的定积分 */float Integral(float (*f)(float), float a, float b){    float s, h;    int n = 100, i;    s = ((*f)(a) + (*f)(b)) / 2;    h = (b - a) / n;    for (i = 1; i &lt; n; i++)    {        s += (*f)(a + i * h);    }    return s * h;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T10</title>
+    <link href="/2020/04/23/CprogrammingT10/"/>
+    <url>/2020/04/23/CprogrammingT10/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T10"><a href="#C语言编程T10" class="headerlink" title="C语言编程T10"></a>C语言编程T10</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p>floor()函数的应用:取整函数！！！</p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/129.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;math.h&gt;float a[5] = {2.33, 2.56, 2.65, 2.66, 2.30};float t(float x, int n);float t(float x, int n){    float x1, x2;    int i;    for (x1 = x, i = 0; i &lt; n - 1; i++)        x1 *= 10.0;    printf(&quot;x1=%f\n&quot;,x1);    x2 = floor((double)x1);     printf(&quot;x2=%f\n&quot;,x2);    x1 = floor((double)(x1 - x2) * 10);    if (x1 &gt;= 5)        x2 += 1;    for (i = 0; i &lt; n - 1; i++)        x2 /= 10.0;    return x2;}int main(){    int i;    printf(&quot;Old array:\n&quot;);    for (i = 0; i &lt; 5; i++)        printf(&quot;a[%d]=%.3f\t&quot;, i, a[i]);    printf(&quot;\nnew array:\n&quot;);    for (i = 0; i &lt; 5; i++)        printf(&quot;a[%d]=%.2f\t&quot;, i, t(a[i], 2));    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言编程T9</title>
     <link href="/2020/04/21/CprogrammingT9/"/>
     <url>/2020/04/21/CprogrammingT9/</url>
