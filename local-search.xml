@@ -4,6 +4,72 @@
   
   
   <entry>
+    <title>C语言改错T7</title>
+    <link href="/2020/04/27/CorrectionT7/"/>
+    <url>/2020/04/27/CorrectionT7/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言改错T7"><a href="#C语言改错T7" class="headerlink" title="C语言改错T7"></a>C语言改错T7</h1><h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点:"></a>易错点:</h2><p><strong>注意返回的是-1还是+1，是谁到谁的距离！</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/171.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;int MyStrcmp(char s[], char t[], char bigger[]);int main(){    char  str1[20], str2[20], str3[20];    int diff;    printf(&quot;Input string:&quot;);    gets(str1);    printf(&quot;Input another string:&quot;);    gets(str2);    diff = MyStrcmp(str1, str2, str3);    printf(&quot;The bigger string is:%s\n&quot;, str3);    printf(&quot;The differ of the strings is:%d\n&quot;, diff);    return 0;}int MyStrcmp(char s[], char t[], char bigger[]){    int i, result = 0;    int len1 = 0, len2 = 0;    while (s[len1++] != &#39;\0&#39;);    while (t[len2++] != &#39;\0&#39;);    for (i = 0; s[i] == t[i]; i++);    if (i==0 || s[i - 1] != &#39;\0&#39; )    {        result = t[i] - s[i];        //printf(&quot;rst=%d\n&quot;,result);    }    if (result &gt;= 0)    {        for (i = 0; i &lt; len2; i++)            bigger[i] = t[i];        bigger[i]=&#39;\0&#39;;    }    else    {        for (i = 0; i &lt; len1; i++)            bigger[i] = s[i];        bigger[i]=&#39;\0&#39;;    }    return -result;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Correction</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Correction</tag>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>C语言编程T16</title>
+    <link href="/2020/04/27/CprogrammingT16/"/>
+    <url>/2020/04/27/CprogrammingT16/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言编程T16"><a href="#C语言编程T16" class="headerlink" title="C语言编程T16"></a>C语言编程T16</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><p><strong>根据过程自己找规律</strong></p><h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p><img src="/img/c_correction/169.png" srcset="/img/loading.gif" alt=""></p><h2 id="答案"><a href="#答案" class="headerlink" title="答案:"></a>答案:</h2><pre><code>#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;//分酒int i;main(){    int a,y,z;    //共有a,分成i    printf(&quot;Input Full a,Empty b,c,Get i:&quot;);    scanf(&quot;%d%d%d%d&quot;,&amp;a,&amp;y,&amp;z,&amp;i);    getti(a,y,z);    getti(a,z,y);}getti(a,y,z)  int a,y,z;  {int b=0,c=0;  //a、b、c表示现在容器已装的容量大小  //a、y、z表示的是容器的最大容量    printf(&quot;  a%d  b%d  c%d\n%4d%4d%4d\n&quot;,a,y,z,a,b,c);    while((a!=i||b!=i)&amp;&amp;c!=i)    {        //b为空,即将a倒满b        if(!b)        {            a-=y;            b=y;        }        //c已满,将c全部倒入a        else if(c==z)        {           a+=z;           c=0;        }        //b的容量大于c中还可以装入的容量        //将b倒入c直到装满        else if(b&gt;z-c)        {            b-=(z-c);            c=z;        }        //倒空b        else        {            c+=b;            b=0;        }        printf(&quot;%4d%4d%4d\n&quot;,a,b,c);    }  }</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>C</category>
+      
+      <category>Cprogramming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C</tag>
+      
+      <tag>Programming</tag>
+      
+      <tag>Cprogramming</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C语言编程T15</title>
     <link href="/2020/04/26/CprogrammingT15/"/>
     <url>/2020/04/26/CprogrammingT15/</url>

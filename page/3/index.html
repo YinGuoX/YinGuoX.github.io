@@ -147,6 +147,79 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/11/CorrectionT3/">
+        <p class="h4 index-header">C语言改错T3</p>
+      </a>
+
+      <a href="/2020/04/11/CorrectionT3/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T3易错点:分清:1.指针数组:  int *p[4]常用于字符串交换,因为相比strcpy()更加节省时间和空间故使用指针数组进行交换效率更高索引技术、索引排序
+
+函数中使用:void Fun(int *p[M]);Fun(p);
+
+2.二维数组的 行指针 :  int (*p)[4] 
+
+p[i]==*(p+i):也就是p[i]的地址！！！p[i][j] == *(p[i]+j) == *(*(p+i)+j) == (*(a+i))[j]&amp;p[i][j] == p[i]+j == *(p+i)+j函数中使用:void Fun(int (*p)[M]);Fun(p);//p</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/11/CorrectionT2/">
+        <p class="h4 index-header">C语言改错T2</p>
+      </a>
+
+      <a href="/2020/04/11/CorrectionT2/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T2易错点:1.认真核对输入、输出格式换行、空格到底要不要???(没有特殊提示应该不用吧~now)
+题目:
+答案:多了一个换行~
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int mon[][13]=
+{
+    {0,31,28,31,30,31,30,31,31,30,31,30,31},
+    {0,31,29,31,30,31,30,31,31,30,31,30,31},
+};
+int  DayofYear(int year, int month, int day);
+void  MonthDay(int year</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/11/CprogrammingT1/">
         <p class="h4 index-header">C语言编程T1</p>
       </a>
