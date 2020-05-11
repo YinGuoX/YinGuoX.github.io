@@ -147,6 +147,83 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/21/CprogrammingT9/">
+        <p class="h4 index-header">C语言编程T9</p>
+      </a>
+
+      <a href="/2020/04/21/CprogrammingT9/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T9思路:认真审题、注意英语的语法规范，i have a apple….太难了，注意名称前可能有冠词！！！
+题目:
+答案:##include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 100
+int Length(char p[]);
+int IsAllDigit(char p[]);
+int main()
+{
+    char str[N];
+    int is;
+    printf(&quot;Please input a string:&quot;);
+    gets(str);
+    printf(&quo</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-21&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/19/CorrectionT6/">
+        <p class="h4 index-header">C语言改错T6</p>
+      </a>
+
+      <a href="/2020/04/19/CorrectionT6/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T6易错点:字符串赋值:‘\0’也占字符数组一个字节char str[6]={‘C’,‘h’,‘i’,‘n’,‘a’,‘\0’};char str[]={‘C’,‘h’,‘i’,‘n’,‘a’,‘\0’};char str[]=”China”;char *ptr=”China”;
+题目:
+答案:strcpy()也可以用来字符串赋值
+#include &lt;stdio.h&gt;
+
+main()
+{
+    int i = 0;
+    char str[6] = {&#39;C&#39;, &#39;h&#39;, &#39;i&#39;, &#39;n&#39;, &#39;a&</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-19&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/18/CprogrammingT8/">
         <p class="h4 index-header">C语言编程T8</p>
       </a>
@@ -449,87 +526,11 @@ int main()
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/13/CorrectionT4/">
-        <p class="h4 index-header">C语言改错T4</p>
-      </a>
-
-      <a href="/2020/04/13/CorrectionT4/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言改错T4易错点:指针数组要初始化指针都要初始化认真检查代码正确性:for(里面),数组交换位置,while();
-题目:
-答案:#include  &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#define   MAX_LEN  10
-#define   N         150
-void SortString(char *ptr[], int n);
-main()
-{
-    int    i, n;
-    char   str[N][MAX_LEN],*pStr[N];
-    printf(&quot;How many countries</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-13&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/12/CprogrammingT2/">
-        <p class="h4 index-header">C语言编程T2</p>
-      </a>
-
-      <a href="/2020/04/12/CprogrammingT2/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T2##思路:
-判断素数可以通过sqrt()或者x/2来降低循环次数思路一:采用long long或者unsigned long 来存储2的i次幂计算2的i次幂可以迭代计算,节省时间
-思路二:采用double来存储2的i次幂注 :
-
-pow()返回的double型，所以将其转换为int型时容易有精度误差，容易出错！！！所以常使用while循环迭代计算
-
-浮点型(float,double)不可以进行取余运算故判断是否整除可以通过整型的除法特性计算(1/2==0)即:x/i == (long long)(x/i)
-题目:
-答案:切记 : pow()的精度误差，一般在int型中不用！！！
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-12&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
     <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
     </span>
   </nav>
   
