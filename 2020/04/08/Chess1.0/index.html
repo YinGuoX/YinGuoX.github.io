@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/null">
-  <link rel="icon" type="image/png" href="/null">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -27,7 +27,7 @@
 
 
 
-  <link  rel="stylesheet" href="/lib/prettify/github-v2.min.css" />
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
 
 
 
@@ -41,7 +41,7 @@
 
 
 <body>
-  <header style="height: 77vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期三, 四月 8日 2020, 6:25 晚上
+                  星期三, 四月 8日 2020, 11:00 上午
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.8k 字
+                    1.7k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                       <i class="far fa-clock"></i>
                     
                     
-                    27
+                    26
                      分钟
                   </span>
                 
@@ -188,297 +188,113 @@
 <h3 id="3-1使用到的相关知识"><a href="#3-1使用到的相关知识" class="headerlink" title="3.1使用到的相关知识:"></a>3.1使用到的相关知识:</h3><p>关键词 : 抽象、图、DFS、BFS、栈、回溯、哈密顿图</p>
 <blockquote>
 <p>《离散数学引论》:<br>哈密顿图 : 存在一条哈密顿圈<br>哈密顿路 : 图中存在一条经过所有节点并且不重复的路</p>
-</blockquote>
 <h3 id="3-2-主要思想"><a href="#3-2-主要思想" class="headerlink" title="3.2 主要思想:"></a>3.2 主要思想:</h3><p>将马和小兵抽象成图上的结点，如果小兵与小兵之间或者小兵与马之间满足马的行走规则,则将其连线，从而形成一张图，进而转换成求图上的哈密顿路问题。<br>如下图:<br><img src="/img/Chessimg/chess2.jpg" srcset="/img/loading.gif" alt=""><br>寻找一条哈密顿路:<br><img src="/img/Chessimg/chess3.jpg" srcset="/img/loading.gif" alt=""></p>
-<h2 id="4-代码实现"><a href="#4-代码实现" class="headerlink" title="4.代码实现:"></a>4.代码实现:</h2><p>使用邻接矩阵来存储图，采用BFS策略来进行路径的选择，通过节点间的度的关系来进行回溯约束，并且采用栈来存储之前遍历过的结点。</p>
-<pre><code>#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-//邻接矩阵结构
-typedef int VertexType;
-typedef int EdgeType;
+<h2 id="4-代码实现"><a href="#4-代码实现" class="headerlink" title="4.代码实现:"></a>4.代码实现:</h2><p>使用邻接矩阵来存储图，采用BFS策略来进行路径的选择，通过节点间的度的关系来进行回溯约束，并且采用栈来存储之前遍历过的结点。<br>``` </p>
+<h1 id="include"><a href="#include" class="headerlink" title="include"></a>include<stdio.h></h1><h1 id="include-1"><a href="#include-1" class="headerlink" title="include"></a>include<stdlib.h></h1><p>//邻接矩阵结构<br>typedef int VertexType;<br>typedef int EdgeType;</p>
+</blockquote>
+<h1 id="define-MAX-20"><a href="#define-MAX-20" class="headerlink" title="define MAX 20"></a>define MAX 20</h1><h1 id="define-INFINITY-65535"><a href="#define-INFINITY-65535" class="headerlink" title="define INFINITY 65535"></a>define INFINITY 65535</h1><h1 id="define-TRUE-1"><a href="#define-TRUE-1" class="headerlink" title="define TRUE 1"></a>define TRUE 1</h1><h1 id="define-FALSE-0"><a href="#define-FALSE-0" class="headerlink" title="define FALSE 0"></a>define FALSE 0</h1><p>typedef int Boole;  //布尔类型 存储TRUE FALSE<br>Boole visited[MAX];    //访问标志数组<br>Boole Svisited[MAX];   //已经入栈标志<br>int Stack[MAX];//用来存放图的顶点<br>    int top=0;//栈顶<br>typedef struct<br>{<br>    VertexType vexs[MAX];   //顶点表<br>    EdgeType arc[MAX][MAX];   //邻接矩阵 可看作边表<br>    int numVertexes,numEdges;<br>    //int GraphType;  //图的类型  无向0,有向1<br>}MGraph;<br>//循环队列<br>typedef struct{<br>int data[10];<br>int rear,front;<br>}Quene,*pQueue;</p>
+<p>void init(pQueue q){<br>    q-&gt;front=0;<br>    q-&gt;rear=0;<br>}</p>
+<p>void destroyQueue(pQueue q){<br>    free(q);<br>    q=NULL;<br>}<br>void add(pQueue q,int x){<br>    if((q-&gt;rear+1)%10==q-&gt;front){<br>        printf(“overflow”);<br>        return ;<br>    }else{<br>        q-&gt;rear=(q-&gt;rear+1)%10;<br>        q-&gt;data[q-&gt;rear]=x;<br>        printf(“入队成功\n”);<br>    }<br>}<br>int  DeQueue(pQueue q){<br>    int e=0;<br>    if(q-&gt;front==q-&gt;rear){<br>        printf(“null”);<br>        return e;<br>    }else{<br>        q-&gt;front=(q-&gt;front+1)%10;<br>       // printf(“q-&gt;front=%d\n”,q-&gt;front);<br>        printf(“删除的元素是:%d\n”,q-&gt;data[q-&gt;front]);<br>        e=q-&gt;data[q-&gt;front];</p>
+<pre><code>}
+return e;
+</code></pre><p>}</p>
+<p>void traverseQuene(pQueue q){<br>    int i=q-&gt;front;<br>    while(i!=q-&gt;rear){<br>        i=(i+1)%10;<br>        printf(“%d “,q-&gt;data[i]);<br>    }<br>    printf(“\n”);<br>}</p>
+<p>//队长度<br>int QueueLength(pQueue q){<br>    return (q-&gt;rear)-(q-&gt;front)+10%10;<br>}<br>//构造图   有向图和无向图<br>void create(MGraph *G)<br>{<br>    int i,j,k,w;<br>    printf(“请输入顶点数,边数:\n”);<br>    scanf(“%d,%d”,&amp;G-&gt;numVertexes,&amp;G-&gt;numEdges);<br>    fflush(stdin);<br>    for(i=0;i<G->numVertexes;i++)     //建立顶点表<br>    {<br>        //printf(“\n第%d个顶点”,i);<br>        //scanf(“%c”,&amp;G-&gt;vexs[i]);<br>        //getchar();<br>        G-&gt;vexs[i]=i;<br>    }</p>
+<pre><code>for(i=0;i&lt;G-&gt;numVertexes;i++)   //矩阵初始化
+    for(j=0;j&lt;G-&gt;numVertexes;j++)
+        G-&gt;arc[i][j]=INFINITY;
 
-#define MAX 20
-#define INFINITY 65535
-#define TRUE 1
-#define FALSE 0
-typedef int Boole;  //布尔类型 存储TRUE FALSE
-Boole visited[MAX];    //访问标志数组
-Boole Svisited[MAX];   //已经入栈标志
-int Stack[MAX];//用来存放图的顶点
-    int top=0;//栈顶
-typedef struct
+for(k=0;k&lt;G-&gt;numEdges;k++)
 {
-    VertexType vexs[MAX];   //顶点表
-    EdgeType arc[MAX][MAX];   //邻接矩阵 可看作边表
-    int numVertexes,numEdges;
-    //int GraphType;  //图的类型  无向0,有向1
-}MGraph;
-//循环队列
-typedef struct{
-int data[10];
-int rear,front;
-}Quene,*pQueue;
-
-void init(pQueue q){
-    q-&gt;front=0;
-    q-&gt;rear=0;
+    printf(&quot;输入边（Vi,Vj）的上下标i,j：&quot;);
+    scanf(&quot;%d,%d&quot;,&amp;i,&amp;j);
+    G-&gt;arc[i][j]=1;
+    //if(G-&gt;GraphType==0)      //此时为无向图   有向图与无向的区别就只是这一行代码的有无
+    G-&gt;arc[j][i]=G-&gt;arc[i][j];
 }
-
-void destroyQueue(pQueue q){
-    free(q);
-    q=NULL;
-}
-void add(pQueue q,int x){
-    if((q-&gt;rear+1)%10==q-&gt;front){
-        printf(&quot;overflow&quot;);
-        return ;
-    }else{
-        q-&gt;rear=(q-&gt;rear+1)%10;
-        q-&gt;data[q-&gt;rear]=x;
-        printf(&quot;入队成功\n&quot;);
+</code></pre><p>}</p>
+<p>void Output(MGraph *G)     //输出邻接矩阵<br>{<br>    int i,j,count=0;<br>    for(i=0;i<G->numVertexes;i++)<br>        printf(“\t%d”,G-&gt;vexs[i]);<br>    printf(“\n”);<br>    for(i=0;i<G->numVertexes;i++)<br>    {<br>        printf(“%4d”,G-&gt;vexs[i]);<br>        for(j=0;j<G->numVertexes;j++)<br>        {</p>
+<pre><code>            printf(&quot;\t%d&quot;,G-&gt;arc[i][j]);
+            count++;
+            if(count%G-&gt;numVertexes==0)
+            printf(&quot;\n&quot;);
     }
 }
-int  DeQueue(pQueue q){
-    int e=0;
-    if(q-&gt;front==q-&gt;rear){
-        printf(&quot;null&quot;);
-        return e;
-    }else{
-        q-&gt;front=(q-&gt;front+1)%10;
-       // printf(&quot;q-&gt;front=%d\n&quot;,q-&gt;front);
-        printf(&quot;删除的元素是:%d\n&quot;,q-&gt;data[q-&gt;front]);
-        e=q-&gt;data[q-&gt;front];
-
+</code></pre><p> }</p>
+<p>/*<br>//一次遍历全部顶点<br>void OneS(MGraph G){<br>    int i,j;<br>    //所有点标记为新点<br>    for(i=0;i&lt;G.numVertexes;i++){<br>        visited[i]=FALSE;<br>        Svisited[i]=FALSE;<br>        Stack[i]=-1;<br>    }<br>    Stack[0]=G.vexs[0];<br>    visited[0]=TRUE;//已经在栈中<br>    top=0;<br>    while(top!=G.numVertexes-1){<br>        for(i=1;i&lt;G.numVertexes;i++){<br>            printf(“i=%d G.arc[Stack[top]][i]=%d !visited[i]=%d !Svisited[i]=%d\n “,i,G.arc[Stack[top]][i],!visited[i],!Svisited[i]);<br>            if(G.arc[Stack[top]][i]!=INFINITY&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){//找邻接点<br>                PrintStack();<br>                top++;<br>                Stack[top]=G.vexs[i];<br>                visited[i]=TRUE;//此点已经入栈<br>            }<br>        }</p>
+<pre><code>    if(i==G.numVertexes){
+        //退栈,表示此点不可达
+        Svisited[Stack[top]]=TRUE;
+        visited[Stack[top]]=FALSE;
+        Queue[rear]=Stack[top];//入队
+        rear++;
+        Stack[top]=-1;
+        top--;
 
     }
-    return e;
-}
-
-void traverseQuene(pQueue q){
-    int i=q-&gt;front;
-    while(i!=q-&gt;rear){
-        i=(i+1)%10;
-        printf(&quot;%d &quot;,q-&gt;data[i]);
+    printf(&quot;top=%d,G.numVertexes-1=%d\n&quot;,top,G.numVertexes-1);
+    if(rear-front==2){//出队
+        Svisited[Queue[front]]=FALSE;
+        front++;
     }
-    printf(&quot;\n&quot;);
+    printf(&quot;rear=%d\n&quot;,rear);
+
 }
+</code></pre><p>}*/</p>
+<p>//打印栈<br>void PrintStack(){<br>    for(int i=0;i&lt;=top;i++){<br>        printf(“%d-&gt;”,Stack[i]);<br>    }<br>    printf(“&lt;\n”);<br>}</p>
+<p>void PrintQueue(Queue Q){<br>    for(int i=0;i&lt;=top;i++){<br>            printf(“%d-&gt;”,Q-&gt;data[i]);<br>        }<br>        printf(“&lt;\n”);<br>}</p>
+<p>//返回结点n的度<br>int NodeDu(MGraph G,int n){<br>    int count=0;<br>    for(int i=0;i&lt;G.numVertexes;i++){<br>        if(G.arc[n][i]==1){<br>            count ++;<br>        }<br>    }<br>    return count;<br>}<br>void PrintNodeDu(MGraph G){<br>    for(int i=0;i&lt;G.numVertexes;i++){<br>        printf(“顶点%d的度:%d”,i,NodeDu(G,i));<br>    }<br>}<br>void OnceSearch(MGraph G){<br>    int i,e;<br>    pQueue q=(pQueue)malloc(sizeof(Quene));//用来存放已经出栈的顶点<br>    //打印顶点<br>    for(i=0;i&lt;G.numVertexes;i++){<br>        printf(“顶点:%d\n”,G.vexs[i]);<br>        visited[i]=FALSE;//标记所有顶点都未被访问<br>        Svisited[i]=FALSE;//标记所有顶点都未被退栈<br>    }<br>    //栈,队初始化<br>    init(q);<br>    Stack[top]=G.vexs[0];<br>    //如果栈里元素=顶点数,则找到路径<br>    int Stop=0;//判断栈顶第二元素是否变化<br>    while((top+1)!=G.numVertexes){<br>        //找相邻结点<br>        for(i=1;i&lt;G.numVertexes;i++){<br>            if(G.arc[Stack[top]][i]==1&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){<br>                //记录栈顶第二元素</p>
+<pre><code>            top++;
+            Stack[top]=G.vexs[i];
+            visited[i]=TRUE;
 
-//队长度
-int QueueLength(pQueue q){
-    return (q-&gt;rear)-(q-&gt;front)+10%10;
-}
-//构造图   有向图和无向图
-void create(MGraph *G)
-{
-    int i,j,k,w;
-    printf(&quot;请输入顶点数,边数:\n&quot;);
-    scanf(&quot;%d,%d&quot;,&amp;G-&gt;numVertexes,&amp;G-&gt;numEdges);
-    fflush(stdin);
-    for(i=0;i&lt;G-&gt;numVertexes;i++)     //建立顶点表
-    {
-        //printf(&quot;\n第%d个顶点&quot;,i);
-        //scanf(&quot;%c&quot;,&amp;G-&gt;vexs[i]);
-        //getchar();
-        G-&gt;vexs[i]=i;
-    }
-
-    for(i=0;i&lt;G-&gt;numVertexes;i++)   //矩阵初始化
-        for(j=0;j&lt;G-&gt;numVertexes;j++)
-            G-&gt;arc[i][j]=INFINITY;
-
-    for(k=0;k&lt;G-&gt;numEdges;k++)
-    {
-        printf(&quot;输入边（Vi,Vj）的上下标i,j：&quot;);
-        scanf(&quot;%d,%d&quot;,&amp;i,&amp;j);
-        G-&gt;arc[i][j]=1;
-        //if(G-&gt;GraphType==0)      //此时为无向图   有向图与无向的区别就只是这一行代码的有无
-        G-&gt;arc[j][i]=G-&gt;arc[i][j];
-    }
-}
-
-void Output(MGraph *G)     //输出邻接矩阵
-{
-    int i,j,count=0;
-    for(i=0;i&lt;G-&gt;numVertexes;i++)
-        printf(&quot;\t%d&quot;,G-&gt;vexs[i]);
-    printf(&quot;\n&quot;);
-    for(i=0;i&lt;G-&gt;numVertexes;i++)
-    {
-        printf(&quot;%4d&quot;,G-&gt;vexs[i]);
-        for(j=0;j&lt;G-&gt;numVertexes;j++)
-        {
-
-                printf(&quot;\t%d&quot;,G-&gt;arc[i][j]);
-                count++;
-                if(count%G-&gt;numVertexes==0)
-                printf(&quot;\n&quot;);
         }
-    }
- }
 
-
-/*
-//一次遍历全部顶点
-void OneS(MGraph G){
-    int i,j;
-    //所有点标记为新点
-    for(i=0;i&lt;G.numVertexes;i++){
-        visited[i]=FALSE;
-        Svisited[i]=FALSE;
-        Stack[i]=-1;
     }
-    Stack[0]=G.vexs[0];
-    visited[0]=TRUE;//已经在栈中
-    top=0;
-    while(top!=G.numVertexes-1){
-        for(i=1;i&lt;G.numVertexes;i++){
-            printf(&quot;i=%d G.arc[Stack[top]][i]=%d !visited[i]=%d !Svisited[i]=%d\n &quot;,i,G.arc[Stack[top]][i],!visited[i],!Svisited[i]);
-            if(G.arc[Stack[top]][i]!=INFINITY&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){//找邻接点
-                PrintStack();
-                top++;
-                Stack[top]=G.vexs[i];
-                visited[i]=TRUE;//此点已经入栈
+     Stop=Stack[top-1];
+    printf(&quot;second STop=%d\n&quot;,Stop);
+     PrintStack();
+    //如果遍历所有相邻结点都没有找到合适结点,则退栈入队重新再找
+    if(0&lt;(top)&amp;&amp;(top+1)!=G.numVertexes){
+        //如果栈顶第二元素变化,说明已经退出第二层,则需要出队
+        add(q,Stack[top]);
+        Svisited[Stack[top]]=TRUE;
+        visited[Stack[top]]=FALSE;
+        printf(&quot;退栈结点:%d\n&quot;,Stack[top]);
+        top--;
+        traverseQuene(q);//打印队列
+        printf(&quot;此时队列元素个数为:%d\n&quot;,QueueLength(q));
+        printf(&quot;此时栈顶元素Stack[%d]=%d的度为:%d\n&quot;,top,Stack[top],NodeDu(G,Stack[top]));
+        if(QueueLength(q)==NodeDu(G,Stack[top])){
+            printf(&quot;进入删除队列:&quot;);
+            for(i=0;i&lt;NodeDu(G,Stack[top])-1;i++){
+                e=DeQueue(q);
+                Svisited[e]=FALSE;
+                visited[e]=FALSE;
             }
-        }
-
-        if(i==G.numVertexes){
-            //退栈,表示此点不可达
-            Svisited[Stack[top]]=TRUE;
-            visited[Stack[top]]=FALSE;
-            Queue[rear]=Stack[top];//入队
-            rear++;
-            Stack[top]=-1;
-            top--;
-
-        }
-        printf(&quot;top=%d,G.numVertexes-1=%d\n&quot;,top,G.numVertexes-1);
-        if(rear-front==2){//出队
-            Svisited[Queue[front]]=FALSE;
-            front++;
-        }
-        printf(&quot;rear=%d\n&quot;,rear);
-
-    }
-}*/
-
-//打印栈
-void PrintStack(){
-    for(int i=0;i&lt;=top;i++){
-        printf(&quot;%d-&gt;&quot;,Stack[i]);
-    }
-    printf(&quot;&lt;\n&quot;);
-}
-/*
-void PrintQueue(Queue Q){
-    printf(&quot;Queue:&quot;);
-    for(int i=0;i&lt;10;i++){
-        printf(&quot; %d &quot;,Q-&gt;data[i]);
-    }
-    printf(&quot;\n&quot;);
-}*/
-
-
-//返回结点n的度
-int NodeDu(MGraph G,int n){
-    int count=0;
-    for(int i=0;i&lt;G.numVertexes;i++){
-        if(G.arc[n][i]==1){
-            count ++;
-        }
-    }
-    return count;
-}
-void PrintNodeDu(MGraph G){
-    for(int i=0;i&lt;G.numVertexes;i++){
-        printf(&quot;顶点%d的度:%d&quot;,i,NodeDu(G,i));
-    }
-}
-void OnceSearch(MGraph G){
-    int i,e;
-    pQueue q=(pQueue)malloc(sizeof(Quene));//用来存放已经出栈的顶点
-    //打印顶点
-    for(i=0;i&lt;G.numVertexes;i++){
-        printf(&quot;顶点:%d\n&quot;,G.vexs[i]);
-        visited[i]=FALSE;//标记所有顶点都未被访问
-        Svisited[i]=FALSE;//标记所有顶点都未被退栈
-    }
-    //栈,队初始化
-    init(q);
-    Stack[top]=G.vexs[0];
-    //如果栈里元素=顶点数,则找到路径
-    int Stop=0;//判断栈顶第二元素是否变化
-    while((top+1)!=G.numVertexes){
-        //找相邻结点
-        for(i=1;i&lt;G.numVertexes;i++){
-            if(G.arc[Stack[top]][i]==1&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){
-                //记录栈顶第二元素
-
-                top++;
-                Stack[top]=G.vexs[i];
-                visited[i]=TRUE;
-
-            }
-
-        }
-         Stop=Stack[top-1];
-        printf(&quot;second STop=%d\n&quot;,Stop);
-         PrintStack();
-        //如果遍历所有相邻结点都没有找到合适结点,则退栈入队重新再找
-        if(0&lt;(top)&amp;&amp;(top+1)!=G.numVertexes){
-            //如果栈顶第二元素变化,说明已经退出第二层,则需要出队
-            add(q,Stack[top]);
+            /*add(q,Stack[top]);
             Svisited[Stack[top]]=TRUE;
             visited[Stack[top]]=FALSE;
             printf(&quot;退栈结点:%d\n&quot;,Stack[top]);
-            top--;
-            traverseQuene(q);//打印队列
-            printf(&quot;此时队列元素个数为:%d\n&quot;,QueueLength(q));
-            printf(&quot;此时栈顶元素Stack[%d]=%d的度为:%d\n&quot;,top,Stack[top],NodeDu(G,Stack[top]));
-            if(QueueLength(q)==NodeDu(G,Stack[top])){
-                printf(&quot;进入删除队列:&quot;);
-                for(i=0;i&lt;NodeDu(G,Stack[top])-1;i++){
-                    e=DeQueue(q);
-                    Svisited[e]=FALSE;
-                    visited[e]=FALSE;
-                }
-                /*add(q,Stack[top]);
-                Svisited[Stack[top]]=TRUE;
-                visited[Stack[top]]=FALSE;
-                printf(&quot;退栈结点:%d\n&quot;,Stack[top]);
-                top--;*/
-
-            }
-            printf(&quot;打印队列:&quot;);
-                traverseQuene(q);//打印队列
-                printf(&quot;此时可入栈结点:&quot;);
-                for(i=0;i&lt;G.numVertexes;i++){
-                    if(G.arc[Stack[top]][i]==1&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){
-                        printf(&quot; %d &quot;,G.vexs[i]);
-                    }
-                }
-            printf(&quot;\ntop=%d\n&quot;,top);
+            top--;*/
 
         }
+        printf(&quot;打印队列:&quot;);
+            traverseQuene(q);//打印队列
+            printf(&quot;此时可入栈结点:&quot;);
+            for(i=0;i&lt;G.numVertexes;i++){
+                if(G.arc[Stack[top]][i]==1&amp;&amp;!visited[i]&amp;&amp;!Svisited[i]){
+                    printf(&quot; %d &quot;,G.vexs[i]);
+                }
+            }
+        printf(&quot;\ntop=%d\n&quot;,top);
+
     }
 }
-
-int main()
-{
-    MGraph G;
-    int i,j;
-    //printf(&quot;输入生成图的类型(无向图0/有向图1)：&quot;);
-    //scanf(&quot;%d&quot;,&amp;G.GraphType);
-    create(&amp;G);
-    printf(&quot;邻接矩阵数据如下：\n&quot;);
-    Output(&amp;G);
-    printf(&quot;\n&quot;);
-    //PrintNodeDu(G);
-    OnceSearch(G);
-    printf(&quot;\n图遍历完毕\n&quot;);
-    PrintStack();
-    return 0;
-}
-</code></pre><h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>代码功能没有实现，应该是回溯栈的选择和约束条件的问题，以后有机会在实现~</p>
+</code></pre><p>}</p>
+<p>int main()<br>{<br>    MGraph G;<br>    int i,j;<br>    //printf(“输入生成图的类型(无向图0/有向图1)：”);<br>    //scanf(“%d”,&amp;G.GraphType);<br>    create(&amp;G);<br>    printf(“邻接矩阵数据如下：\n”);<br>    Output(&amp;G);<br>    printf(“\n”);<br>    //PrintNodeDu(G);<br>    OnceSearch(G);<br>    printf(“\n图遍历完毕\n”);<br>    PrintStack();<br>    return 0;<br>}</p>
+<p>```</p>
+<h4 id="代码不足"><a href="#代码不足" class="headerlink" title="代码不足:"></a>代码不足:</h4><p>代码功能没有实现，应该是回溯栈的选择和约束条件的问题，以后有机会在实现~</p>
 
             </div>
             <hr>
@@ -539,6 +355,17 @@ int main()
                 <div class="comments" id="comments">
                   
                   
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
 
                 </div>
               
@@ -599,6 +426,7 @@ int main()
   
 
   <footer class="mt-5">
+
   <div class="text-center py-3">
     <div>
       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
@@ -607,48 +435,55 @@ int main()
         <span>Fluid</span></a>
     </div>
     
-  <div>
+
     
-      <!-- 不蒜子统计PV -->
-      
-      <span id="busuanzi_container_site_pv" style="display: none">
-      总访问量 <span id="busuanzi_value_site_pv"></span> 次
-    </span>
+
     
-    
-      <!-- 不蒜子统计UV -->
-      
-      <span id="busuanzi_container_site_uv" style="display: none">
-      总访客数 <span id="busuanzi_value_site_uv"></span> 人
-    </span>
-    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
   </div>
 
 
-    
-  <!-- 备案信息 -->
-  <div>
-    <a href="http://beian.miit.gov.cn/" target="_blank" class="beian-icp"
-       rel="nofollow noopener">京ICP证123456号</a>
-    
-      <a
-        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=12345678"
-        rel="nofollow noopener"
-        class="beian-police"
-        target="_blank"
-      >
-        <span class="beian-police-sep">&nbsp;|&nbsp;</span>
-        
-          <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon" />
-        
-        <span>京公网安备12345678号</span>
-      </a>
-  </div>
-  
-
-
-    
-  </div>
 </footer>
 
 <!-- SCRIPTS -->
@@ -732,7 +567,7 @@ int main()
         "跳跳马1.0&nbsp;",
       ],
       cursorChar: "_",
-      typeSpeed: 250,
+      typeSpeed: 90,
       loop: false,
     });
     typed.stop();
@@ -749,8 +584,6 @@ int main()
     anchors.options = {
       placement: "right",
       visible: "hover",
-      
-      icon: "#"
       
     };
     var el = "h1,h2,h3,h4,h5,h6".split(",");
@@ -794,56 +627,6 @@ int main()
 
 
 
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 

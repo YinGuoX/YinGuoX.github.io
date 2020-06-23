@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/null">
-  <link rel="icon" type="image/png" href="/null">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -27,7 +27,7 @@
 
 
 
-  <link  rel="stylesheet" href="/lib/prettify/github-v2.min.css" />
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
 
 
 
@@ -145,7 +145,7 @@
 
 <div class="text-center">
   <p class="h3">YinGuo</p>
-  <p>Study / IT / Chess / Unity of knowing and doing</p>
+  <p>CS / DL / CV</p>
   
     
     
@@ -158,19 +158,41 @@
     
     
     
+    <a href="https://twitter.com" target="_blank" rel="noopener" class="h4 px-1 false">
+      <i class="fab fa-twitter" aria-hidden="true"></i>
+      
+    </a>
+  
+    
+    
+    
     <a href="javascript:;" class="h4 px-1 qr-trigger">
       <i class="fab fa-weixin qrcode" aria-hidden="true"></i>
       
-        <img class="qr-img" src="/img/avatar.png" srcset="/img/loading.gif" alt="qrcode" />
+        <img class="qr-img" src="/img/avatar_1.jpg" srcset="/img/loading.gif" alt="qrcode" />
       
     </a>
   
 </div>
 <div class="mt-5 markdown-body">
-  <center>
-
-<h2 id="HELLO-WORLD"><a href="#HELLO-WORLD" class="headerlink" title="HELLO WORLD"></a>HELLO WORLD</h2><p> This is YinGuo.</p>
-<h3 id="I-forever-thought"><a href="#I-forever-thought" class="headerlink" title="I forever thought"></a>I forever thought</h3><h3 id="You-are-more-than-what-you-have-become"><a href="#You-are-more-than-what-you-have-become" class="headerlink" title="You are more than what you have become."></a>You are more than what you have become.</h3><h3 id="Therefore"><a href="#Therefore" class="headerlink" title="Therefore"></a>Therefore</h3><h3 id="Look-inside-yourself"><a href="#Look-inside-yourself" class="headerlink" title="Look inside yourself"></a>Look inside yourself</h3><h3 id="You-must-take-your-place-in-the-circle-of-life"><a href="#You-must-take-your-place-in-the-circle-of-life" class="headerlink" title="You must take your place in the circle of life."></a>You must take your place in the circle of life.</h3></center>
+  <p><script>
+fetch('https://api.eatrice.top')
+  .then(response => response.json())
+  .then(data => {
+    var rainbow = document.getElementById('rainbow');
+    rainbow.innerHTML = data.Content;
+    rainbow.href = "https://rainbow.eatrice.top/?ID=" + data.ID;
+  })
+  .catch(console.error)
+</script></p>
+<center>
+<p>热爱计算机科学技术，闲暇时间爱打羽毛球与国际象棋，欢迎各位前来切磋~
+<br>
+<p>生活中践行王守仁的知行合一，略信仰马克思哲学，深知路漫漫，吾将上下求索。
+<br>
+<h3>以有涯之生逐无涯之知，岂不快哉！哈哈哈</h3>
+<h2><a id="rainbow">🌈 获取中...</a></h2>
+</center>
 
 </div>
 
@@ -217,6 +239,7 @@
   
 
   <footer class="mt-5">
+
   <div class="text-center py-3">
     <div>
       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
@@ -225,48 +248,55 @@
         <span>Fluid</span></a>
     </div>
     
-  <div>
+
     
-      <!-- 不蒜子统计PV -->
-      
-      <span id="busuanzi_container_site_pv" style="display: none">
-      总访问量 <span id="busuanzi_value_site_pv"></span> 次
-    </span>
+
     
-    
-      <!-- 不蒜子统计UV -->
-      
-      <span id="busuanzi_container_site_uv" style="display: none">
-      总访客数 <span id="busuanzi_value_site_uv"></span> 人
-    </span>
-    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
   </div>
 
 
-    
-  <!-- 备案信息 -->
-  <div>
-    <a href="http://beian.miit.gov.cn/" target="_blank" class="beian-icp"
-       rel="nofollow noopener">京ICP证123456号</a>
-    
-      <a
-        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=12345678"
-        rel="nofollow noopener"
-        class="beian-police"
-        target="_blank"
-      >
-        <span class="beian-police-sep">&nbsp;|&nbsp;</span>
-        
-          <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon" />
-        
-        <span>京公网安备12345678号</span>
-      </a>
-  </div>
-  
-
-
-    
-  </div>
 </footer>
 
 <!-- SCRIPTS -->
@@ -322,7 +352,7 @@
         "地势坤 君子以厚德载物&nbsp;",
       ],
       cursorChar: "_",
-      typeSpeed: 250,
+      typeSpeed: 90,
       loop: false,
     });
     typed.stop();
@@ -339,8 +369,6 @@
     anchors.options = {
       placement: "right",
       visible: "hover",
-      
-      icon: "#"
       
     };
     var el = "h1,h2,h3,h4,h5,h6".split(",");
@@ -370,56 +398,6 @@
 
 
 
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
