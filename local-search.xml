@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>机器学习程序练习2:逻辑回归和正则化</title>
+    <link href="/2020/07/08/ML_Andrew_Pex2_Logistic_Regression/"/>
+    <url>/2020/07/08/ML_Andrew_Pex2_Logistic_Regression/</url>
+    
+    <content type="html"><![CDATA[<h1 id="吴恩达机器学习程序练习2-逻辑回归与正则化"><a href="#吴恩达机器学习程序练习2-逻辑回归与正则化" class="headerlink" title="吴恩达机器学习程序练习2:逻辑回归与正则化"></a>吴恩达机器学习程序练习2:逻辑回归与正则化</h1><p>更多详细信息可参考同文件夹下的andrew_ml_ex22391</p><h2 id="1-逻辑回归"><a href="#1-逻辑回归" class="headerlink" title="1.逻辑回归"></a>1.逻辑回归</h2><p>构建一个逻辑回归模型来预测学生是否被大学录取<br>假设你是大学相关的管理者，想通过申请学生两次测试的评分，来决定是否被录取，现在你拥有申请学生的可用于训练逻辑回归的训练样本集。<br>对于每一个样本：两次测试的评分与最后是否被录取结果</p><h3 id="1-1-数据可视化"><a href="#1-1-数据可视化" class="headerlink" title="1.1 数据可视化"></a>1.1 数据可视化</h3><pre><code class="lang-python">import numpy as npimport pandas as pdimport matplotlib.pyplot as plt</code></pre><pre><code class="lang-python">path = &#39;./andrew_ml_ex22391/ex2data1.txt&#39;data = pd.read_csv(path,header=None,names=[&#39;Exam 1&#39;,&#39;Exam 2&#39;,&#39;Admitted&#39;])data.head()</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Exam 1</th>      <th>Exam 2</th>      <th>Admitted</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>34.623660</td>      <td>78.024693</td>      <td>0</td>    </tr>    <tr>      <th>1</th>      <td>30.286711</td>      <td>43.894998</td>      <td>0</td>    </tr>    <tr>      <th>2</th>      <td>35.847409</td>      <td>72.902198</td>      <td>0</td>    </tr>    <tr>      <th>3</th>      <td>60.182599</td>      <td>86.308552</td>      <td>1</td>    </tr>    <tr>      <th>4</th>      <td>79.032736</td>      <td>75.344376</td>      <td>1</td>    </tr>  </tbody></table></div><pre><code class="lang-python"># 获取Admitted为1的data所有的数据# pandas库中的isin()用于数据筛选# isin()接收一个列表，判断该列中元素是否在列表中positive = data[data[&#39;Admitted&#39;].isin([1])]negative = data[data[&#39;Admitted&#39;].isin([0])]# print(positive)fig,ax = plt.subplots(figsize=(12,8))ax.scatter(positive[&#39;Exam 1&#39;],positive[&#39;Exam 2&#39;],s = 50,c=&#39;b&#39;,marker=&#39;o&#39;,label=&#39;Admitted&#39;)ax.scatter(negative[&#39;Exam 1&#39;],negative[&#39;Exam 2&#39;],s=50,c=&#39;r&#39;,marker=&#39;x&#39;,label=&#39;Nor Admitted&#39;)ax.legend()ax.set_xlabel(&#39;Exam 1 Score&#39;)ax.set_ylabel(&#39;Exam 2 Score&#39;)plt.show()</code></pre><p><img src="/img/lg6.png" srcset="/img/loading.gif" alt="png"></p><h3 id="1-2-实现"><a href="#1-2-实现" class="headerlink" title="1.2 实现"></a>1.2 实现</h3><h4 id="1-2-1-sigmoid函数"><a href="#1-2-1-sigmoid函数" class="headerlink" title="1.2.1 sigmoid函数"></a>1.2.1 sigmoid函数</h4><p>逻辑回归函数 (选择的模型) (hypothesis函数) 为</p><script type="math/tex; mode=display">h_\theta=g(\theta^Tx)</script><p>g()代表一个常用的逻辑函数(logistic function) ，即 Sigmoid 函数(Sigmoid function)(Logistic function),公式为:</p><script type="math/tex; mode=display">g(z)=\frac{1}{1+e^{-z}}</script><p>所以合起来，得到的逻辑回归模型的假设函数为：</p><script type="math/tex; mode=display">h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}</script><pre><code class="lang-python"># 实现sigmoid函数def sigmoid(z):    return 1/(1+np.exp(-z))</code></pre><h4 id="1-2-2-代价函数和梯度"><a href="#1-2-2-代价函数和梯度" class="headerlink" title="1.2.2 代价函数和梯度"></a>1.2.2 代价函数和梯度</h4><p>代价函数：</p><script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m[-y^{(i)}log(h_\theta(x^{(i)}))-(1-y^{(i)})log(1-h_\theta(x^{(i)}))]</script><p>梯度：</p><script type="math/tex; mode=display">\frac{\partial J(\theta)}{\partial \theta_j}=\frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}</script><p>虽然这个梯度与线性回归的梯度一模一样，但是$h_\theta(x)$是不一样的！</p><pre><code class="lang-python"># 实现代价函数def cost(theta,X,y):    theta = np.matrix(theta)    X=np.matrix(X)    y = np.matrix(y)    first = np.multiply(-y,np.log(sigmoid(X*theta.T)))    second = np.multiply((1-y),np.log(1-sigmoid(X*theta.T)))    return np.sum(first-second)/(len(X))</code></pre><p>初始化X,y,$\theta$</p><pre><code class="lang-python"># 添加一列常数列data.insert(0,&#39;Ones&#39;,1)# 初始化X,y,thetacols = data.shape[1]X = data.iloc[:,0:cols-1]y = data.iloc[:,cols-1:cols]theta = np.zeros(3)# 转换类型X = np.array(X.values)y = np.array(y.values)# print(&quot;X为：&quot;)# print(X)# print(&quot;y为：&quot;)# print(y)</code></pre><pre><code class="lang-python"># 检查矩阵的维度X.shape,theta.shape,y.shape</code></pre><pre><code>((100, 3), (3,), (100, 1))</code></pre><pre><code class="lang-python"># 用初始theta来计算代价(验证正确性)cost(theta,X,y)</code></pre><pre><code>0.6931471805599453</code></pre><pre><code class="lang-python"># 实现梯度计算的函数(由于使用第三方库来计算theta，故不进行梯度下降)def gradient(theta,X,y):    theta = np.matrix(theta)    X = np.matrix(X)    y = np.matrix(y)    parameters = int(theta.ravel().shape[1])    grad = np.zeros(parameters)    # 迭代计算-------------------------------    error = sigmoid(X*theta.T)-y    for i in range(parameters):        term = np.multiply(error,X[:,i])        # 求解梯度        grad[i] = np.sum(term)/len(X)        # 梯度下降        # theta[0][i]=theta[0][i]-alpha*grad[i]    # ----------------------------------------    return grad</code></pre><h4 id="1-2-3-用工具库计算-theta-的值"><a href="#1-2-3-用工具库计算-theta-的值" class="headerlink" title="1.2.3 用工具库计算$\theta$的值"></a>1.2.3 用工具库计算$\theta$的值</h4><p>在之前的线性回归中，我们自己写代码实现梯度下降：代价函数、计算梯度、梯度下降。<br><br>此次，我们通过调用已有的库来进行梯度下降（即：不用自己定义迭代次数和步长，功能会直接告诉我们最优解。正如：Andrew Ng介绍的Octave的’fminunc’函数）。<br><br>在python中，可以使用scipy.optimize.fmin_tnc做同样的事情</p><pre><code class="lang-python">import scipy.optimize as optresult = opt.fmin_tnc(func=cost,x0=theta,fprime=gradient,args=(X,y))result</code></pre><pre><code>(array([-25.16131872,   0.20623159,   0.20147149]), 36, 0)</code></pre><pre><code class="lang-python"># 使用第三方库计算的结果带回代价函数计算cost(result[0],X,y)</code></pre><pre><code>0.20349770158947425</code></pre><pre><code class="lang-python"># 画出决策曲线plotting_x1 = np.linspace(30,100,100)plotting_h1 = ( - result[0][0]-result[0][1]*plotting_x1)/result[0][2]fig,ax = plt.subplots(figsize=(12,8))ax.plot(plotting_x1,plotting_h1,&#39;y&#39;,label = &#39;Prediction&#39;)ax.scatter(positive[&#39;Exam 1&#39;], positive[&#39;Exam 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Admitted&#39;)ax.scatter(negative[&#39;Exam 1&#39;], negative[&#39;Exam 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Not Admitted&#39;)ax.legend()ax.set_xlabel(&#39;Exam 1 Score&#39;)ax.set_ylabel(&#39;Exam 2 Score&#39;)plt.show()</code></pre><p><img src="/img/lg26.png" srcset="/img/loading.gif" alt="png"></p><h4 id="1-2-4-评价逻辑回归模型"><a href="#1-2-4-评价逻辑回归模型" class="headerlink" title="1.2.4 评价逻辑回归模型"></a>1.2.4 评价逻辑回归模型</h4><p>在确定参数之后，可以使用这个模型来预测一个学生是否被录取</p><pre><code class="lang-python"># 实现h(x)def hfunc1(theta,X):    return sigmoid(np.dot(theta.T,X))hfunc1(result[0],[1,45,85])</code></pre><pre><code>0.776290625526598</code></pre><h5 id="评价-theta"><a href="#评价-theta" class="headerlink" title="评价$\theta$"></a>评价$\theta$</h5><p>看模型在训练集上的正确率怎么样。写一个predict的函数，给出数据以及参数后，会返回0或者1.然后在把这个priedict函数用于训练集上，看准确率怎样</p><pre><code class="lang-python"># 定义预测函数def predict(theta,X):    probability = sigmoid(X*theta.T)    return [1 if x &gt;= 0.5 else 0 for x in probability]</code></pre><pre><code class="lang-python"># 添加预测准确率theta_min = np.matrix(result[0])predictions = predict(theta_min,X)# zip()，打包成一个一个的元组correct = [1 if ((a==1 and b == 1) or (a == 0 and b==0)) else 0 for (a,b) in zip(predictions,y)]accuracy = (sum(map(int,correct))% len(correct))print(&#39;accuracy = {0}%&#39;.format(accuracy))</code></pre><pre><code>accuracy = 89%</code></pre><p>画出对应曲线(有缘再续)</p><h2 id="2-逻辑回归-正则化"><a href="#2-逻辑回归-正则化" class="headerlink" title="2.逻辑回归+正则化"></a>2.逻辑回归+正则化</h2><p>实现加入正则项来提升逻辑回归算法。<br><br>假设你是工厂的生产主管，你有一些芯片在两次测试中的测试结果，测试结果决定芯片是否接受或抛弃。有一些历史数据，可以帮助构建一个逻辑回归模型。</p><h3 id="2-1-数据可视化"><a href="#2-1-数据可视化" class="headerlink" title="2.1 数据可视化"></a>2.1 数据可视化</h3><pre><code class="lang-python">path = &#39;./andrew_ml_ex22391/ex2data2.txt&#39;data_init = pd.read_csv(path,header=None,names = [&#39;Test 1&#39;,&#39;Test 2&#39;,&#39;Accepted&#39;])data_init.head()</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Test 1</th>      <th>Test 2</th>      <th>Accepted</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0.051267</td>      <td>0.69956</td>      <td>1</td>    </tr>    <tr>      <th>1</th>      <td>-0.092742</td>      <td>0.68494</td>      <td>1</td>    </tr>    <tr>      <th>2</th>      <td>-0.213710</td>      <td>0.69225</td>      <td>1</td>    </tr>    <tr>      <th>3</th>      <td>-0.375000</td>      <td>0.50219</td>      <td>1</td>    </tr>    <tr>      <th>4</th>      <td>-0.513250</td>      <td>0.46564</td>      <td>1</td>    </tr>  </tbody></table></div><pre><code class="lang-python">positive2 = data_init[data_init[&#39;Accepted&#39;].isin([1])]negative2 = data_init[data_init[&#39;Accepted&#39;].isin([0])]fig,ax = plt.subplots(figsize=(12,8))ax.scatter(positive2[&#39;Test 1&#39;],positive2[&#39;Test 2&#39;],s=50,c=&#39;b&#39;,marker=&#39;o&#39;,label=&#39;Accepted&#39;)ax.scatter(negative2[&#39;Test 1&#39;],negative2[&#39;Test 2&#39;],s=50,c=&#39;r&#39;,marker=&#39;x&#39;,label=&#39;Rejected&#39;)ax.legend()ax.set_xlabel(&#39;Test 1 Score&#39;)ax.set_ylabel(&#39;Test 2 Score&#39;)plt.show()</code></pre><p><img src="/img/lg37.png" srcset="/img/loading.gif" alt="png"></p><p>如上图所示，这个数据集不可使用直线进行分割，而之前的逻辑回归只适用于线性的分割，故另想它法</p><h3 id="2-2-特征映射"><a href="#2-2-特征映射" class="headerlink" title="2.2 特征映射"></a>2.2 特征映射</h3><p>一种更好的使用数据集的方式是为每组数据创造更多的特征。所以我们为每一组$x_1,x_2$添加了最高到6次幂的特征</p><pre><code class="lang-python">degree = 6data2 = data_initx1 = data2[&#39;Test 1&#39;]x2 = data2[&#39;Test 2&#39;]data2.insert(3,&#39;Ones&#39;,1)for i in range(1,degree+1):    for j in range(0,i+1):        data2[&#39;F&#39;+str(i-j)+str(j)]=np.power(x1,i-j)*np.power(x2,j)data2.drop(&#39;Test 1&#39;,axis=1,inplace=True)data2.drop(&#39;Test 2&#39;,axis = 1,inplace=True)data2.head()</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Accepted</th>      <th>Ones</th>      <th>F10</th>      <th>F01</th>      <th>F20</th>      <th>F11</th>      <th>F02</th>      <th>F30</th>      <th>F21</th>      <th>F12</th>      <th>...</th>      <th>F23</th>      <th>F14</th>      <th>F05</th>      <th>F60</th>      <th>F51</th>      <th>F42</th>      <th>F33</th>      <th>F24</th>      <th>F15</th>      <th>F06</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1</td>      <td>1</td>      <td>0.051267</td>      <td>0.69956</td>      <td>0.002628</td>      <td>0.035864</td>      <td>0.489384</td>      <td>0.000135</td>      <td>0.001839</td>      <td>0.025089</td>      <td>...</td>      <td>0.000900</td>      <td>0.012278</td>      <td>0.167542</td>      <td>1.815630e-08</td>      <td>2.477505e-07</td>      <td>0.000003</td>      <td>0.000046</td>      <td>0.000629</td>      <td>0.008589</td>      <td>0.117206</td>    </tr>    <tr>      <th>1</th>      <td>1</td>      <td>1</td>      <td>-0.092742</td>      <td>0.68494</td>      <td>0.008601</td>      <td>-0.063523</td>      <td>0.469143</td>      <td>-0.000798</td>      <td>0.005891</td>      <td>-0.043509</td>      <td>...</td>      <td>0.002764</td>      <td>-0.020412</td>      <td>0.150752</td>      <td>6.362953e-07</td>      <td>-4.699318e-06</td>      <td>0.000035</td>      <td>-0.000256</td>      <td>0.001893</td>      <td>-0.013981</td>      <td>0.103256</td>    </tr>    <tr>      <th>2</th>      <td>1</td>      <td>1</td>      <td>-0.213710</td>      <td>0.69225</td>      <td>0.045672</td>      <td>-0.147941</td>      <td>0.479210</td>      <td>-0.009761</td>      <td>0.031616</td>      <td>-0.102412</td>      <td>...</td>      <td>0.015151</td>      <td>-0.049077</td>      <td>0.158970</td>      <td>9.526844e-05</td>      <td>-3.085938e-04</td>      <td>0.001000</td>      <td>-0.003238</td>      <td>0.010488</td>      <td>-0.033973</td>      <td>0.110047</td>    </tr>    <tr>      <th>3</th>      <td>1</td>      <td>1</td>      <td>-0.375000</td>      <td>0.50219</td>      <td>0.140625</td>      <td>-0.188321</td>      <td>0.252195</td>      <td>-0.052734</td>      <td>0.070620</td>      <td>-0.094573</td>      <td>...</td>      <td>0.017810</td>      <td>-0.023851</td>      <td>0.031940</td>      <td>2.780914e-03</td>      <td>-3.724126e-03</td>      <td>0.004987</td>      <td>-0.006679</td>      <td>0.008944</td>      <td>-0.011978</td>      <td>0.016040</td>    </tr>    <tr>      <th>4</th>      <td>1</td>      <td>1</td>      <td>-0.513250</td>      <td>0.46564</td>      <td>0.263426</td>      <td>-0.238990</td>      <td>0.216821</td>      <td>-0.135203</td>      <td>0.122661</td>      <td>-0.111283</td>      <td>...</td>      <td>0.026596</td>      <td>-0.024128</td>      <td>0.021890</td>      <td>1.827990e-02</td>      <td>-1.658422e-02</td>      <td>0.015046</td>      <td>-0.013650</td>      <td>0.012384</td>      <td>-0.011235</td>      <td>0.010193</td>    </tr>  </tbody></table><p>5 rows × 29 columns</p></div><h3 id="2-3-代价函数和梯度"><a href="#2-3-代价函数和梯度" class="headerlink" title="2.3 代价函数和梯度"></a>2.3 代价函数和梯度</h3><p>代价函数：</p><script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m[-y^{(i)}log(h_\theta(x^{(i)}))-(1-y^{(i)})log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum_{j=1}^n\theta_j^{2}</script><p>注：$\theta_0$是不需要正则化，故下标从1开始</p><p>梯度的第j个元素的更新公式：</p><script type="math/tex; mode=display">\theta_0:=\theta_0-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_0^{(i)}</script><script type="math/tex; mode=display">\theta_j:=\theta_j-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_j^{(i)}+\frac{\lambda}{m}\theta_j</script><p>对j=1,2,…….n时的式子重新调整：</p><script type="math/tex; mode=display">\theta_j:=\theta_j(1-\alpha\frac{\lambda}{m})-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_j^{(i)}</script><pre><code class="lang-python"># 实现正则化的代价函数def costReg(theta,X,y,learningRate):    theta = np.matrix(theta)    X = np.matrix(X)    y = np.matrix(y)    first = np.multiply(-y,np.log(sigmoid(X*theta.T)))    second = np.multiply((1-y),np.log(1-sigmoid(X*theta.T)))    reg = (learningRate/(2*len(X)))*np.sum(np.power(theta[:,1:theta.shape[1]],2))    return np.sum(first-second)/len(X)+reg</code></pre><pre><code class="lang-python"># 实现正则化的梯度函数def gradientReg(theta,X,y,learningRate):    theta = np.matrix(theta)    X = np.matrix(X)    y = np.matrix(y)    patameters = int(theta.ravel().shape[1])    grad = np.zeros(patameters)    error = sigmoid(X*theta.T)-y    for i in range(patameters):        term = np.multiply(error,X[:,i])        if i==0 :            grad[i] = np.sum(term)/len(X)        else :            grad[i] = (np.sum(term)/len(X))+((learningRate/len(X))*theta[:,i])    return grad</code></pre><pre><code class="lang-python"># 初始化X,y.thetacols = data2.shape[1]X2 = data2.iloc[:,1:cols]y2 = data2.iloc[:,0:1]theta2 = np.zeros(cols-1)# 类型转换X2 = np.array(X2.values)y2 = np.array(y2.values)# lambda设为1learningRate = 1</code></pre><pre><code class="lang-python"># 计算初始代价costReg(theta2,X2,y2,learningRate)</code></pre><pre><code>0.6931471805599454</code></pre><h4 id="2-3-1-使用工具库求解-theta-等参数"><a href="#2-3-1-使用工具库求解-theta-等参数" class="headerlink" title="2.3.1 使用工具库求解$\theta$等参数"></a>2.3.1 使用工具库求解$\theta$等参数</h4><pre><code class="lang-python">result2 = opt.fmin_tnc(func=costReg,x0=theta2,fprime=gradientReg,args=(X2,y2,learningRate))result2</code></pre><pre><code>(array([ 1.27271027,  0.62529965,  1.18111687, -2.01987399, -0.91743189,        -1.43166928,  0.12393228, -0.36553118, -0.35725403, -0.17516292,        -1.45817009, -0.05098418, -0.61558554, -0.27469165, -1.19271298,        -0.2421784 , -0.20603299, -0.04466178, -0.27778951, -0.29539513,        -0.45645982, -1.04319155,  0.02779373, -0.2924487 ,  0.0155576 ,        -0.32742405, -0.1438915 , -0.92467487]), 32, 1)</code></pre><p>最后，我们可以使用第1部分中的预测函数来查看我们的方案在训练数据上的准确度。</p><pre><code class="lang-python">theta_min = np.matrix(result2[0])predictions = predict(theta_min, X2)correct = [1 if ((a == 1 and b == 1) or (a == 0 and b == 0)) else 0 for (a, b) in zip(predictions, y2)]accuracy = (sum(map(int, correct)) % len(correct))print (&#39;accuracy = {0}%&#39;.format(accuracy))</code></pre><pre><code>accuracy = 98%</code></pre><h3 id="2-4-画出决策曲线"><a href="#2-4-画出决策曲线" class="headerlink" title="2.4 画出决策曲线"></a>2.4 画出决策曲线</h3><pre><code class="lang-python"># 预测函数h(x)def hfunc2(theta, x1, x2):    temp = theta[0][0]    place = 0    for i in range(1, degree+1):        for j in range(0, i+1):            temp+= np.power(x1, i-j) * np.power(x2, j) * theta[0][place+1]            place+=1    return temp</code></pre><pre><code class="lang-python"># 找出边界def find_decision_boundary(theta):    t1 = np.linspace(-1,1.5,1000)    t2 = np.linspace(-1,1.5,1000)    # 获取(t1,t2)这样的数组对    cordinates=[(x,y) for x in t1 for y in t2]    # print(&quot;cordinates是：\n{}&quot;.format(cordinates))    # 一个一个抽取(x.y)的数组对    x_cord,y_cord = zip(*cordinates)    # print(&quot;cx_cord,y_cord是：\n{}，{}&quot;.format(x_cord,y_cord))    h_val = pd.DataFrame({&#39;x1&#39;:x_cord,&#39;x2&#39;:y_cord})    print(&quot;h_val是：\n{}&quot;.format(h_val))    h_val[&#39;hval&#39;]=hfunc2(theta,h_val[&#39;x1&#39;],h_val[&#39;x2&#39;])    decision=h_val[np.abs(h_val[&#39;hval&#39;])&lt;2*10**-3]    return decision.x1, decision.x2</code></pre><pre><code class="lang-python"># 画图fig,ax = plt.subplots(figsize=(12,8))ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)ax.set_xlabel(&#39;Test 1 Score&#39;)ax.set_ylabel(&#39;Test 2 Score&#39;)x,y =find_decision_boundary(result2)plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)ax.legend()plt.show()</code></pre><pre><code>h_val是：         x1        x20      -1.0 -1.0000001      -1.0 -0.9974972      -1.0 -0.9949953      -1.0 -0.9924924      -1.0 -0.989990...     ...       ...999995  1.5  1.489990999996  1.5  1.492492999997  1.5  1.494995999998  1.5  1.497497999999  1.5  1.500000[1000000 rows x 2 columns]</code></pre><p><img src="/img/lg55.png" srcset="/img/loading.gif" alt="png"></p><h3 id="2-5-改变-lambda-，观察决策曲线"><a href="#2-5-改变-lambda-，观察决策曲线" class="headerlink" title="2.5 改变$\lambda$，观察决策曲线"></a>2.5 改变$\lambda$，观察决策曲线</h3><h4 id="2-5-1-过拟合"><a href="#2-5-1-过拟合" class="headerlink" title="2.5.1 过拟合"></a>2.5.1 过拟合</h4><p>当$\lambda=0$可以得出，使正则化项为0，使得$\theta$值不受$\lambda$影响，从而特征过多，方差过高，出现过拟合(对每一个训练集样本都尽可能拟合)</p><pre><code class="lang-python">learningRate2 = 0result3 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate2))result3</code></pre><pre><code>(array([  13.21662791,   17.63904891,    5.27881592, -136.13732177,         -67.12242042,  -52.94668399, -147.43086589,  -91.68410686,         -38.38361129,    6.59822331,  495.35657992,  402.46736709,         511.3069028 ,  206.24695325,   66.55863181,  273.9167483 ,         304.90920777,  318.45935938,  157.30786853,   54.95286981,           1.80807367, -601.66243281, -692.5740057 , -962.14314287,        -654.83889729, -639.88930817, -262.03506162,  -50.59000875]), 280, 3)</code></pre><pre><code class="lang-python">fig, ax = plt.subplots(figsize=(12,8))ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)ax.set_xlabel(&#39;Test 1 Score&#39;)ax.set_ylabel(&#39;Test 2 Score&#39;)x, y = find_decision_boundary(result3)plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)ax.legend()plt.show()</code></pre><pre><code>h_val是：         x1        x20      -1.0 -1.0000001      -1.0 -0.9974972      -1.0 -0.9949953      -1.0 -0.9924924      -1.0 -0.989990...     ...       ...999995  1.5  1.489990999996  1.5  1.492492999997  1.5  1.494995999998  1.5  1.497497999999  1.5  1.500000[1000000 rows x 2 columns]</code></pre><p><img src="/img/lg59.png" srcset="/img/loading.gif" alt="png"></p><h4 id="2-5-2-欠拟合"><a href="#2-5-2-欠拟合" class="headerlink" title="2.5.2 欠拟合"></a>2.5.2 欠拟合</h4><p>当$\lambda=100$可以得出，使得$\theta$值更容易受$\lambda$影响，从而使$\theta$过小，偏差过高，出现欠拟合(对整个一个训练集样本都勉强拟合)</p><pre><code class="lang-python">learningRate3 = 100result4 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate3))result4</code></pre><pre><code>(array([ 0.02187847, -0.0174817 ,  0.00571065, -0.05516901, -0.01314874,        -0.03859873, -0.01846356, -0.00773219, -0.00892429, -0.02280461,        -0.04343846, -0.00235623, -0.01415612, -0.00349507, -0.04143595,        -0.02100593, -0.00471917, -0.00359131, -0.00632226, -0.0050244 ,        -0.03197683, -0.03416334, -0.00107629, -0.00702615, -0.00038507,        -0.0079823 , -0.00154779, -0.04108683]), 11, 1)</code></pre><pre><code class="lang-python">fig, ax = plt.subplots(figsize=(12,8))ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)ax.set_xlabel(&#39;Test 1 Score&#39;)ax.set_ylabel(&#39;Test 2 Score&#39;)x, y = find_decision_boundary(result4)plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)ax.legend()plt.show()</code></pre><pre><code>h_val是：         x1        x20      -1.0 -1.0000001      -1.0 -0.9974972      -1.0 -0.9949953      -1.0 -0.9924924      -1.0 -0.989990...     ...       ...999995  1.5  1.489990999996  1.5  1.492492999997  1.5  1.494995999998  1.5  1.497497999999  1.5  1.500000[1000000 rows x 2 columns]</code></pre><p><img src="lg62.png" srcset="/img/loading.gif" alt="png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Programming</category>
+      
+      <category>ML</category>
+      
+      <category>Programming Exercise</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Programming</tag>
+      
+      <tag>ML</tag>
+      
+      <tag>Programming Exercise</tag>
+      
+      <tag>Andrew Ng</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Code One Hour：Numpy-Base</title>
     <link href="/2020/06/27/Code_One_Hour1/"/>
     <url>/2020/06/27/Code_One_Hour1/</url>
@@ -36,8 +71,8 @@
   
   <entry>
     <title>机器学习程序练习1:线性回归</title>
-    <link href="/2020/06/20/ML_Andrew_Pex1_Linear_Regression/"/>
-    <url>/2020/06/20/ML_Andrew_Pex1_Linear_Regression/</url>
+    <link href="/2020/06/20/ML_Andrew_Pex1_Linear_Regression%20-%20%E5%89%AF%E6%9C%AC/"/>
+    <url>/2020/06/20/ML_Andrew_Pex1_Linear_Regression%20-%20%E5%89%AF%E6%9C%AC/</url>
     
     <content type="html"><![CDATA[<h1 id="吴恩达机器学习程序练习1-线性回归"><a href="#吴恩达机器学习程序练习1-线性回归" class="headerlink" title="吴恩达机器学习程序练习1:线性回归"></a>吴恩达机器学习程序练习1:线性回归</h1><p>更多详细信息可参考同文件夹下的andrew_ml_ex14179</p><pre><code class="lang-python"># 导入对应的第三方库import numpy as npimport pandas as pdimport matplotlib.pyplot as plt</code></pre><h2 id="1-简单练习"><a href="#1-简单练习" class="headerlink" title="1.简单练习"></a>1.简单练习</h2><pre><code class="lang-python">A = np.eye(6)A</code></pre><pre><code>array([[1., 0., 0., 0., 0., 0.],       [0., 1., 0., 0., 0., 0.],       [0., 0., 1., 0., 0., 0.],       [0., 0., 0., 1., 0., 0.],       [0., 0., 0., 0., 1., 0.],       [0., 0., 0., 0., 0., 1.]])</code></pre><h2 id="2-单变量的线性回归"><a href="#2-单变量的线性回归" class="headerlink" title="2.单变量的线性回归"></a>2.单变量的线性回归</h2><p>根据城市人口数量，预测开小吃店的利润。<br>数据在ex1data1.txt中，第一列是城市人口数量，第二列是该城市小吃店利润</p><h3 id="2-1-Plotting-the-data"><a href="#2-1-Plotting-the-data" class="headerlink" title="2.1 Plotting the data"></a>2.1 Plotting the data</h3><pre><code class="lang-python"># 读入数据并且显示path = &#39;./andrew_ml_ex14179/ex1data1.txt&#39;# header=1：以第一行数据作为列索引(列名)# names = [...]:给定列名# 返回DataFrame类型,Population：人口(万)data = pd.read_csv(path,header=None,names=[&#39;Population&#39;,&#39;Profit&#39;])# DataFrame.head([N]):返回前N行data.head(94)</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Population</th>      <th>Profit</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>6.1101</td>      <td>17.5920</td>    </tr>    <tr>      <th>1</th>      <td>5.5277</td>      <td>9.1302</td>    </tr>    <tr>      <th>2</th>      <td>8.5186</td>      <td>13.6620</td>    </tr>    <tr>      <th>3</th>      <td>7.0032</td>      <td>11.8540</td>    </tr>    <tr>      <th>4</th>      <td>5.8598</td>      <td>6.8233</td>    </tr>    <tr>      <th>...</th>      <td>...</td>      <td>...</td>    </tr>    <tr>      <th>89</th>      <td>5.0594</td>      <td>2.8214</td>    </tr>    <tr>      <th>90</th>      <td>5.7077</td>      <td>1.8451</td>    </tr>    <tr>      <th>91</th>      <td>7.6366</td>      <td>4.2959</td>    </tr>    <tr>      <th>92</th>      <td>5.8707</td>      <td>7.2029</td>    </tr>    <tr>      <th>93</th>      <td>5.3054</td>      <td>1.9869</td>    </tr>  </tbody></table><p>94 rows × 2 columns</p></div><pre><code class="lang-python"># 将数据绘图成散点图data.plot(kind=&#39;scatter&#39;,x=&#39;Population&#39;,y=&#39;Profit&#39;,figsize=(12,8))plt.show()</code></pre><p><img src="/img/ML_Andrew/output_8_0.png" srcset="/img/loading.gif" alt="png"></p><h3 id="2-2-梯度下降"><a href="#2-2-梯度下降" class="headerlink" title="2.2 梯度下降"></a>2.2 梯度下降</h3><p>使用传统的线性回归的代价函数</p><h4 id="2-2-1-公式"><a href="#2-2-1-公式" class="headerlink" title="2.2.1 公式"></a>2.2.1 公式</h4><script type="math/tex; mode=display">J(\theta)=\frac{1}{2m}\sum_{i=1}^m{(h_{\theta}(x^{(i)})-y^{(i)})^2}</script><pre><code class="lang-python"># X是矩阵def computeCost(X,y,theta):    # *对应元素相乘    inner = np.power(((X*theta.T)-y),2)    return np.sum(inner)/(2*len(X))</code></pre><pre><code class="lang-python"># 验证矩阵间的乘法(*)是对应元素相乘x=np.array([[1,2],[3,4]])y=np.array([[1,2],[3,4]])print(x*y)# 这才是真正的矩阵的乘法print(x.dot(y))# 对应元素相减print(x-y)</code></pre><pre><code>[[ 1  4] [ 9 16]][[ 7 10] [15 22]][[0 0] [0 0]]</code></pre><h4 id="2-2-2-实现"><a href="#2-2-2-实现" class="headerlink" title="2.2.2 实现"></a>2.2.2 实现</h4><p>新加一列x，用于更新theta,并且将theta初始化为0，学习率初始化为0.01，迭代次数为1500次</p><pre><code class="lang-python"># 在第0列新增一列索引为Ones的全部为1的数据data.insert(0,&#39;Ones&#39;,1)# 删除某一列 要axis=1，因为默认是行# 并且要inplace=True,才是对原数据进行操作data.head(100)</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Ones</th>      <th>Population</th>      <th>Profit</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1</td>      <td>6.1101</td>      <td>17.59200</td>    </tr>    <tr>      <th>1</th>      <td>1</td>      <td>5.5277</td>      <td>9.13020</td>    </tr>    <tr>      <th>2</th>      <td>1</td>      <td>8.5186</td>      <td>13.66200</td>    </tr>    <tr>      <th>3</th>      <td>1</td>      <td>7.0032</td>      <td>11.85400</td>    </tr>    <tr>      <th>4</th>      <td>1</td>      <td>5.8598</td>      <td>6.82330</td>    </tr>    <tr>      <th>...</th>      <td>...</td>      <td>...</td>      <td>...</td>    </tr>    <tr>      <th>92</th>      <td>1</td>      <td>5.8707</td>      <td>7.20290</td>    </tr>    <tr>      <th>93</th>      <td>1</td>      <td>5.3054</td>      <td>1.98690</td>    </tr>    <tr>      <th>94</th>      <td>1</td>      <td>8.2934</td>      <td>0.14454</td>    </tr>    <tr>      <th>95</th>      <td>1</td>      <td>13.3940</td>      <td>9.05510</td>    </tr>    <tr>      <th>96</th>      <td>1</td>      <td>5.4369</td>      <td>0.61705</td>    </tr>  </tbody></table><p>97 rows × 3 columns</p></div><pre><code class="lang-python"># 初始化# 获得data的列数，0为行数cols=data.shape[1]print(cols)# [,]先行后列,获取对应行列对应区域的数据X = data.iloc[:,:-1]Y = data.iloc[:,cols-1:cols]# X训练集 Y目标集print(type(X))print(type(Y))</code></pre><pre><code>3&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</code></pre><pre><code class="lang-python"># 因为代价函数使用的是numpy矩阵，所以要转换X和Y，并且初始化theta# X.values:获取X的值，没有索引了# print(type(X.values))# print(Y.values)print(type(X))# 将X，Y转换为对应的矩阵X=np.matrix(X)# print(X)# print(X)print(type(Y))y=np.matrix(Y.values)print(type(y))theta = np.asmatrix(np.array([0,0]))print(theta)</code></pre><pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;&lt;class &#39;numpy.matrix&#39;&gt;[[0 0]]</code></pre><pre><code class="lang-python"># 查看对应维度X.shape,theta.shape,y.shapeprint(theta.size)</code></pre><pre><code>2</code></pre><h4 id="2-2-3-计算代价函数"><a href="#2-2-3-计算代价函数" class="headerlink" title="2.2.3 计算代价函数"></a>2.2.3 计算代价函数</h4><p>theta初始为0<br>computeCost(X,y,theta)</p><pre><code class="lang-python">computeCost(X,y,theta)</code></pre><pre><code>32.072733877455676</code></pre><h4 id="2-2-4-梯度下降算法"><a href="#2-2-4-梯度下降算法" class="headerlink" title="2.2.4 梯度下降算法"></a>2.2.4 梯度下降算法</h4><p>目标是最小化代价函数J(theta)，变量是theta不是X和y,通过变换theta来变化代价函数，进而使代价函数最小。<br>检查梯度下降算法是否正确运行，可以打印J(theta)的值来判断是否在不断减小，并且最后收敛到一个稳定的值。</p><pre><code class="lang-python">def gradientDescent(X,y,theta,alpha,iters):    # 初始化参数矩阵    temp=np.matrix(np.zeros(theta.shape))    # ravel()将矩阵扁平化    # 获取参数theta的个数    parameters = int(theta.ravel().shape[1])    # 用来存储代价    cost = np.zeros(iters)    thetax = np.zeros((iters,theta.size))    # print(thetax)    for i in range(iters):        # 计算代价误差        # h_theta(x)-y        error = (X*theta.T)-y        for j in range(parameters):            # np.multiply()对应元素相乘            # 计算J(theta)的导数            term = np.multiply(error,X[:,j])            # 进行梯度下降            temp[0,j]=theta[0,j]-((alpha/len(X)))*np.sum(term)            thetax[i][j]=temp[0,j]        theta = temp        cost[i]=computeCost(X,y,theta)    return theta,cost,thetax</code></pre><pre><code class="lang-python"># 初始化alpha 和 itersalpha = 0.01iters = 1500# 运行梯度下降算法来找到适合训练集的thetag,cost,thetax = gradientDescent(X,y,theta,alpha,iters)g</code></pre><pre><code>matrix([[-3.63029144,  1.16636235]])</code></pre><pre><code class="lang-python"># 预测35000和70000城市规模的小吃利润predict1 = [1,3.5]*g.Tprint(&quot;predict1:&quot;,predict1)predict2=[1,7]*g.Tprint(&quot;predict2:&quot;,predict2)</code></pre><pre><code>predict1: [[0.45197679]]predict2: [[4.53424501]]</code></pre><pre><code class="lang-python"># 显示原始数据以及拟合的线性回归方程# numpy.linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None)# 在[start,stop]返回num均匀分布的样本x = np.linspace(data.Population.min(),data.Population.max(),100)# print(x)f = g[0,0]+(g[0,1]*x)# plt.subplots(1,3,figsize=(12,8))设置一个1行3个12*8大小的子图# 返回一个figure图像和一个子图ax的列表fig ,ax =plt.subplots(figsize=(12,8))# ax.plot()绘制一条线ax.plot(x,f,&#39;r&#39;,label=&#39;Prediction&#39;)# ax.scatter()绘制一个散点图ax.scatter(data.Population,data.Profit,label=&#39;Training Data&#39;)# ax.legend(loc=1)显示图中的标签在第一象限ax.legend(loc=1)ax.set_xlabel(&quot;Population&quot;)ax.set_ylabel(&#39;Profit&#39;)ax.set_title(&quot;Predicted Profit vs. Population Size&quot;)plt.show()</code></pre><p><img src="/img/ML_Andrew/output_23_0.png" srcset="/img/loading.gif" alt="png"></p><h3 id="2-3可视化J-theta-未完待续"><a href="#2-3可视化J-theta-未完待续" class="headerlink" title="2.3可视化J(theta)(未完待续)"></a>2.3可视化J(theta)(未完待续)</h3><p>希望能够画出J(theta)与theta0,theta1之间的对应关系，应该是一个三维图像</p><pre><code class="lang-python">print(thetax.shape)print(cost.shape)print(X.shape)print(y.shape)print(cost)</code></pre><pre><code>(1500, 2)(1500,)(97, 2)(97, 1)[6.73719046 5.93159357 5.90115471 ... 4.48343473 4.48341145 4.48338826]</code></pre><pre><code class="lang-python"># 绘制3d图像# 直接根据theta0,theta1,costfunction对应的点来绘制出的散点图from mpl_toolkits.mplot3d import Axes3Dfrom matplotlib import cmfig=plt.figure()ax=fig.add_subplot(111,projection=&#39;3d&#39;)x=thetax[:,0]y1=thetax[:,1]ax.plot_trisurf(x,y1,cost,)plt.show()</code></pre><p><img src="/img/ML_Andrew/output_26_0.png" srcset="/img/loading.gif" alt="png"></p><h2 id="3-多变量线性回归"><a href="#3-多变量线性回归" class="headerlink" title="3.多变量线性回归"></a>3.多变量线性回归</h2><p>数据集:ex1data2.txt：<br>第一列：房屋大小<br>第二列：卧室数量<br>第三列：房屋售价<br>根据已有数据建立模型，预测房屋的售价</p><pre><code class="lang-python"># 读入数据并且显示path = &#39;./andrew_ml_ex14179/ex1data2.txt&#39;# header=1：以第一行数据作为列索引(列名)# names = [...]:给定列名# 返回DataFrame类型,Population：人口(万)data2 = pd.read_csv(path,header=None,names=[&#39;Size&#39;,&#39;Bedrooms&#39;,&#39;Price&#39;])# DataFrame.head([N]):返回前N行print(data2.head())print(data2.shape)</code></pre><pre><code>   Size  Bedrooms   Price0  2104         3  3999001  1600         3  3299002  2400         3  3690003  1416         2  2320004  3000         4  539900(47, 3)</code></pre><h3 id="3-1-特征缩放-Feature-Scaling"><a href="#3-1-特征缩放-Feature-Scaling" class="headerlink" title="3.1 特征缩放(Feature Scaling)"></a>3.1 特征缩放(Feature Scaling)</h3><p>根据数据得知，size变量的大小是bedrooms的1000倍，所以最好统一量级，可以使梯度下降收敛的更快</p><h4 id="3-1-1Mean-Normalization-均值归一化"><a href="#3-1-1Mean-Normalization-均值归一化" class="headerlink" title="3.1.1Mean Normalization(均值归一化)"></a>3.1.1Mean Normalization(均值归一化)</h4><p>特征减去平均值再除以标准差</p><pre><code class="lang-python">data2 = (data2-data2.mean())/data2.std()data2.head()</code></pre><div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: right;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Size</th>      <th>Bedrooms</th>      <th>Price</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0.130010</td>      <td>-0.223675</td>      <td>0.475747</td>    </tr>    <tr>      <th>1</th>      <td>-0.504190</td>      <td>-0.223675</td>      <td>-0.084074</td>    </tr>    <tr>      <th>2</th>      <td>0.502476</td>      <td>-0.223675</td>      <td>0.228626</td>    </tr>    <tr>      <th>3</th>      <td>-0.735723</td>      <td>-1.537767</td>      <td>-0.867025</td>    </tr>    <tr>      <th>4</th>      <td>1.257476</td>      <td>1.090417</td>      <td>1.595389</td>    </tr>  </tbody></table></div><h3 id="3-2-梯度下降算法"><a href="#3-2-梯度下降算法" class="headerlink" title="3.2 梯度下降算法"></a>3.2 梯度下降算法</h3><pre><code class="lang-python"># 为了能够根据矩阵运算，添加一列常数项# data2.drop(&#39;Ones&#39;,axis=1,inplace=True)data2.insert(0,&#39;Ones&#39;,1)# 初始化x,ycols = data2.shape[1]X2=data2.iloc[:,0:cols-1]y2=data2.iloc[:,cols-1:cols]# 转换为matrix格式并且初始化thetax2=np.matrix(X2)y2=np.matrix(y2)theta2 = np.matrix(np.array([0,0,0]))# 运行梯度下降算法print(&quot;开始运行梯度下降算法&quot;)g2,cost2,thetax=gradientDescent(x2,y2,theta2,alpha,iters)g2</code></pre><pre><code>开始运行梯度下降算法matrix([[-1.10898288e-16,  8.84042349e-01, -5.24551809e-02]])</code></pre><h3 id="3-3-Normal-Equation-正规方程算法"><a href="#3-3-Normal-Equation-正规方程算法" class="headerlink" title="3.3 Normal Equation(正规方程算法)"></a>3.3 Normal Equation(正规方程算法)</h3><p>正规方程是直接以theta为变量求解J(theta)的最小值，也即是直接求每个theta的偏导并且令其为0，求解方程即可<br>则利用正规方程解出向量：</p><script type="math/tex; mode=display">\theta = (X^TX)^{-1}X^Ty</script><p>梯度下降 VS 正规方程<br>梯度下降：需要选择学习率α，需要多次迭代，当特征数量n大时也能较好适用，适用于各种类型的模型<br>正规方程：不需要选择学习率α，一次计算得出，需要计算$(X^TX)^{-1}$，如果特征数量n较大则运算代价大，因为矩阵逆的计算时间复杂度为O($n^3$)，通常来说当小于10000 时还是可以接受的，只适用于线性模型，不适合逻辑回归模型等其他模型</p><pre><code class="lang-python"># 正规方程def normalEqn(X,y):# numpy.linalg模块包含线性代数的函数。# 使用这个模块，可以计算逆矩阵、求特征值、解线性方程组以及求解行列式等# inv()求解矩阵的逆# pinv()求解矩阵的伪逆    theta = np.linalg.inv(X.T.dot(X))    theta = theta.dot(X.T)    theta = theta.dot(y)    return theta</code></pre><pre><code class="lang-python"># 使用data1数据进行验证final_theta2=normalEqn(X,y)final_theta2</code></pre><pre><code>matrix([[-3.89578088],        [ 1.19303364]])</code></pre><pre><code class="lang-python"># 使用梯度下降算法# 初始化alpha 和 itersalpha = 0.01iters = 1500# 运行梯度下降算法来找到适合训练集的thetag,cost,thetax = gradientDescent(X,y,theta,alpha,iters)g</code></pre><pre><code>matrix([[-3.63029144,  1.16636235]])</code></pre>]]></content>
     
@@ -90,9 +125,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -123,9 +158,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -156,11 +191,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -189,9 +224,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -222,9 +257,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -255,9 +290,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -288,9 +323,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -321,9 +356,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -354,9 +389,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -387,9 +422,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -420,9 +455,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -453,11 +488,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -486,9 +521,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -519,9 +554,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -552,11 +587,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -585,9 +620,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -647,9 +682,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -680,11 +715,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -713,9 +748,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -746,9 +781,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -779,9 +814,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -812,11 +847,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -845,11 +880,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     
@@ -878,9 +913,9 @@
     
     <tags>
       
-      <tag>C</tag>
-      
       <tag>Programming</tag>
+      
+      <tag>C</tag>
       
       <tag>Cprogramming</tag>
       
@@ -911,11 +946,11 @@
     
     <tags>
       
+      <tag>Programming</tag>
+      
       <tag>Correction</tag>
       
       <tag>C</tag>
-      
-      <tag>Programming</tag>
       
     </tags>
     

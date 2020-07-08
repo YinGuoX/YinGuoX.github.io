@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>机器学习程序练习2:逻辑回归和正则化 - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/textbg.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 七月 8日 2020, 7:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    3.5k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    59
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="吴恩达机器学习程序练习2-逻辑回归与正则化"><a href="#吴恩达机器学习程序练习2-逻辑回归与正则化" class="headerlink" title="吴恩达机器学习程序练习2:逻辑回归与正则化"></a>吴恩达机器学习程序练习2:逻辑回归与正则化</h1><p>更多详细信息可参考同文件夹下的andrew_ml_ex22391</p>
+<h2 id="1-逻辑回归"><a href="#1-逻辑回归" class="headerlink" title="1.逻辑回归"></a>1.逻辑回归</h2><p>构建一个逻辑回归模型来预测学生是否被大学录取<br>假设你是大学相关的管理者，想通过申请学生两次测试的评分，来决定是否被录取，现在你拥有申请学生的可用于训练逻辑回归的训练样本集。<br>对于每一个样本：两次测试的评分与最后是否被录取结果</p>
+<h3 id="1-1-数据可视化"><a href="#1-1-数据可视化" class="headerlink" title="1.1 数据可视化"></a>1.1 数据可视化</h3><pre><code class="lang-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+</code></pre>
+<pre><code class="lang-python">path = &#39;./andrew_ml_ex22391/ex2data1.txt&#39;
+data = pd.read_csv(path,header=None,names=[&#39;Exam 1&#39;,&#39;Exam 2&#39;,&#39;Admitted&#39;])
+data.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Exam 1</th>
+      <th>Exam 2</th>
+      <th>Admitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>34.623660</td>
+      <td>78.024693</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>30.286711</td>
+      <td>43.894998</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>35.847409</td>
+      <td>72.902198</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>60.182599</td>
+      <td>86.308552</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>79.032736</td>
+      <td>75.344376</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<pre><code class="lang-python"># 获取Admitted为1的data所有的数据
+# pandas库中的isin()用于数据筛选
+# isin()接收一个列表，判断该列中元素是否在列表中
+positive = data[data[&#39;Admitted&#39;].isin([1])]
+negative = data[data[&#39;Admitted&#39;].isin([0])]
+# print(positive)
+fig,ax = plt.subplots(figsize=(12,8))
+ax.scatter(positive[&#39;Exam 1&#39;],positive[&#39;Exam 2&#39;],s = 50,c=&#39;b&#39;,marker=&#39;o&#39;,label=&#39;Admitted&#39;)
+ax.scatter(negative[&#39;Exam 1&#39;],negative[&#39;Exam 2&#39;],s=50,c=&#39;r&#39;,marker=&#39;x&#39;,label=&#39;Nor Admitted&#39;)
+ax.legend()
+ax.set_xlabel(&#39;Exam 1 Score&#39;)
+ax.set_ylabel(&#39;Exam 2 Score&#39;)
+plt.show()
+</code></pre>
+<p><img src="/img/lg6.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="1-2-实现"><a href="#1-2-实现" class="headerlink" title="1.2 实现"></a>1.2 实现</h3><h4 id="1-2-1-sigmoid函数"><a href="#1-2-1-sigmoid函数" class="headerlink" title="1.2.1 sigmoid函数"></a>1.2.1 sigmoid函数</h4><p>逻辑回归函数 (选择的模型) (hypothesis函数) 为</p>
+<script type="math/tex; mode=display">h_\theta=g(\theta^Tx)</script><p>g()代表一个常用的逻辑函数(logistic function) ，即 Sigmoid 函数(Sigmoid function)(Logistic function),公式为:</p>
+<script type="math/tex; mode=display">g(z)=\frac{1}{1+e^{-z}}</script><p>所以合起来，得到的逻辑回归模型的假设函数为：</p>
+<script type="math/tex; mode=display">h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}</script><pre><code class="lang-python"># 实现sigmoid函数
+def sigmoid(z):
+    return 1/(1+np.exp(-z))
+</code></pre>
+<h4 id="1-2-2-代价函数和梯度"><a href="#1-2-2-代价函数和梯度" class="headerlink" title="1.2.2 代价函数和梯度"></a>1.2.2 代价函数和梯度</h4><p>代价函数：</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m[-y^{(i)}log(h_\theta(x^{(i)}))-(1-y^{(i)})log(1-h_\theta(x^{(i)}))]</script><p>梯度：</p>
+<script type="math/tex; mode=display">\frac{\partial J(\theta)}{\partial \theta_j}=\frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}</script><p>虽然这个梯度与线性回归的梯度一模一样，但是$h_\theta(x)$是不一样的！</p>
+<pre><code class="lang-python"># 实现代价函数
+def cost(theta,X,y):
+    theta = np.matrix(theta)
+    X=np.matrix(X)
+    y = np.matrix(y)
+    first = np.multiply(-y,np.log(sigmoid(X*theta.T)))
+    second = np.multiply((1-y),np.log(1-sigmoid(X*theta.T)))
+    return np.sum(first-second)/(len(X))
+</code></pre>
+<p>初始化X,y,$\theta$</p>
+<pre><code class="lang-python"># 添加一列常数列
+data.insert(0,&#39;Ones&#39;,1)
+# 初始化X,y,theta
+cols = data.shape[1]
+X = data.iloc[:,0:cols-1]
+y = data.iloc[:,cols-1:cols]
+theta = np.zeros(3)
+# 转换类型
+X = np.array(X.values)
+y = np.array(y.values)
+# print(&quot;X为：&quot;)
+# print(X)
+# print(&quot;y为：&quot;)
+# print(y)
+</code></pre>
+<pre><code class="lang-python"># 检查矩阵的维度
+X.shape,theta.shape,y.shape
+</code></pre>
+<pre><code>((100, 3), (3,), (100, 1))
+</code></pre><pre><code class="lang-python"># 用初始theta来计算代价(验证正确性)
+cost(theta,X,y)
+</code></pre>
+<pre><code>0.6931471805599453
+</code></pre><pre><code class="lang-python"># 实现梯度计算的函数(由于使用第三方库来计算theta，故不进行梯度下降)
+def gradient(theta,X,y):
+    theta = np.matrix(theta)
+    X = np.matrix(X)
+    y = np.matrix(y)
+    parameters = int(theta.ravel().shape[1])
+    grad = np.zeros(parameters)
+    # 迭代计算-------------------------------
+    error = sigmoid(X*theta.T)-y
+    for i in range(parameters):
+        term = np.multiply(error,X[:,i])
+        # 求解梯度
+        grad[i] = np.sum(term)/len(X)
+        # 梯度下降
+        # theta[0][i]=theta[0][i]-alpha*grad[i]
+    # ----------------------------------------
+    return grad
+</code></pre>
+<h4 id="1-2-3-用工具库计算-theta-的值"><a href="#1-2-3-用工具库计算-theta-的值" class="headerlink" title="1.2.3 用工具库计算$\theta$的值"></a>1.2.3 用工具库计算$\theta$的值</h4><p>在之前的线性回归中，我们自己写代码实现梯度下降：代价函数、计算梯度、梯度下降。<br><br>此次，我们通过调用已有的库来进行梯度下降（即：不用自己定义迭代次数和步长，功能会直接告诉我们最优解。正如：Andrew Ng介绍的Octave的’fminunc’函数）。<br><br>在python中，可以使用scipy.optimize.fmin_tnc做同样的事情</p>
+<pre><code class="lang-python">import scipy.optimize as opt
+result = opt.fmin_tnc(func=cost,x0=theta,fprime=gradient,args=(X,y))
+result
+</code></pre>
+<pre><code>(array([-25.16131872,   0.20623159,   0.20147149]), 36, 0)
+</code></pre><pre><code class="lang-python"># 使用第三方库计算的结果带回代价函数计算
+cost(result[0],X,y)
+</code></pre>
+<pre><code>0.20349770158947425
+</code></pre><pre><code class="lang-python"># 画出决策曲线
+plotting_x1 = np.linspace(30,100,100)
+plotting_h1 = ( - result[0][0]-result[0][1]*plotting_x1)/result[0][2]
+
+fig,ax = plt.subplots(figsize=(12,8))
+ax.plot(plotting_x1,plotting_h1,&#39;y&#39;,label = &#39;Prediction&#39;)
+ax.scatter(positive[&#39;Exam 1&#39;], positive[&#39;Exam 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Admitted&#39;)
+ax.scatter(negative[&#39;Exam 1&#39;], negative[&#39;Exam 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Not Admitted&#39;)
+ax.legend()
+ax.set_xlabel(&#39;Exam 1 Score&#39;)
+ax.set_ylabel(&#39;Exam 2 Score&#39;)
+plt.show()
+</code></pre>
+<p><img src="/img/lg26.png" srcset="/img/loading.gif" alt="png"></p>
+<h4 id="1-2-4-评价逻辑回归模型"><a href="#1-2-4-评价逻辑回归模型" class="headerlink" title="1.2.4 评价逻辑回归模型"></a>1.2.4 评价逻辑回归模型</h4><p>在确定参数之后，可以使用这个模型来预测一个学生是否被录取</p>
+<pre><code class="lang-python"># 实现h(x)
+def hfunc1(theta,X):
+    return sigmoid(np.dot(theta.T,X))
+hfunc1(result[0],[1,45,85])
+</code></pre>
+<pre><code>0.776290625526598
+</code></pre><h5 id="评价-theta"><a href="#评价-theta" class="headerlink" title="评价$\theta$"></a>评价$\theta$</h5><p>看模型在训练集上的正确率怎么样。写一个predict的函数，给出数据以及参数后，会返回0或者1.然后在把这个priedict函数用于训练集上，看准确率怎样</p>
+<pre><code class="lang-python"># 定义预测函数
+def predict(theta,X):
+    probability = sigmoid(X*theta.T)
+    return [1 if x &gt;= 0.5 else 0 for x in probability]
+</code></pre>
+<pre><code class="lang-python"># 添加预测准确率
+theta_min = np.matrix(result[0])
+predictions = predict(theta_min,X)
+# zip()，打包成一个一个的元组
+correct = [1 if ((a==1 and b == 1) or (a == 0 and b==0)) else 0 for (a,b) in zip(predictions,y)]
+accuracy = (sum(map(int,correct))% len(correct))
+print(&#39;accuracy = {0}%&#39;.format(accuracy))
+</code></pre>
+<pre><code>accuracy = 89%
+</code></pre><p>画出对应曲线(有缘再续)</p>
+<h2 id="2-逻辑回归-正则化"><a href="#2-逻辑回归-正则化" class="headerlink" title="2.逻辑回归+正则化"></a>2.逻辑回归+正则化</h2><p>实现加入正则项来提升逻辑回归算法。<br><br>假设你是工厂的生产主管，你有一些芯片在两次测试中的测试结果，测试结果决定芯片是否接受或抛弃。有一些历史数据，可以帮助构建一个逻辑回归模型。</p>
+<h3 id="2-1-数据可视化"><a href="#2-1-数据可视化" class="headerlink" title="2.1 数据可视化"></a>2.1 数据可视化</h3><pre><code class="lang-python">path = &#39;./andrew_ml_ex22391/ex2data2.txt&#39;
+data_init = pd.read_csv(path,header=None,names = [&#39;Test 1&#39;,&#39;Test 2&#39;,&#39;Accepted&#39;])
+data_init.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Test 1</th>
+      <th>Test 2</th>
+      <th>Accepted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.051267</td>
+      <td>0.69956</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.092742</td>
+      <td>0.68494</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.213710</td>
+      <td>0.69225</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.375000</td>
+      <td>0.50219</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.513250</td>
+      <td>0.46564</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<pre><code class="lang-python">positive2 = data_init[data_init[&#39;Accepted&#39;].isin([1])]
+negative2 = data_init[data_init[&#39;Accepted&#39;].isin([0])]
+
+fig,ax = plt.subplots(figsize=(12,8))
+ax.scatter(positive2[&#39;Test 1&#39;],positive2[&#39;Test 2&#39;],s=50,c=&#39;b&#39;,marker=&#39;o&#39;,label=&#39;Accepted&#39;)
+ax.scatter(negative2[&#39;Test 1&#39;],negative2[&#39;Test 2&#39;],s=50,c=&#39;r&#39;,marker=&#39;x&#39;,label=&#39;Rejected&#39;)
+ax.legend()
+ax.set_xlabel(&#39;Test 1 Score&#39;)
+ax.set_ylabel(&#39;Test 2 Score&#39;)
+plt.show()
+</code></pre>
+<p><img src="/img/lg37.png" srcset="/img/loading.gif" alt="png"></p>
+<p>如上图所示，这个数据集不可使用直线进行分割，而之前的逻辑回归只适用于线性的分割，故另想它法</p>
+<h3 id="2-2-特征映射"><a href="#2-2-特征映射" class="headerlink" title="2.2 特征映射"></a>2.2 特征映射</h3><p>一种更好的使用数据集的方式是为每组数据创造更多的特征。所以我们为每一组$x_1,x_2$添加了最高到6次幂的特征</p>
+<pre><code class="lang-python">degree = 6
+data2 = data_init
+x1 = data2[&#39;Test 1&#39;]
+x2 = data2[&#39;Test 2&#39;]
+data2.insert(3,&#39;Ones&#39;,1)
+for i in range(1,degree+1):
+    for j in range(0,i+1):
+        data2[&#39;F&#39;+str(i-j)+str(j)]=np.power(x1,i-j)*np.power(x2,j)
+data2.drop(&#39;Test 1&#39;,axis=1,inplace=True)
+data2.drop(&#39;Test 2&#39;,axis = 1,inplace=True)
+data2.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Accepted</th>
+      <th>Ones</th>
+      <th>F10</th>
+      <th>F01</th>
+      <th>F20</th>
+      <th>F11</th>
+      <th>F02</th>
+      <th>F30</th>
+      <th>F21</th>
+      <th>F12</th>
+      <th>...</th>
+      <th>F23</th>
+      <th>F14</th>
+      <th>F05</th>
+      <th>F60</th>
+      <th>F51</th>
+      <th>F42</th>
+      <th>F33</th>
+      <th>F24</th>
+      <th>F15</th>
+      <th>F06</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0.051267</td>
+      <td>0.69956</td>
+      <td>0.002628</td>
+      <td>0.035864</td>
+      <td>0.489384</td>
+      <td>0.000135</td>
+      <td>0.001839</td>
+      <td>0.025089</td>
+      <td>...</td>
+      <td>0.000900</td>
+      <td>0.012278</td>
+      <td>0.167542</td>
+      <td>1.815630e-08</td>
+      <td>2.477505e-07</td>
+      <td>0.000003</td>
+      <td>0.000046</td>
+      <td>0.000629</td>
+      <td>0.008589</td>
+      <td>0.117206</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>1</td>
+      <td>-0.092742</td>
+      <td>0.68494</td>
+      <td>0.008601</td>
+      <td>-0.063523</td>
+      <td>0.469143</td>
+      <td>-0.000798</td>
+      <td>0.005891</td>
+      <td>-0.043509</td>
+      <td>...</td>
+      <td>0.002764</td>
+      <td>-0.020412</td>
+      <td>0.150752</td>
+      <td>6.362953e-07</td>
+      <td>-4.699318e-06</td>
+      <td>0.000035</td>
+      <td>-0.000256</td>
+      <td>0.001893</td>
+      <td>-0.013981</td>
+      <td>0.103256</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>1</td>
+      <td>-0.213710</td>
+      <td>0.69225</td>
+      <td>0.045672</td>
+      <td>-0.147941</td>
+      <td>0.479210</td>
+      <td>-0.009761</td>
+      <td>0.031616</td>
+      <td>-0.102412</td>
+      <td>...</td>
+      <td>0.015151</td>
+      <td>-0.049077</td>
+      <td>0.158970</td>
+      <td>9.526844e-05</td>
+      <td>-3.085938e-04</td>
+      <td>0.001000</td>
+      <td>-0.003238</td>
+      <td>0.010488</td>
+      <td>-0.033973</td>
+      <td>0.110047</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>1</td>
+      <td>-0.375000</td>
+      <td>0.50219</td>
+      <td>0.140625</td>
+      <td>-0.188321</td>
+      <td>0.252195</td>
+      <td>-0.052734</td>
+      <td>0.070620</td>
+      <td>-0.094573</td>
+      <td>...</td>
+      <td>0.017810</td>
+      <td>-0.023851</td>
+      <td>0.031940</td>
+      <td>2.780914e-03</td>
+      <td>-3.724126e-03</td>
+      <td>0.004987</td>
+      <td>-0.006679</td>
+      <td>0.008944</td>
+      <td>-0.011978</td>
+      <td>0.016040</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>1</td>
+      <td>-0.513250</td>
+      <td>0.46564</td>
+      <td>0.263426</td>
+      <td>-0.238990</td>
+      <td>0.216821</td>
+      <td>-0.135203</td>
+      <td>0.122661</td>
+      <td>-0.111283</td>
+      <td>...</td>
+      <td>0.026596</td>
+      <td>-0.024128</td>
+      <td>0.021890</td>
+      <td>1.827990e-02</td>
+      <td>-1.658422e-02</td>
+      <td>0.015046</td>
+      <td>-0.013650</td>
+      <td>0.012384</td>
+      <td>-0.011235</td>
+      <td>0.010193</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 29 columns</p>
+</div>
+
+
+
+<h3 id="2-3-代价函数和梯度"><a href="#2-3-代价函数和梯度" class="headerlink" title="2.3 代价函数和梯度"></a>2.3 代价函数和梯度</h3><p>代价函数：</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m[-y^{(i)}log(h_\theta(x^{(i)}))-(1-y^{(i)})log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum_{j=1}^n\theta_j^{2}</script><p>注：$\theta_0$是不需要正则化，故下标从1开始</p>
+<p>梯度的第j个元素的更新公式：</p>
+<script type="math/tex; mode=display">\theta_0:=\theta_0-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_0^{(i)}</script><script type="math/tex; mode=display">\theta_j:=\theta_j-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_j^{(i)}+\frac{\lambda}{m}\theta_j</script><p>对j=1,2,…….n时的式子重新调整：</p>
+<script type="math/tex; mode=display">\theta_j:=\theta_j(1-\alpha\frac{\lambda}{m})-\alpha\frac{1}{m}\sum_{i=1}^m[h_\theta(x^{(i)})-y^{(i)}]x_j^{(i)}</script><pre><code class="lang-python"># 实现正则化的代价函数
+def costReg(theta,X,y,learningRate):
+    theta = np.matrix(theta)
+    X = np.matrix(X)
+    y = np.matrix(y)
+    first = np.multiply(-y,np.log(sigmoid(X*theta.T)))
+    second = np.multiply((1-y),np.log(1-sigmoid(X*theta.T)))
+    reg = (learningRate/(2*len(X)))*np.sum(np.power(theta[:,1:theta.shape[1]],2))
+    return np.sum(first-second)/len(X)+reg
+</code></pre>
+<pre><code class="lang-python"># 实现正则化的梯度函数
+def gradientReg(theta,X,y,learningRate):
+    theta = np.matrix(theta)
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+    patameters = int(theta.ravel().shape[1])
+    grad = np.zeros(patameters)
+
+    error = sigmoid(X*theta.T)-y
+
+    for i in range(patameters):
+        term = np.multiply(error,X[:,i])
+        if i==0 :
+            grad[i] = np.sum(term)/len(X)
+        else :
+            grad[i] = (np.sum(term)/len(X))+((learningRate/len(X))*theta[:,i])
+    return grad
+</code></pre>
+<pre><code class="lang-python"># 初始化X,y.theta
+cols = data2.shape[1]
+X2 = data2.iloc[:,1:cols]
+y2 = data2.iloc[:,0:1]
+theta2 = np.zeros(cols-1)
+# 类型转换
+X2 = np.array(X2.values)
+y2 = np.array(y2.values)
+# lambda设为1
+learningRate = 1
+</code></pre>
+<pre><code class="lang-python"># 计算初始代价
+costReg(theta2,X2,y2,learningRate)
+</code></pre>
+<pre><code>0.6931471805599454
+</code></pre><h4 id="2-3-1-使用工具库求解-theta-等参数"><a href="#2-3-1-使用工具库求解-theta-等参数" class="headerlink" title="2.3.1 使用工具库求解$\theta$等参数"></a>2.3.1 使用工具库求解$\theta$等参数</h4><pre><code class="lang-python">result2 = opt.fmin_tnc(func=costReg,x0=theta2,fprime=gradientReg,args=(X2,y2,learningRate))
+result2
+</code></pre>
+<pre><code>(array([ 1.27271027,  0.62529965,  1.18111687, -2.01987399, -0.91743189,
+        -1.43166928,  0.12393228, -0.36553118, -0.35725403, -0.17516292,
+        -1.45817009, -0.05098418, -0.61558554, -0.27469165, -1.19271298,
+        -0.2421784 , -0.20603299, -0.04466178, -0.27778951, -0.29539513,
+        -0.45645982, -1.04319155,  0.02779373, -0.2924487 ,  0.0155576 ,
+        -0.32742405, -0.1438915 , -0.92467487]),
+ 32,
+ 1)
+</code></pre><p>最后，我们可以使用第1部分中的预测函数来查看我们的方案在训练数据上的准确度。</p>
+<pre><code class="lang-python">theta_min = np.matrix(result2[0])
+predictions = predict(theta_min, X2)
+correct = [1 if ((a == 1 and b == 1) or (a == 0 and b == 0)) else 0 for (a, b) in zip(predictions, y2)]
+accuracy = (sum(map(int, correct)) % len(correct))
+print (&#39;accuracy = {0}%&#39;.format(accuracy))
+</code></pre>
+<pre><code>accuracy = 98%
+</code></pre><h3 id="2-4-画出决策曲线"><a href="#2-4-画出决策曲线" class="headerlink" title="2.4 画出决策曲线"></a>2.4 画出决策曲线</h3><pre><code class="lang-python"># 预测函数h(x)
+def hfunc2(theta, x1, x2):
+    temp = theta[0][0]
+    place = 0
+    for i in range(1, degree+1):
+        for j in range(0, i+1):
+            temp+= np.power(x1, i-j) * np.power(x2, j) * theta[0][place+1]
+            place+=1
+    return temp
+</code></pre>
+<pre><code class="lang-python"># 找出边界
+def find_decision_boundary(theta):
+    t1 = np.linspace(-1,1.5,1000)
+    t2 = np.linspace(-1,1.5,1000)
+    # 获取(t1,t2)这样的数组对
+    cordinates=[(x,y) for x in t1 for y in t2]
+    # print(&quot;cordinates是：\n{}&quot;.format(cordinates))
+    # 一个一个抽取(x.y)的数组对
+    x_cord,y_cord = zip(*cordinates)
+    # print(&quot;cx_cord,y_cord是：\n{}，{}&quot;.format(x_cord,y_cord))
+    h_val = pd.DataFrame({&#39;x1&#39;:x_cord,&#39;x2&#39;:y_cord})
+    print(&quot;h_val是：\n{}&quot;.format(h_val))
+    h_val[&#39;hval&#39;]=hfunc2(theta,h_val[&#39;x1&#39;],h_val[&#39;x2&#39;])
+    decision=h_val[np.abs(h_val[&#39;hval&#39;])&lt;2*10**-3]
+    return decision.x1, decision.x2
+</code></pre>
+<pre><code class="lang-python"># 画图
+fig,ax = plt.subplots(figsize=(12,8))
+ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)
+ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)
+ax.set_xlabel(&#39;Test 1 Score&#39;)
+ax.set_ylabel(&#39;Test 2 Score&#39;)
+
+x,y =find_decision_boundary(result2)
+plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)
+ax.legend()
+plt.show()
+</code></pre>
+<pre><code>h_val是：
+         x1        x2
+0      -1.0 -1.000000
+1      -1.0 -0.997497
+2      -1.0 -0.994995
+3      -1.0 -0.992492
+4      -1.0 -0.989990
+...     ...       ...
+999995  1.5  1.489990
+999996  1.5  1.492492
+999997  1.5  1.494995
+999998  1.5  1.497497
+999999  1.5  1.500000
+
+[1000000 rows x 2 columns]
+</code></pre><p><img src="/img/lg55.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="2-5-改变-lambda-，观察决策曲线"><a href="#2-5-改变-lambda-，观察决策曲线" class="headerlink" title="2.5 改变$\lambda$，观察决策曲线"></a>2.5 改变$\lambda$，观察决策曲线</h3><h4 id="2-5-1-过拟合"><a href="#2-5-1-过拟合" class="headerlink" title="2.5.1 过拟合"></a>2.5.1 过拟合</h4><p>当$\lambda=0$可以得出，使正则化项为0，使得$\theta$值不受$\lambda$影响，从而特征过多，方差过高，出现过拟合(对每一个训练集样本都尽可能拟合)</p>
+<pre><code class="lang-python">learningRate2 = 0
+result3 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate2))
+result3
+</code></pre>
+<pre><code>(array([  13.21662791,   17.63904891,    5.27881592, -136.13732177,
+         -67.12242042,  -52.94668399, -147.43086589,  -91.68410686,
+         -38.38361129,    6.59822331,  495.35657992,  402.46736709,
+         511.3069028 ,  206.24695325,   66.55863181,  273.9167483 ,
+         304.90920777,  318.45935938,  157.30786853,   54.95286981,
+           1.80807367, -601.66243281, -692.5740057 , -962.14314287,
+        -654.83889729, -639.88930817, -262.03506162,  -50.59000875]),
+ 280,
+ 3)
+</code></pre><pre><code class="lang-python">fig, ax = plt.subplots(figsize=(12,8))
+ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)
+ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)
+ax.set_xlabel(&#39;Test 1 Score&#39;)
+ax.set_ylabel(&#39;Test 2 Score&#39;)
+
+x, y = find_decision_boundary(result3)
+plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)
+ax.legend()
+plt.show()
+</code></pre>
+<pre><code>h_val是：
+         x1        x2
+0      -1.0 -1.000000
+1      -1.0 -0.997497
+2      -1.0 -0.994995
+3      -1.0 -0.992492
+4      -1.0 -0.989990
+...     ...       ...
+999995  1.5  1.489990
+999996  1.5  1.492492
+999997  1.5  1.494995
+999998  1.5  1.497497
+999999  1.5  1.500000
+
+[1000000 rows x 2 columns]
+</code></pre><p><img src="/img/lg59.png" srcset="/img/loading.gif" alt="png"></p>
+<h4 id="2-5-2-欠拟合"><a href="#2-5-2-欠拟合" class="headerlink" title="2.5.2 欠拟合"></a>2.5.2 欠拟合</h4><p>当$\lambda=100$可以得出，使得$\theta$值更容易受$\lambda$影响，从而使$\theta$过小，偏差过高，出现欠拟合(对整个一个训练集样本都勉强拟合)</p>
+<pre><code class="lang-python">learningRate3 = 100
+result4 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate3))
+result4
+</code></pre>
+<pre><code>(array([ 0.02187847, -0.0174817 ,  0.00571065, -0.05516901, -0.01314874,
+        -0.03859873, -0.01846356, -0.00773219, -0.00892429, -0.02280461,
+        -0.04343846, -0.00235623, -0.01415612, -0.00349507, -0.04143595,
+        -0.02100593, -0.00471917, -0.00359131, -0.00632226, -0.0050244 ,
+        -0.03197683, -0.03416334, -0.00107629, -0.00702615, -0.00038507,
+        -0.0079823 , -0.00154779, -0.04108683]),
+ 11,
+ 1)
+</code></pre><pre><code class="lang-python">fig, ax = plt.subplots(figsize=(12,8))
+ax.scatter(positive2[&#39;Test 1&#39;], positive2[&#39;Test 2&#39;], s=50, c=&#39;b&#39;, marker=&#39;o&#39;, label=&#39;Accepted&#39;)
+ax.scatter(negative2[&#39;Test 1&#39;], negative2[&#39;Test 2&#39;], s=50, c=&#39;r&#39;, marker=&#39;x&#39;, label=&#39;Rejected&#39;)
+ax.set_xlabel(&#39;Test 1 Score&#39;)
+ax.set_ylabel(&#39;Test 2 Score&#39;)
+
+x, y = find_decision_boundary(result4)
+plt.scatter(x, y, c=&#39;y&#39;, s=10, label=&#39;Prediction&#39;)
+ax.legend()
+plt.show()
+</code></pre>
+<pre><code>h_val是：
+         x1        x2
+0      -1.0 -1.000000
+1      -1.0 -0.997497
+2      -1.0 -0.994995
+3      -1.0 -0.992492
+4      -1.0 -0.989990
+...     ...       ...
+999995  1.5  1.489990
+999996  1.5  1.492492
+999997  1.5  1.494995
+999998  1.5  1.497497
+999999  1.5  1.500000
+
+[1000000 rows x 2 columns]
+</code></pre><p><img src="lg62.png" srcset="/img/loading.gif" alt="png"></p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/">Programming</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/">ML</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ML/">ML</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming-Exercise/">Programming Exercise</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Andrew-Ng/">Andrew Ng</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/27/Code_One_Hour1/">
+                        <span class="hidden-mobile">Code One Hour：Numpy-Base</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "机器学习程序练习2:逻辑回归和正则化&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+      MathJax.Hub.Register.StartupHook("End Jax",function () {
+        var BROWSER = MathJax.Hub.Browser;
+        var jax = "HTML-CSS";
+        if (BROWSER.isMSIE && BROWSER.hasMathPlayer) jax = "NativeMML";
+        return MathJax.Hub.setRenderer(jax);
+      });
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
