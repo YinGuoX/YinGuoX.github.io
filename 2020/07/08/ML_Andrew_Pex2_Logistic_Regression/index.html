@@ -262,7 +262,7 @@ ax.set_xlabel(&#39;Exam 1 Score&#39;)
 ax.set_ylabel(&#39;Exam 2 Score&#39;)
 plt.show()
 </code></pre>
-<p><img src="/img/lg6.png" srcset="/img/loading.gif" alt="png"></p>
+<p><img src="/img/ML_Andrew/lg6.png" srcset="/img/loading.gif" alt="png"></p>
 <h3 id="1-2-实现"><a href="#1-2-实现" class="headerlink" title="1.2 实现"></a>1.2 实现</h3><h4 id="1-2-1-sigmoid函数"><a href="#1-2-1-sigmoid函数" class="headerlink" title="1.2.1 sigmoid函数"></a>1.2.1 sigmoid函数</h4><p>逻辑回归函数 (选择的模型) (hypothesis函数) 为</p>
 <script type="math/tex; mode=display">h_\theta=g(\theta^Tx)</script><p>g()代表一个常用的逻辑函数(logistic function) ，即 Sigmoid 函数(Sigmoid function)(Logistic function),公式为:</p>
 <script type="math/tex; mode=display">g(z)=\frac{1}{1+e^{-z}}</script><p>所以合起来，得到的逻辑回归模型的假设函数为：</p>
@@ -347,7 +347,7 @@ ax.set_xlabel(&#39;Exam 1 Score&#39;)
 ax.set_ylabel(&#39;Exam 2 Score&#39;)
 plt.show()
 </code></pre>
-<p><img src="/img/lg26.png" srcset="/img/loading.gif" alt="png"></p>
+<p><img src="/img/ML_Andrew/lg26.png" srcset="/img/loading.gif" alt="png"></p>
 <h4 id="1-2-4-评价逻辑回归模型"><a href="#1-2-4-评价逻辑回归模型" class="headerlink" title="1.2.4 评价逻辑回归模型"></a>1.2.4 评价逻辑回归模型</h4><p>在确定参数之后，可以使用这个模型来预测一个学生是否被录取</p>
 <pre><code class="lang-python"># 实现h(x)
 def hfunc1(theta,X):
@@ -448,7 +448,7 @@ ax.set_xlabel(&#39;Test 1 Score&#39;)
 ax.set_ylabel(&#39;Test 2 Score&#39;)
 plt.show()
 </code></pre>
-<p><img src="/img/lg37.png" srcset="/img/loading.gif" alt="png"></p>
+<p><img src="/img/ML_Andrew/lg37.png" srcset="/img/loading.gif" alt="png"></p>
 <p>如上图所示，这个数据集不可使用直线进行分割，而之前的逻辑回归只适用于线性的分割，故另想它法</p>
 <h3 id="2-2-特征映射"><a href="#2-2-特征映射" class="headerlink" title="2.2 特征映射"></a>2.2 特征映射</h3><p>一种更好的使用数据集的方式是为每组数据创造更多的特征。所以我们为每一组$x_1,x_2$添加了最高到6次幂的特征</p>
 <pre><code class="lang-python">degree = 6
@@ -752,7 +752,7 @@ plt.show()
 999999  1.5  1.500000
 
 [1000000 rows x 2 columns]
-</code></pre><p><img src="/img/lg55.png" srcset="/img/loading.gif" alt="png"></p>
+</code></pre><p><img src="/img/ML_Andrew/lg55.png" srcset="/img/loading.gif" alt="png"></p>
 <h3 id="2-5-改变-lambda-，观察决策曲线"><a href="#2-5-改变-lambda-，观察决策曲线" class="headerlink" title="2.5 改变$\lambda$，观察决策曲线"></a>2.5 改变$\lambda$，观察决策曲线</h3><h4 id="2-5-1-过拟合"><a href="#2-5-1-过拟合" class="headerlink" title="2.5.1 过拟合"></a>2.5.1 过拟合</h4><p>当$\lambda=0$可以得出，使正则化项为0，使得$\theta$值不受$\lambda$影响，从而特征过多，方差过高，出现过拟合(对每一个训练集样本都尽可能拟合)</p>
 <pre><code class="lang-python">learningRate2 = 0
 result3 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate2))
@@ -793,7 +793,7 @@ plt.show()
 999999  1.5  1.500000
 
 [1000000 rows x 2 columns]
-</code></pre><p><img src="/img/lg59.png" srcset="/img/loading.gif" alt="png"></p>
+</code></pre><p><img src="/img/ML_Andrew/lg59.png" srcset="/img/loading.gif" alt="png"></p>
 <h4 id="2-5-2-欠拟合"><a href="#2-5-2-欠拟合" class="headerlink" title="2.5.2 欠拟合"></a>2.5.2 欠拟合</h4><p>当$\lambda=100$可以得出，使得$\theta$值更容易受$\lambda$影响，从而使$\theta$过小，偏差过高，出现欠拟合(对整个一个训练集样本都勉强拟合)</p>
 <pre><code class="lang-python">learningRate3 = 100
 result4 = opt.fmin_tnc(func=costReg, x0=theta2, fprime=gradientReg, args=(X2, y2, learningRate3))
@@ -833,7 +833,7 @@ plt.show()
 999999  1.5  1.500000
 
 [1000000 rows x 2 columns]
-</code></pre><p><img src="lg62.png" srcset="/img/loading.gif" alt="png"></p>
+</code></pre><p><img src="/img/ML_Andrew/lg62.png" srcset="/img/loading.gif" alt="png"></p>
 
             </div>
             <hr>
