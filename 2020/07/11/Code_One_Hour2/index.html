@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Numpy-Advanced - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 七月 11日 2020, 7:16 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    4.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    74
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Numpy使用-进阶篇"><a href="#Numpy使用-进阶篇" class="headerlink" title="Numpy使用-进阶篇"></a>Numpy使用-进阶篇</h1><h2 id="1-广播法则-rule"><a href="#1-广播法则-rule" class="headerlink" title="1. 广播法则(rule)"></a>1. 广播法则(rule)</h2><p>广播法则可以使通用函数有意义的处理不具有相同形状的输入</p>
+<blockquote>
+<ul>
+<li>广播第一法则：如果所有的输入数组的维度数量不同，则小维度数量的数组的形状将会在最左边补1（添加一维），直至所有的数组具有相同的维度数量。</li>
+<li>广播第二法则：如果输入的数组的维度在任何一维都不匹配，则数组的形状会沿着维度为1的维度扩展以匹配另一个数组的形状</li>
+<li>广播第三法则：如果输入的数组的形状在任何维度上都不匹配并且没有任何一个维度为1，则会引发异常</li>
+</ul>
+</blockquote>
+<h3 id="1-1-维度的数量、大小"><a href="#1-1-维度的数量、大小" class="headerlink" title="1.1 维度的数量、大小"></a>1.1 维度的数量、大小</h3><p><strong>维度的数量</strong>：numpy中指定维度都是使用元组表示。如：np.zeros((2,3,2))的维度数量是三维的，np.zeros(3,)的维度数量是1维的,区别(3)与(3,)后者才是元组<br><br><strong>维度的大小</strong>：如：np.zeros((2,3,4))维度数量是三维，第一维的维度大小是2，第二维的维度大小是3，第三维的维度大小是4</p>
+<h3 id="1-2-广播-Broadcasting"><a href="#1-2-广播-Broadcasting" class="headerlink" title="1.2 广播(Broadcasting)"></a>1.2 广播(Broadcasting)</h3><p>通常只在对多个数组进行对应元素进行操作时，并且<strong>数组形状(维度数量)(不同维度)</strong>不同时，才会发生广播</p>
+<pre><code class="lang-python">import numpy as np
+a = np.array([1,2,3])
+b = 2
+# a是一维向量，b是标量，即：形状不同
+# a*b == [1,2,3]*[2,2,2]
+a*b
+</code></pre>
+<pre><code>array([2, 4, 6])
+</code></pre><pre><code class="lang-python">A = np.zeros((2,5,3,4))
+B = np.zeros((3,4))
+# 运用了广播第一、第二法则
+# 从后往前有相同维度的大小可以运用广播法则
+print(&quot;从后往前有相同维度的大小可以运用广播法则&quot;)
+print((A+B).shape)
+C = np.zeros((3,3))
+print(&quot;从后往前没有相同维度的大小，则不可以运用广播法则&quot;)
+print((A+C).shape)
+</code></pre>
+<pre><code>从后往前有相同维度的大小可以运用广播法则
+(2, 5, 3, 4)
+从后往前没有相同维度的大小，则不可以运用广播法则
+
+
+
+---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-2-668acc6dcffb&gt; in &lt;module&gt;
+      7 C = np.zeros((3,3))
+      8 print(&quot;从后往前没有相同维度的大小，则不可以运用广播法则&quot;)
+----&gt; 9 print((A+C).shape)
+
+
+ValueError: operands could not be broadcast together with shapes (2,5,3,4) (3,3) 
+</code></pre><pre><code class="lang-python">print(&quot;从后往前有一些相同维度的大小，并且不同的维度大小为1，则可以运用广播法则&quot;)
+D = np.zeros((1,3,1))
+print((A+D).shape)
+print(&quot;从后往前有一些相同维度的大小，并且不同的维度大小有一个不为1，则不可以运用广播法则&quot;)
+F = np.zeros((6,1,3,1))
+print((A+F).shape)
+</code></pre>
+<pre><code>从后往前有一些相同维度的大小，并且不同的维度大小为1，则可以运用广播法则
+(2, 5, 3, 4)
+从后往前有一些相同维度的大小，并且不同的维度大小有一个不为1，则不可以运用广播法则
+
+
+
+---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-3-d5cc52d6194a&gt; in &lt;module&gt;
+      4 print(&quot;从后往前有一些相同维度的大小，并且不同的维度大小有一个不为1，则不可以运用广播法则&quot;)
+      5 F = np.zeros((6,1,3,1))
+----&gt; 6 print((A+F).shape)
+
+
+ValueError: operands could not be broadcast together with shapes (2,5,3,4) (6,1,3,1) 
+</code></pre><h2 id="2-花式索引和索引技巧"><a href="#2-花式索引和索引技巧" class="headerlink" title="2. 花式索引和索引技巧"></a>2. 花式索引和索引技巧</h2><h3 id="2-1-通过数组索引"><a href="#2-1-通过数组索引" class="headerlink" title="2.1 通过数组索引"></a>2.1 通过数组索引</h3><p>数组、多维数组都可以当做索引进行索引</p>
+<pre><code class="lang-python">a = np.arange(12)**2
+print(a)
+i = np.array([1,1,3,8,5])
+print(i)
+print(a[i])
+</code></pre>
+<pre><code>[  0   1   4   9  16  25  36  49  64  81 100 121]
+[1 1 3 8 5]
+[ 1  1  9 64 25]
+</code></pre><pre><code class="lang-python">j = np.array([[3,4],[9,7]])
+print(a[j])
+</code></pre>
+<pre><code>[[ 9 16]
+ [81 49]]
+</code></pre><p>当被索引数组a是多维时，每一个唯一的索引数列指向a的第一维,如：</p>
+<pre><code class="lang-python">palette = np.array([[0,0,0],[255,0,0],[0,255,0],[0,0,255],[255,255,255]])
+print(palette)
+image = np.array([[0,1,2,0],[0,3,4,0]])
+print(image)
+print(palette[image])
+</code></pre>
+<pre><code>[[  0   0   0]
+ [255   0   0]
+ [  0 255   0]
+ [  0   0 255]
+ [255 255 255]]
+[[0 1 2 0]
+ [0 3 4 0]]
+[[[  0   0   0]
+  [255   0   0]
+  [  0 255   0]
+  [  0   0   0]]
+
+ [[  0   0   0]
+  [  0   0 255]
+  [255 255 255]
+  [  0   0   0]]]
+</code></pre><p>也可以不止给出一维的索引，但是每一维的索引数组必须有相同的形状</p>
+<pre><code class="lang-python">a = np.arange(12).reshape(3,4)
+print(a)
+i = np.array([[0,1],[1,2]])
+print(i)
+j = np.array([[2,1],[2,2]])
+print(j)
+print(a[i,j])
+print(a[i,2])
+print(a[:,j])
+</code></pre>
+<pre><code>[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+[[0 1]
+ [1 2]]
+[[2 1]
+ [2 2]]
+[[ 2  5]
+ [ 6 10]]
+[[ 2  6]
+ [ 6 10]]
+[[[ 2  1]
+  [ 2  2]]
+
+ [[ 6  5]
+  [ 6  6]]
+
+ [[10  9]
+  [10 10]]]
+</code></pre><p>同理，可以将i,j放入序列中，然后通过list索引(现在应该已经弃用)</p>
+<pre><code class="lang-python">l = [i,j]
+print(l)
+print(a[l])
+</code></pre>
+<pre><code>[array([[0, 1],
+       [1, 2]]), array([[2, 1],
+       [2, 2]])]
+[[ 2  5]
+ [ 6 10]]
+
+
+d:\dl\minconda3\envs\ml_dl_andrewng\lib\site-packages\ipykernel_launcher.py:3: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+  This is separate from the ipykernel package so we can avoid doing imports until
+</code></pre><p>但是，不可以将i,j放入np.array数组中，因为将会被解释成索引a的第一维</p>
+<pre><code class="lang-python">s = np.array([i,j])
+print(s)
+print(a[s])
+print(a[tuple(s)])
+</code></pre>
+<pre><code>[[[0 1]
+  [1 2]]
+
+ [[2 1]
+  [2 2]]]
+[[[[ 0  1  2  3]
+   [ 4  5  6  7]]
+
+  [[ 4  5  6  7]
+   [ 8  9 10 11]]]
+
+
+ [[[ 8  9 10 11]
+   [ 4  5  6  7]]
+
+  [[ 8  9 10 11]
+   [ 8  9 10 11]]]]
+[[ 2  5]
+ [ 6 10]]
+</code></pre><p>也可以用来搜索时间序列最大值</p>
+<pre><code class="lang-python">time = np.linspace(20,145,5)
+data = np.sin(np.arange(20)).reshape(5,4)
+print(&quot;time:\n{}&quot;.format(time))
+print(&quot;data:\n{}&quot;.format(data))
+ind = data.argmax(axis=0)
+print(&quot;ind:\n{}&quot;.format(ind))
+time_max = time[ind]
+data_max = data[ind,range(data.shape[1])]
+print(&quot;time_max:\n{}&quot;.format(time_max))
+print(&quot;data_max:\n{}&quot;.format(data_max))
+all(data_max == data.max(axis=0))
+</code></pre>
+<pre><code>time:
+[ 20.    51.25  82.5  113.75 145.  ]
+data:
+[[ 0.          0.84147098  0.90929743  0.14112001]
+ [-0.7568025  -0.95892427 -0.2794155   0.6569866 ]
+ [ 0.98935825  0.41211849 -0.54402111 -0.99999021]
+ [-0.53657292  0.42016704  0.99060736  0.65028784]
+ [-0.28790332 -0.96139749 -0.75098725  0.14987721]]
+ind:
+[2 0 3 1]
+time_max:
+[ 82.5   20.   113.75  51.25]
+data_max:
+[0.98935825 0.84147098 0.99060736 0.6569866 ]
+
+
+
+
+
+True
+</code></pre><p>也可以使用数组索引作为目标进行赋值</p>
+<pre><code class="lang-python">a = np.arange(5)
+print(&quot;a:\n{}&quot;.format(a))
+a[[1,3,4]]=0
+print(&quot;a:\n{}&quot;.format(a))
+a[[0,0,2]]=[1,2,3]
+print(&quot;a:\n{}&quot;.format(a))
+a[[0,0,2]]+=1
+print(&quot;a:\n{}&quot;.format(a))
+</code></pre>
+<pre><code>a:
+[0 1 2 3 4]
+a:
+[0 0 2 0 0]
+a:
+[2 0 3 0 0]
+a:
+[3 0 4 0 0]
+</code></pre><p><strong>注</strong>：Python的+=结构，即使0在索引列表中出现两次，索引为0的元素也仅仅增加一次，这是因为Python中要求 a+=1 和 a=a+1等同</p>
+<h3 id="2-2-通过布尔数组索引"><a href="#2-2-通过布尔数组索引" class="headerlink" title="2.2 通过布尔数组索引"></a>2.2 通过布尔数组索引</h3><p>当我们使用整数数组索引数组时，我们是提供一个索引列表进行索引。<br><br>通过布尔数组索引可以显式的选择想要和不想要的元素</p>
+<pre><code class="lang-python">a = np.arange(12).reshape(3,4)
+b = a&gt;4
+print(&quot;b:\n{}&quot;.format(b))
+print(&quot;a[b]:\n{}&quot;.format(a[b]))
+</code></pre>
+<pre><code>b:
+[[False False False False]
+ [False  True  True  True]
+ [ True  True  True  True]]
+a[b]:
+[ 5  6  7  8  9 10 11]
+</code></pre><p>通过布尔数组索引在赋值时非常有用</p>
+<pre><code class="lang-python">a[b]=0
+print(&quot;a:\n{}&quot;.format(a))
+</code></pre>
+<pre><code>a:
+[[0 1 2 3]
+ [4 0 0 0]
+ [0 0 0 0]]
+</code></pre><p>与整数索引类似，也可以对数组的每个维度我们给一个一维布尔数组来选择我们想要的切片。</p>
+<pre><code class="lang-python">a = np.arange(12).reshape(3,4)
+b1 = np.array([False,True,True])
+b2 = np.array([True,False,True,False])
+print(&quot;a[b1,:]:\n{}&quot;.format(a[b1,:]))
+print(&quot;a[b1]:\n{}&quot;.format(a[b1]))
+print(&quot;a[:,b2]:\n{}&quot;.format(a[:,b2]))
+print(&quot;a[b1,b2]:\n{}&quot;.format(a[b1,b2]))
+</code></pre>
+<pre><code>a[b1,:]:
+[[ 4  5  6  7]
+ [ 8  9 10 11]]
+a[b1]:
+[[ 4  5  6  7]
+ [ 8  9 10 11]]
+a[:,b2]:
+[[ 0  2]
+ [ 4  6]
+ [ 8 10]]
+a[b1,b2]:
+[ 4 10]
+</code></pre><p><strong>注:</strong> 一维数组的长度必须和你想要切片的维度或轴的长度一致，在之前的例子中，b1是一个秩为1长度为三的数组(a的行数)，b2(长度为4)与a的第二秩(列)相一致。</p>
+<h3 id="2-3-np-ix-函数"><a href="#2-3-np-ix-函数" class="headerlink" title="2.3 np.ix_()函数"></a>2.3 np.ix_()函数</h3><p><strong>待判断</strong><br>将输入的数组，产生笛卡尔积的映射关系，根据关系寻找对应位置的元素(也就是产生一个索引)<br><br>另一种解释：为了获得多元组的结果而用来结合不同向量。例如，如果你想要用所有向量a、b和c元素组成的三元组来计算a+b*c,</p>
+<pre><code class="lang-python">a = np.array([2,3,4,5])
+b = np.array([8,5,4])
+c = np.array([5,4,6,8,3])
+ax,bx,cx = np.ix_(a,b,c)
+print(&quot;ax:\n{}&quot;.format(ax))
+print(&quot;bx:\n{}&quot;.format(bx))
+print(&quot;cx:\n{}&quot;.format(cx))
+print(&quot;shape:\n{}{}{}&quot;.format(ax.shape,bx.shape,cx.shape))
+</code></pre>
+<pre><code>ax:
+[[[2]]
+
+ [[3]]
+
+ [[4]]
+
+ [[5]]]
+bx:
+[[[8]
+  [5]
+  [4]]]
+cx:
+[[[5 4 6 8 3]]]
+shape:
+(4, 1, 1)(1, 3, 1)(1, 1, 5)
+</code></pre><pre><code class="lang-python">result = ax + bx*cx
+print(&quot;result:\n{}&quot;.format(result))
+result[3,2,4] == a[3]+b[2]*c[4]
+</code></pre>
+<pre><code>result:
+[[[42 34 50 66 26]
+  [27 22 32 42 17]
+  [22 18 26 34 14]]
+
+ [[43 35 51 67 27]
+  [28 23 33 43 18]
+  [23 19 27 35 15]]
+
+ [[44 36 52 68 28]
+  [29 24 34 44 19]
+  [24 20 28 36 16]]
+
+ [[45 37 53 69 29]
+  [30 25 35 45 20]
+  [25 21 29 37 17]]]
+
+
+
+
+
+True
+</code></pre><pre><code class="lang-python"># 另一种计算方式
+def ufunc_reduce(ufct,*vectors):
+    vs = np.ix_(*vectors)
+    r = ufct.identity
+    for v in vs:
+        r = ufct(r,v)
+    return r
+ufunc_reduce(np.add,a,b,c)
+</code></pre>
+<pre><code>array([[[15, 14, 16, 18, 13],
+        [12, 11, 13, 15, 10],
+        [11, 10, 12, 14,  9]],
+
+       [[16, 15, 17, 19, 14],
+        [13, 12, 14, 16, 11],
+        [12, 11, 13, 15, 10]],
+
+       [[17, 16, 18, 20, 15],
+        [14, 13, 15, 17, 12],
+        [13, 12, 14, 16, 11]],
+
+       [[18, 17, 19, 21, 16],
+        [15, 14, 16, 18, 13],
+        [14, 13, 15, 17, 12]]])
+</code></pre><h3 id="2-4-用字符串索引"><a href="#2-4-用字符串索引" class="headerlink" title="2.4 用字符串索引"></a>2.4 用字符串索引</h3><p>详情可以参考<a href="https://docs.scipy.org/doc/numpy-1.13.0/user/basics.rec.html" target="_blank" rel="noopener">RecordArray</a></p>
+<h2 id="3-线性代数"><a href="#3-线性代数" class="headerlink" title="3. 线性代数"></a>3. 线性代数</h2><h3 id="3-1-简单的矩阵-ndarray数组-运算"><a href="#3-1-简单的矩阵-ndarray数组-运算" class="headerlink" title="3.1 简单的矩阵(ndarray数组)运算"></a>3.1 简单的矩阵(ndarray数组)运算</h3><p>矩阵的转置(transpose())、逆(inv())、伪逆(pinv())、迹(trace())、矩阵方程的解(solve())、特征值和特征向量(eig())。</p>
+<pre><code class="lang-python">import numpy as np
+a = np.array([[1.0,2.0],[3.0,4.0]])
+print(&quot;a:\n{}&quot;.format(a))
+print(&quot;a的转置:\n{}&quot;.format(a.transpose()))
+ainv=np.linalg.inv(a)
+print(&quot;a的逆:\n{}&quot;.format(ainv))
+# np.dot()矩阵的乘法(区别于矩阵元素的乘法！)
+print(&quot;a*a^-1:\n{}&quot;.format(np.dot(a,ainv)))
+# &quot;eye&quot; represents &quot;I&quot; or math &quot;E&quot;
+u = np.eye(2)
+print(&quot;u:\n{}&quot;.format(u))
+print(&quot;u的迹:\n{}&quot;.format(np.trace(u)))
+# 求解ax=y的线性矩阵方程
+y = np.array([[5.],[7.]])
+print(&quot;ax=y的解x为:\n{}&quot;.format(np.linalg.solve(a,y)))
+j = np.array([[0.0,-1.0],[1.0,0.0]])
+# Parameters:
+#     square matrix
+# Returns
+#     The eigenvalues, each repeated according to its multiplicity.
+#     The normalized (unit &quot;length&quot;) eigenvectors, such that the
+#     column ``v[:,i]`` is the eigenvector corresponding to the
+#     eigenvalue ``w[i]`` 
+print(&quot;矩阵j的特征值和特征向量:\n{}&quot;.format(np.linalg.eig(j)))
+</code></pre>
+<pre><code>a:
+[[1. 2.]
+ [3. 4.]]
+a的转置:
+[[1. 3.]
+ [2. 4.]]
+a的逆:
+[[-2.   1. ]
+ [ 1.5 -0.5]]
+a*a^-1:
+[[1.0000000e+00 0.0000000e+00]
+ [8.8817842e-16 1.0000000e+00]]
+u:
+[[1. 0.]
+ [0. 1.]]
+u的迹:
+2.0
+ax=y的解x为:
+[[-3.]
+ [ 4.]]
+矩阵j的特征值和特征向量:
+(array([0.+1.j, 0.-1.j]), array([[0.70710678+0.j        , 0.70710678-0.j        ],
+       [0.        -0.70710678j, 0.        +0.70710678j]]))
+</code></pre><h3 id="3-2-矩阵类"><a href="#3-2-矩阵类" class="headerlink" title="3.2 矩阵类"></a>3.2 矩阵类</h3><p>关于矩阵类的简短介绍<br><br>矩阵类的：创建、类型、转置(A.T)、乘法(A*B)、逆(A.I)、矩阵方程的解</p>
+<pre><code class="lang-python">A = np.matrix(&#39;1.0 2.0; 3.0 4.0&#39;)
+print(&quot;矩阵A:\n{}&quot;.format(A))
+print(&quot;A的类型为;\n{}&quot;.format(type(A)))
+print(&quot;A的转置:\n{}&quot;.format(A.T))
+X = np.matrix(&#39;5.0 7.0&#39;)
+Y = X.T
+print(&quot;矩阵Y:\n{}&quot;.format(Y))
+print(&quot;矩阵类型的乘法(矩阵的乘法):A*Y=:\n{}&quot;.format(A*Y))
+Ainv=A.I
+print(&quot;A的逆:\n{}&quot;.format(Ainv))
+print(&quot;验证:A*Ainv==I:\n{}&quot;.format(A*Ainv))
+print(&quot;矩阵方程AX=Y的解X=\n{}&quot;.format(np.linalg.solve(A,Y)))
+</code></pre>
+<pre><code>矩阵A:
+[[1. 2.]
+ [3. 4.]]
+A的类型为;
+&lt;class &#39;numpy.matrix&#39;&gt;
+A的转置:
+[[1. 3.]
+ [2. 4.]]
+矩阵Y:
+[[5.]
+ [7.]]
+矩阵类型的乘法(矩阵的乘法):A*Y=:
+[[19.]
+ [43.]]
+A的逆:
+[[-2.   1. ]
+ [ 1.5 -0.5]]
+验证:A*Ainv==I:
+[[1.0000000e+00 0.0000000e+00]
+ [8.8817842e-16 1.0000000e+00]]
+矩阵方程AX=Y的解X=
+[[-3.]
+ [ 4.]]
+</code></pre><h3 id="3-3-索引：比较矩阵和二维数组"><a href="#3-3-索引：比较矩阵和二维数组" class="headerlink" title="3.3 索引：比较矩阵和二维数组"></a>3.3 索引：比较矩阵和二维数组</h3><p><strong>注：</strong>Numpy中数组和矩阵有些重要的区别<br><br>Numpy提供了两个基本的对象：N维数组对象和通用函数对象。其他的对象都是构建在它们的基础之上。<br><br>矩阵就是继承自Numpy的二维数组对象。所以对于数组和矩阵，索引都必须包含函数的组合：整数标量、省略号(ellipses)、整数列表、整数或布尔值构成的元组或数组。<br><br>矩阵可以被用作矩阵的索引，但是通常需要数组、列表或者其他形式来完成<br><br>并且索引都是从0开始，传统上沿着0轴的方向被称为行，1轴方向被称为列。</p>
+<pre><code class="lang-python">A = np.arange(12)
+print(&quot;A:\n{}&quot;.format(A))
+A.shape = (3,4)
+print(&quot;A:\n{}&quot;.format(A))
+# np.mat()可以从字符串或者列表中生成矩阵
+M = np.mat(A.copy())
+print(type(A),&quot; &quot;,type(M))
+</code></pre>
+<pre><code>A:
+[ 0  1  2  3  4  5  6  7  8  9 10 11]
+A:
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+&lt;class &#39;numpy.ndarray&#39;&gt;   &lt;class &#39;numpy.matrix&#39;&gt;
+</code></pre><h4 id="3-3-1-切片"><a href="#3-3-1-切片" class="headerlink" title="3.3.1 切片"></a>3.3.1 切片</h4><p>基本的切片使用切片对象或整数，如：A[:]和M[:]。<br><br><strong>注：</strong>Numpy切片数组不会创建数据副本，而是提供统一的数据的视图</p>
+<pre><code class="lang-python">print(&quot;A[:]:\n&quot;,A[:])
+print(&quot;A[:].shape:&quot;,A[:].shape)
+print(&quot;M[:]:\n&quot;,M[:])
+print(&quot;M[:].shape:&quot;,M[:].shape)
+</code></pre>
+<pre><code>A[:]:
+ [[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+A[:].shape: (3, 4)
+M[:]:
+ [[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+M[:].shape: (3, 4)
+</code></pre><p>现在有些不同啦！可以使用逗号分割索引来沿着多个轴索引</p>
+<pre><code class="lang-python">print(&quot;A[:,1]:\n&quot;,A[:,1])
+print(&quot;A[:,1].shape:&quot;,A[:,1].shape)
+print(&quot;M[:,1]:\n&quot;,M[:,1])
+print(&quot;M[:,1].shape:&quot;,M[:,1].shape)
+</code></pre>
+<pre><code>A[:,1]:
+ [1 5 9]
+A[:,1].shape: (3,)
+M[:,1]:
+ [[1]
+ [5]
+ [9]]
+M[:,1].shape: (3, 1)
+</code></pre><p><strong>注：</strong>对二维数组使用一个冒号产生一个一维数组，然而矩阵产生了一个二维矩阵</p>
+<p>获取一个数组的第一列和第三列</p>
+<pre><code class="lang-python">print(&quot;方法一：使用列表切片&quot;)
+print(&quot;A[:,[1,3]]:\n&quot;,A[:,[1,3]])
+print(&quot;方法二：使用take()&quot;)
+print(&quot;A[:,].take([1,3],axis=1):\n&quot;,A[:,].take([1,3],axis=1))
+print(&quot;如果想跳过第0行&quot;)
+print(&quot;A[1:,[1,3]]:\n&quot;,A[1:,[1,3]])
+print(&quot;A[1:,].take([1,3],axis=1):\n&quot;,A[1:,].take([1,3],axis=1))
+print(&quot;方法三：通过矩阵向量积(叉积)&quot;)
+print(&quot;A[np.ix_((1,2),(1,3))]:\n&quot;,A[np.ix_((1,2),(1,3))])
+</code></pre>
+<pre><code>方法一：使用列表切片
+A[:,[1,3]]:
+ [[ 1  3]
+ [ 5  7]
+ [ 9 11]]
+方法二：使用take()
+A[:,].take([1,3],axis=1):
+ [[ 1  3]
+ [ 5  7]
+ [ 9 11]]
+如果想跳过第0行
+A[1:,[1,3]]:
+ [[ 5  7]
+ [ 9 11]]
+A[1:,].take([1,3],axis=1):
+ [[ 5  7]
+ [ 9 11]]
+方法三：通过矩阵向量积(叉积)
+A[np.ix_((1,2),(1,3))]:
+ [[ 5  7]
+ [ 9 11]]
+</code></pre><p>做一些更复杂的，如：保留第一行大于1的列</p>
+<pre><code class="lang-python">print(&quot;方法一：创建布尔索引&quot;)
+B = A[0,:]&gt;1
+print(&#39;A[0,:]&gt;1:\n&#39;,A[0,:]&gt;1)
+print(&quot;A[:,A[0,:]&gt;1]:\n&quot;,A[:,A[0,:]&gt;1])
+print(&quot;但是索引矩阵没这么方便&quot;)
+print(&quot;M[0,:]&gt;1:&quot;,M[0,:]&gt;1)
+M[0,:]&gt;1
+</code></pre>
+<pre><code>方法一：创建布尔索引
+A[0,:]&gt;1:
+ [False False  True  True]
+A[:,A[0,:]&gt;1]:
+ [[ 2  3]
+ [ 6  7]
+ [10 11]]
+但是索引矩阵没这么方便
+M[0,:]&gt;1: [[False False  True  True]]
+
+
+
+
+
+matrix([[False, False,  True,  True]])
+</code></pre><pre><code class="lang-python">M[:,M[0,:]&gt;1]
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+IndexError                                Traceback (most recent call last)
+
+&lt;ipython-input-25-4d44b986840f&gt; in &lt;module&gt;
+----&gt; 1 M[:,M[0,:]&gt;1]
+
+
+d:\dl\minconda3\envs\ml_dl_andrewng\lib\site-packages\numpy\matrixlib\defmatrix.py in __getitem__(self, index)
+    191 
+    192         try:
+--&gt; 193             out = N.ndarray.__getitem__(self, index)
+    194         finally:
+    195             self._getitem = False
+
+
+IndexError: too many indices for array: array is 2-dimensional, but 3 were indexed
+</code></pre><p>所以不能使用矩阵切片来切片产生一个矩阵。<br><br>换一种方法：矩阵有个A属性：其值是数组呈现的</p>
+<pre><code class="lang-python">M[:,M.A[0,:]&gt;1]
+</code></pre>
+<pre><code>matrix([[ 2,  3],
+        [ 6,  7],
+        [10, 11]])
+</code></pre><p>对矩阵两个方向有条件的切片</p>
+<pre><code class="lang-python">A[A[:,0]&gt;2,A[0,:]&gt;1]
+</code></pre>
+<pre><code>array([ 6, 11])
+</code></pre><pre><code class="lang-python">M[M.A[:,0]&gt;2,M.A[0,:]&gt;1]
+</code></pre>
+<pre><code>matrix([[ 6, 11]])
+</code></pre><p>使用向量积ix_()；即对输入的数组进行笛卡尔积，然后可以作为索引。</p>
+<pre><code class="lang-python">print(&quot;A:\n&quot;,A)
+print(&quot;np.ix_(A[:,0]&gt;2,A[0,:]&gt;1):\n&quot;,np.ix_(A[:,0]&gt;2,A[0,:]&gt;1))
+print(&quot;A[np.ix_(A[:,0]&gt;2,A[0,:]&gt;1)]:\n&quot;,A[np.ix_(A[:,0]&gt;2,A[0,:]&gt;1)])
+print(&quot;M[np.ix_(M.A[:,0]&gt;2,M.A[0,:]&gt;1):\n]&quot;,M[np.ix_(M.A[:,0]&gt;2,M.A[0,:]&gt;1)])
+</code></pre>
+<pre><code>A:
+ [[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+np.ix_(A[:,0]&gt;2,A[0,:]&gt;1):
+ (array([[1],
+       [2]], dtype=int64), array([[2, 3]], dtype=int64))
+A[np.ix_(A[:,0]&gt;2,A[0,:]&gt;1)]:
+ [[ 6  7]
+ [10 11]]
+M[np.ix_(M.A[:,0]&gt;2,M.A[0,:]&gt;1):
+] [[ 6  7]
+ [10 11]]
+</code></pre><h2 id="4-技巧和提示"><a href="#4-技巧和提示" class="headerlink" title="4. 技巧和提示"></a>4. 技巧和提示</h2><p>以下给出一些简短和有用的提示</p>
+<h3 id="4-1-“自动”改变形状"><a href="#4-1-“自动”改变形状" class="headerlink" title="4.1 “自动”改变形状"></a>4.1 “自动”改变形状</h3><p>更改数组的维度，可以省略一个尺寸，系统会自动推导出来。</p>
+<pre><code class="lang-python">a = np.arange(30)
+# 只要是负数，即可表示省略该尺寸，需要系统自动推导
+a.shape = 2,-100,3
+a.shape
+</code></pre>
+<pre><code>(2, 5, 3)
+</code></pre><pre><code class="lang-python">a
+</code></pre>
+<pre><code>array([[[ 0,  1,  2],
+        [ 3,  4,  5],
+        [ 6,  7,  8],
+        [ 9, 10, 11],
+        [12, 13, 14]],
+
+       [[15, 16, 17],
+        [18, 19, 20],
+        [21, 22, 23],
+        [24, 25, 26],
+        [27, 28, 29]]])
+</code></pre><h3 id="4-2-向量组合-stacking"><a href="#4-2-向量组合-stacking" class="headerlink" title="4.2 向量组合(stacking)"></a>4.2 向量组合(stacking)</h3><p>如何使用两个相同形状的列表构建一个二维数组。<br><br>在MATLAB中这十分简单：x,y是相同长度的两个向量，只需要：m = [x;y]<br><br>在Python的Numpy中：通过函数:column_stack、dstack、hstack、vstack来完成。</p>
+<pre><code class="lang-python">x = np.arange(0,10,2)
+y = np.arange(5)
+print(&quot;x:&quot;,x)
+print(&quot;y:&quot;,y)
+print(&quot;np.vstack([x,y]):\n&quot;,np.vstack([x,y]))
+print(&quot;np.hstack([x,y]):\n&quot;,np.hstack([x,y]))
+</code></pre>
+<pre><code>x: [0 2 4 6 8]
+y: [0 1 2 3 4]
+np.vstack([x,y]):
+ [[0 2 4 6 8]
+ [0 1 2 3 4]]
+np.hstack([x,y]):
+ [0 2 4 6 8 0 1 2 3 4]
+</code></pre><h3 id="4-3-直方图-histogram"><a href="#4-3-直方图-histogram" class="headerlink" title="4.3 直方图(histogram)"></a>4.3 直方图(histogram)</h3><p>Numpy中的histogram函数是通过一个数组，返回一对变量：直方图数组和箱式向量。<br><br><strong>注：</strong>matplotlib也有一个用来建立直方图的函数(hist,与MATLAB一样)，并且与Numpy不同。主要的差别是：matplotlib.hist会自动绘制直方图，而numpy.histogram仅仅产生数据</p>
+<pre><code class="lang-python">import numpy
+import pylab
+# 创建一个正态分布的平均值和标准差
+mu,sigma = 2,0.5
+# 随机创建10000个符合正态分布的样本
+v = numpy.random.normal(mu,sigma,10000)
+print(v)
+# 使用pylab的hist
+# 自己调整bins的值即可知道其作用
+pylab.hist(v,bins=100)
+pylab.title(&quot;Matplotlib Version&quot;)
+pylab.show()
+# 使用numpy的histogram
+&#39;&#39;&#39;
+histogram(a,bins=10,range=None,weights=None,density=False);
+    a是待统计数据的数组；
+    bins指定统计的区间个数；
+    range是一个长度为2的元组，表示统计范围的最小值和最大值，默认值None，表示范围由数据的范围决定
+    weights为数组的每个元素指定了权值,histogram()会对区间中数组所对应的权值进行求和
+    density为True时，返回每个区间的概率密度；为False，返回每个区间中元素的个数
+&#39;&#39;&#39;
+(n,bins) = numpy.histogram(v,bins=100,density=False)
+# print(&quot;n,bins:&quot;,(n,bins))
+pylab.plot(.5*(bins[1:]+bins[:-1]),n)
+pylab.title(&quot;Numpy Version&quot;)
+pylab.show()
+</code></pre>
+<pre><code>[1.45504749 1.84171988 1.39863619 ... 0.59289162 2.20937138 2.11719324]
+</code></pre><p><img src="/img/code_one_hour/2_1.png" srcset="/img/loading.gif" alt="png"></p>
+<p><img src="/img/code_one_hour/2_2.png" srcset="/img/loading.gif" alt="png"></p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Numpy/">Numpy</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/11/ML_Andrew_Pex3_Multi_class_Classification_and_Neural_Network/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">机器学习程序练习3:多分类器和神经网络</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/08/ML_Andrew_Pex2_Logistic_Regression/">
+                        <span class="hidden-mobile">机器学习程序练习2:逻辑回归和正则化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Numpy-Advanced&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
