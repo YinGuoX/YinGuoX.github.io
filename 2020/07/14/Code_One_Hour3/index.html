@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Pandas-Base-One - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 七月 14日 2020, 7:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    8.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    140
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Pandas使用-基础篇One"><a href="#Pandas使用-基础篇One" class="headerlink" title="Pandas使用-基础篇One"></a>Pandas使用-基础篇One</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>Pandas是Python第三方库，提供高性能易用数据类型和分析工具。<br><br>Pandas基于Numpy实现，常与Numpy和Matplotlib一同使用。<br><br>Pandas基于Series、DataFrame两种数据类型进行基本操作、运算操作、特征类操作、关联类操作等。</p>
+<h2 id="2-Series数据结构"><a href="#2-Series数据结构" class="headerlink" title="2. Series数据结构"></a>2. Series数据结构</h2><h3 id="2-1-基本概念及创建"><a href="#2-1-基本概念及创建" class="headerlink" title="2.1 基本概念及创建"></a>2.1 基本概念及创建</h3><p>Series是带有标签的一维数组，可以保存任何数据类型（整数，字符串，浮点数，Python对象等）,轴标签统称为索引</p>
+<pre><code class="lang-python">import numpy as np
+import pandas as pd
+
+# 创建一个Series数据
+s = pd.Series(np.random.rand(5))
+print(&quot;s:\n&quot;,s)
+print(&quot;type(s):&quot;,type(s))
+
+print(&quot;s.index:&quot;,s.index)
+print(&quot;type(s.index):&quot;,type(s.index))
+print(&quot;s.values:&quot;,s.values)
+print(&quot;type(s.values:)&quot;,type(s.values))
+</code></pre>
+<pre><code>s:
+ 0    0.991089
+1    0.390686
+2    0.411035
+3    0.157825
+4    0.744405
+dtype: float64
+type(s): &lt;class &#39;pandas.core.series.Series&#39;&gt;
+s.index: RangeIndex(start=0, stop=5, step=1)
+type(s.index): &lt;class &#39;pandas.core.indexes.range.RangeIndex&#39;&gt;
+s.values: [0.99108888 0.39068557 0.4110352  0.15782502 0.74440456]
+type(s.values:) &lt;class &#39;numpy.ndarray&#39;&gt;
+</code></pre><p>从上述代码可知：series相比于ndarray，是一个自带索引index的数组 → 一维数组 + 对应索引<br><br>所以当只看series的值的时候，就是一个ndarray。series和ndarray较相似，索引切片功能差别不大。<br><br>series和dict相比，series更像一个有顺序的字典（dict本身不存在顺序），其索引原理与字典相似（一个用key，一个用index）</p>
+<h4 id="2-1-1-Series的创建"><a href="#2-1-1-Series的创建" class="headerlink" title="2.1.1 Series的创建"></a>2.1.1 Series的创建</h4><pre><code class="lang-python">print(&quot;创建方法一：由字典创建&quot;)
+dic = {&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3,&#39;4&#39;:4,&#39;5&#39;:&#39;hello&#39;}
+print(&quot;dic:&quot;,dic)
+s = pd.Series(dic)
+print(&quot;s:\n&quot;,s)
+print(&quot;--------------------------------------------------------&quot;)
+print(&quot;创建方法二：由数组创建&quot;)
+arr = np.random.randn(5)
+print(&quot;arr:&quot;,arr)
+s = pd.Series(arr)
+print(&quot;s:\n&quot;,s)
+print(&quot;设置Series的索引和数值类型:index,dtype&quot;)
+s = pd.Series(arr,index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;],dtype=np.object)
+print(&quot;s:\n&quot;,s)
+print(&quot;--------------------------------------------------------&quot;)
+print(&quot;创建方法三：由标量创建&quot;)
+# 最好提供索引
+s = pd.Series(10,index=range(5))
+print(&quot;s:\n&quot;,s)
+</code></pre>
+<pre><code>创建方法一：由字典创建
+dic: {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: 3, &#39;4&#39;: 4, &#39;5&#39;: &#39;hello&#39;}
+s:
+ a        1
+b        2
+c        3
+4        4
+5    hello
+dtype: object
+--------------------------------------------------------
+创建方法二：由数组创建
+arr: [-0.27992332 -0.47444909  0.07829063 -0.89396309 -0.71199936]
+s:
+ 0   -0.279923
+1   -0.474449
+2    0.078291
+3   -0.893963
+4   -0.711999
+dtype: float64
+设置Series的索引和数值类型:index,dtype
+s:
+ a    -0.279923
+b    -0.474449
+c    0.0782906
+d    -0.893963
+e    -0.711999
+dtype: object
+--------------------------------------------------------
+创建方法三：由标量创建
+s:
+ 0    10
+1    10
+2    10
+3    10
+4    10
+dtype: int64
+</code></pre><h4 id="2-1-2-Series的属性"><a href="#2-1-2-Series的属性" class="headerlink" title="2.1.2 Series的属性"></a>2.1.2 Series的属性</h4><pre><code class="lang-python">s1 = pd.Series(np.random.randn(5))
+print(s1)
+print(&#39;--------------------------&#39;)
+s2 = pd.Series(np.random.randn(5),name=&#39;test&#39;)
+print(s2)
+print(&quot;Series的name属性：&quot;)
+print(&#39;s1.name:&#39;,s1.name,&quot;type(s1.name)&quot;,type(s1.name))
+print(&#39;s2.name:&#39;,s2.name,&quot;type(s2.name)&quot;,type(s2.name))
+print(&#39;--------------------------&#39;)
+print(&quot;重新命名一个Series的name:rename:不改变原Series&quot;)
+s3 = s2.rename(&#39;hahah&#39;)
+print(&quot;s2.name:&quot;,s2.name,&quot;\ns3.name:&quot;,s3.name)
+</code></pre>
+<pre><code>0    0.529423
+1    0.177581
+2   -0.246114
+3   -1.393932
+4   -1.603171
+dtype: float64
+--------------------------
+0   -1.660828
+1   -0.049651
+2    1.146793
+3   -0.916907
+4    1.046905
+Name: test, dtype: float64
+Series的name属性：
+s1.name: None type(s1.name) &lt;class &#39;NoneType&#39;&gt;
+s2.name: test type(s2.name) &lt;class &#39;str&#39;&gt;
+--------------------------
+重新命名一个Series的name:rename:不改变原Series
+s2.name: test 
+s3.name: hahah
+</code></pre><h3 id="2-2-索引"><a href="#2-2-索引" class="headerlink" title="2.2 索引"></a>2.2 索引</h3><ul>
+<li>位置下标/标签索引/切片索引/布尔索引</li>
+</ul>
+<pre><code class="lang-python">print(&quot;位置下标进行索引：&quot;)
+s = pd.Series(np.random.randn(5),index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;])
+print(s)
+print(&quot;s[0]:&quot;,s[0])
+print(&quot;type(s[0]):&quot;,type(s[0]))
+# 将np.float转换为python的float
+print(&quot;float(s[0])&quot;,float(s[0]))
+print(&quot;type(float(s[0])):&quot;,type(float(s[0])))
+print(&quot;numpy.float与float占用的字节不同&quot;)
+# print(s[-1])
+# print(s[6])
+print(&quot;位置索引只能在Series个数的范围内&quot;)
+</code></pre>
+<pre><code>位置下标进行索引：
+a   -0.808881
+b    0.436290
+c    0.947834
+d    0.985208
+e   -1.519866
+dtype: float64
+s[0]: -0.8088810564339672
+type(s[0]): &lt;class &#39;numpy.float64&#39;&gt;
+float(s[0]) -0.8088810564339672
+type(float(s[0])): &lt;class &#39;float&#39;&gt;
+numpy.float与float占用的字节不同
+位置索引只能在Series个数的范围内
+</code></pre><pre><code class="lang-python">print(&quot;使用标签进行索引：&quot;)
+s = pd.Series(np.random.randn(5),index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;])
+print(s)
+print(&quot;s[&#39;a&#39;]:&quot;,s[&#39;a&#39;])
+print(&quot;type(s[&#39;a&#39;])&quot;,type(s[&#39;a&#39;]))
+print(&quot;多标签索引：&quot;)
+sci = s[[&#39;a&#39;,&#39;b&#39;,&#39;e&#39;]]
+print(sci)
+print(&quot;type(s):&quot;,type(s))
+print(&quot;type(sci):&quot;,type(sci))
+</code></pre>
+<pre><code>使用标签进行索引：
+a    0.279955
+b   -0.537458
+c   -1.724077
+d   -1.379164
+e    0.414601
+dtype: float64
+s[&#39;a&#39;]: 0.2799546950699817
+type(s[&#39;a&#39;]) &lt;class &#39;numpy.float64&#39;&gt;
+多标签索引：
+a    0.279955
+b   -0.537458
+e    0.414601
+dtype: float64
+type(s): &lt;class &#39;pandas.core.series.Series&#39;&gt;
+type(sci): &lt;class &#39;pandas.core.series.Series&#39;&gt;
+</code></pre><pre><code class="lang-python">print(&quot;进行切片索引；&quot;)
+s1 = pd.Series(np.random.rand(5))
+s2 = pd.Series(np.random.randn(5),index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;])
+print(&quot;s1:&quot;)
+print(s1)
+print(&quot;s2:&quot;)
+print(s2)
+print(&quot;s1[1:4]:\n&quot;,s1[1:4])
+print(&quot;s1[4]:&quot;,s1[4])
+print(&quot;s2[&#39;a&#39;:&#39;c&#39;]:\n&quot;,s2[&#39;a&#39;:&#39;c&#39;])
+print(&quot;s2[0:3]:\n&quot;,s2[0:3])
+print(&quot;------------------------------&quot;)
+print(&quot;s2[:-1]:从头到尾不包尾&quot;)
+print(s2[:-1])
+print(&quot;跳步&quot;)
+print(s2[::2])
+</code></pre>
+<pre><code>进行切片索引；
+s1:
+0    0.798952
+1    0.723280
+2    0.907490
+3    0.549969
+4    0.804682
+dtype: float64
+s2:
+a   -0.257709
+b    0.383322
+c    0.438494
+d   -1.134009
+e    0.531293
+dtype: float64
+s1[1:4]:
+ 1    0.723280
+2    0.907490
+3    0.549969
+dtype: float64
+s1[4]: 0.804682149011115
+s2[&#39;a&#39;:&#39;c&#39;]:
+ a   -0.257709
+b    0.383322
+c    0.438494
+dtype: float64
+s2[0:3]:
+ a   -0.257709
+b    0.383322
+c    0.438494
+dtype: float64
+------------------------------
+s2[:-1]:从头到尾不包尾
+a   -0.257709
+b    0.383322
+c    0.438494
+d   -1.134009
+dtype: float64
+跳步
+a   -0.257709
+c    0.438494
+e    0.531293
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;使用布尔型进行索引：&quot;)
+s = pd.Series(np.random.rand(3)*100)
+s[4] = None
+print(&quot;s:&quot;)
+print(s)
+bs1 = s&gt;50
+bs2 = s.isnull()
+bs3 = s.notnull()
+print(&quot;bs1 = s &gt; 50 :&quot;)
+print(bs1,type(bs1),bs1.dtype)
+print(&quot;bs2 = s.isnull :&quot;)
+print(bs2,type(bs2),bs2.dtype)
+print(&quot;bs3 = s.notnull :&quot;)
+print(bs3,type(bs3),bs3.dtype)
+print(&quot;--------------------------------------&quot;)
+print(&quot;s[s&gt;50]:&quot;)
+print(s[s&gt;50])
+print(&quot;s[s.notnull()]:&quot;)
+print(s[s.notnull()])
+</code></pre>
+<pre><code>使用布尔型进行索引：
+s:
+0    89.2165
+1    27.0294
+2    39.3481
+4       None
+dtype: object
+bs1 = s &gt; 50 :
+0     True
+1    False
+2    False
+4    False
+dtype: bool &lt;class &#39;pandas.core.series.Series&#39;&gt; bool
+bs2 = s.isnull :
+0    False
+1    False
+2    False
+4     True
+dtype: bool &lt;class &#39;pandas.core.series.Series&#39;&gt; bool
+bs3 = s.notnull :
+0     True
+1     True
+2     True
+4    False
+dtype: bool &lt;class &#39;pandas.core.series.Series&#39;&gt; bool
+--------------------------------------
+s[s&gt;50]:
+0    89.2165
+dtype: object
+s[s.notnull()]:
+0    89.2165
+1    27.0294
+2    39.3481
+dtype: object
+</code></pre><h3 id="2-3-基本技巧"><a href="#2-3-基本技巧" class="headerlink" title="2.3 基本技巧"></a>2.3 基本技巧</h3><ul>
+<li>数据查看/重新索引/对齐/添加、修改、删除</li>
+</ul>
+<pre><code class="lang-python">print(&quot;查看数据&quot;)
+s = pd.Series(np.random.rand(50))
+print(&quot;查看头部数据(默认查看5条)&quot;)
+print(s.head())
+print(&quot;查看尾部数据(默认查看5条)&quot;)
+print(s.tail(10))
+</code></pre>
+<pre><code>查看数据
+查看头部数据(默认查看5条)
+0    0.541801
+1    0.299434
+2    0.131653
+3    0.648302
+4    0.942479
+dtype: float64
+查看尾部数据(默认查看5条)
+40    0.639890
+41    0.654656
+42    0.230673
+43    0.055762
+44    0.542185
+45    0.996363
+46    0.394246
+47    0.379160
+48    0.746220
+49    0.077130
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;重新索引reindex&quot;)
+# .reindex将会根据索引重新排序，如果当前索引不存在，则引入缺失值Nan
+# fill_value参数：填充Nan的值
+s = pd.Series(np.random.rand(3),index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;])
+print(s)
+s1 = s.reindex([&#39;c&#39;,&#39;a&#39;,&#39;b&#39;,&#39;d&#39;,&#39;e&#39;])
+print(s1)
+s2 = s.reindex([&#39;c&#39;,&#39;a&#39;,&#39;b&#39;,&#39;d&#39;,&#39;e&#39;],fill_value=100)
+print(s2)
+</code></pre>
+<pre><code>重新索引reindex
+a    0.465069
+b    0.709122
+c    0.820364
+dtype: float64
+c    0.820364
+a    0.465069
+b    0.709122
+d         NaN
+e         NaN
+dtype: float64
+c      0.820364
+a      0.465069
+b      0.709122
+d    100.000000
+e    100.000000
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;对齐&quot;)
+# Series 和 ndarray 之间的主要区别是，Series 上的操作会根据标签自动对齐
+# index顺序不会影响数值计算，以标签来计算
+# 空值和任何值计算结果扔为空值
+# 有些像数据库的全连接
+s1 = pd.Series(np.random.rand(3),index = [&quot;Jack&quot;,&#39;Marry&#39;,&#39;Tom&#39;])
+s2 = pd.Series(np.random.rand(3),index = [&quot;Wang&quot;,&quot;Jack&quot;,&quot;Marry&quot;])
+print(s1)
+print(s2)
+print(&quot;s1+s2:&quot;)
+print(s1+s2)
+</code></pre>
+<pre><code>对齐
+Jack     0.900155
+Marry    0.238390
+Tom      0.370405
+dtype: float64
+Wang     0.398863
+Jack     0.336837
+Marry    0.757366
+dtype: float64
+s1+s2:
+Jack     1.236992
+Marry    0.995755
+Tom           NaN
+Wang          NaN
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;删除&quot;)
+s = pd.Series(np.random.rand(5),index = list(&#39;ngjur&#39;))
+print(s)
+s1 = s.drop(&#39;n&#39;)
+s2 = s.drop([&#39;g&#39;,&#39;j&#39;])
+print(&quot;s1:&quot;)
+print(s1)
+print(&quot;s2:&quot;)
+print(s2)
+print(&#39;s:&#39;)
+print(s)
+</code></pre>
+<pre><code>删除
+n    0.815866
+g    0.279513
+j    0.734668
+u    0.199442
+r    0.866230
+dtype: float64
+s1:
+g    0.279513
+j    0.734668
+u    0.199442
+r    0.866230
+dtype: float64
+s2:
+n    0.815866
+u    0.199442
+r    0.866230
+dtype: float64
+s:
+n    0.815866
+g    0.279513
+j    0.734668
+u    0.199442
+r    0.866230
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;添加&quot;)
+s1 = pd.Series(np.random.rand(5))
+s2 = pd.Series(np.random.rand(5),index = list(&#39;njurd&#39;))
+print(s1)
+print(s2)
+print(&quot;直接通过下标索引or标签inde添加值即可(改变原数组)&quot;)
+s1[5] = 100
+s2[&#39;a&#39;] = 100
+print(s1)
+print(s2)
+print(&quot;通过.append()直接添加一个数组(返回一个新数组，不改变原数组)&quot;)
+s3 = s1.append(s2)
+print(s3)
+print(s1)
+</code></pre>
+<pre><code>添加
+0    0.224355
+1    0.897432
+2    0.825291
+3    0.612719
+4    0.949516
+dtype: float64
+n    0.081467
+j    0.341444
+u    0.001559
+r    0.599653
+d    0.763388
+dtype: float64
+直接通过下标索引or标签inde添加值即可(改变原数组)
+0      0.224355
+1      0.897432
+2      0.825291
+3      0.612719
+4      0.949516
+5    100.000000
+dtype: float64
+n      0.081467
+j      0.341444
+u      0.001559
+r      0.599653
+d      0.763388
+a    100.000000
+dtype: float64
+通过.append()直接添加一个数组(返回一个新数组，不改变原数组)
+0      0.224355
+1      0.897432
+2      0.825291
+3      0.612719
+4      0.949516
+5    100.000000
+n      0.081467
+j      0.341444
+u      0.001559
+r      0.599653
+d      0.763388
+a    100.000000
+dtype: float64
+0      0.224355
+1      0.897432
+2      0.825291
+3      0.612719
+4      0.949516
+5    100.000000
+dtype: float64
+</code></pre><pre><code class="lang-python">print(&quot;修改&quot;)
+# 通过索引直接修改
+s = pd.Series(np.random.rand(3),index=list(&#39;abc&#39;))
+print(s)
+s[&#39;a&#39;] = 100
+s[[&#39;b&#39;,&#39;c&#39;]] = 200
+print(s)
+</code></pre>
+<pre><code>修改
+a    0.525042
+b    0.005570
+c    0.623136
+dtype: float64
+a    100.0
+b    200.0
+c    200.0
+dtype: float64
+</code></pre><h2 id="3-Dataframe数据结构"><a href="#3-Dataframe数据结构" class="headerlink" title="3. Dataframe数据结构"></a>3. Dataframe数据结构</h2><ul>
+<li>“二维数组”Dataframe：是一个表格类型的数据结构，是带有标签的二维数组。包含一组有序的列，其列的值类型可以是数值、字符串、布尔值等。</li>
+<li>Dataframe中给的数据以一个或多个二维块存放，不是列表、字典或者一维数组结构。</li>
+</ul>
+<pre><code class="lang-python">data = {&#39;name&#39;:[&#39;Jack&#39;,&#39;Tom&#39;,&#39;Mary&#39;],
+       &#39;age&#39;:[18,19,20],
+        &#39;gender&#39;:[&#39;m&#39;,&#39;m&#39;,&#39;w&#39;]
+       }
+frame = pd.DataFrame(data)
+print(&quot;data:&quot;)
+print(data)
+print(&quot;frame&quot;)
+print(frame)
+print(type(frame))
+print(&#39;frame.index:&#39;,frame.index,&#39;\nframe.index的数据类型为：&#39;,type(frame.index))
+print(&#39;frame.columns:&#39;,frame.columns,&#39;\nframe.columns的数据类型为：&#39;,type(frame.columns))
+print(&#39;frame.values:&#39;,frame.values,&#39;\nframe.values的数据类型为：&#39;,type(frame.values))
+</code></pre>
+<pre><code>data:
+{&#39;name&#39;: [&#39;Jack&#39;, &#39;Tom&#39;, &#39;Mary&#39;], &#39;age&#39;: [18, 19, 20], &#39;gender&#39;: [&#39;m&#39;, &#39;m&#39;, &#39;w&#39;]}
+frame
+   name  age gender
+0  Jack   18      m
+1   Tom   19      m
+2  Mary   20      w
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+frame.index: RangeIndex(start=0, stop=3, step=1) 
+frame.index的数据类型为： &lt;class &#39;pandas.core.indexes.range.RangeIndex&#39;&gt;
+frame.columns: Index([&#39;name&#39;, &#39;age&#39;, &#39;gender&#39;], dtype=&#39;object&#39;) 
+frame.columns的数据类型为： &lt;class &#39;pandas.core.indexes.base.Index&#39;&gt;
+frame.values: [[&#39;Jack&#39; 18 &#39;m&#39;]
+ [&#39;Tom&#39; 19 &#39;m&#39;]
+ [&#39;Mary&#39; 20 &#39;w&#39;]] 
+frame.values的数据类型为： &lt;class &#39;numpy.ndarray&#39;&gt;
+</code></pre><h3 id="3-1-创建"><a href="#3-1-创建" class="headerlink" title="3.1 创建"></a>3.1 创建</h3><pre><code class="lang-python">print(&quot;创建方法一：由数组or列表组成的字典创建&quot;)
+# columns 为字典的key
+# index 为默认的数字标签
+# 字典value的长度必须保持一致
+data1 = {
+    &#39;a&#39;:[1,2,3],
+    &#39;b&#39;:[3,4,5],
+    &#39;c&#39;:[5,6,7]
+}
+data2 = {&#39;one&#39;:np.random.rand(3),
+        &#39;two&#39;:np.random.rand(3)}
+print(data1)
+print(data2)
+df1 = pd.DataFrame(data1)
+df2 = pd.DataFrame(data2)
+print(df1)
+print(df2)
+print(&quot;columns可以指定：多则Nan,少则省略&quot;)
+df1 = pd.DataFrame(data1,columns = [&#39;b&#39;,&#39;c&#39;,&#39;a&#39;,&#39;d&#39;])
+df2 = pd.DataFrame(data2,columns=[&#39;one&#39;])
+print(df1)
+print(df2)
+print(&quot;可以重新定义index，格式为list,长度必须保持一致&quot;)
+df2 = pd.DataFrame(data2,index=[&#39;f1&#39;,&#39;f2&#39;,&#39;f3&#39;])
+print(df2)
+</code></pre>
+<pre><code>创建方法一：由数组or列表组成的字典创建
+{&#39;a&#39;: [1, 2, 3], &#39;b&#39;: [3, 4, 5], &#39;c&#39;: [5, 6, 7]}
+{&#39;one&#39;: array([0.46225442, 0.36833065, 0.3688846 ]), &#39;two&#39;: array([0.32915014, 0.49685771, 0.98724123])}
+   a  b  c
+0  1  3  5
+1  2  4  6
+2  3  5  7
+        one       two
+0  0.462254  0.329150
+1  0.368331  0.496858
+2  0.368885  0.987241
+columns可以指定：多则Nan,少则省略
+   b  c  a    d
+0  3  5  1  NaN
+1  4  6  2  NaN
+2  5  7  3  NaN
+        one
+0  0.462254
+1  0.368331
+2  0.368885
+可以重新定义index，格式为list,长度必须保持一致
+         one       two
+f1  0.462254  0.329150
+f2  0.368331  0.496858
+f3  0.368885  0.987241
+</code></pre><pre><code class="lang-python">print(&quot;创建方法二：由Series组成的字典&quot;)
+# 由Seris组成的字典 创建Dataframe，columns为字典key，
+# index为Series的标签（如果Series没有指定标签，则是默认数字标签）
+# Series可以长度不一样，生成的Dataframe会出现NaN值
+data1 = {
+    &#39;one&#39;:pd.Series(np.random.rand(2)),
+    &#39;two&#39;:pd.Series(np.random.rand(3))
+}
+data2 = {
+    &#39;one&#39;:pd.Series(np.random.rand(2),index=[&#39;a&#39;,&#39;b&#39;]),
+    &#39;two&#39;:pd.Series(np.random.rand(3),index=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;])
+}
+print(data1)
+print(data2)
+df1 = pd.DataFrame(data1)
+df2 = pd.DataFrame(data2)
+print(df1)
+print(df2)
+</code></pre>
+<pre><code>创建方法二：由Series组成的字典
+{&#39;one&#39;: 0    0.583443
+1    0.743103
+dtype: float64, &#39;two&#39;: 0    0.692130
+1    0.164697
+2    0.857449
+dtype: float64}
+{&#39;one&#39;: a    0.24425
+b    0.48213
+dtype: float64, &#39;two&#39;: a    0.654920
+b    0.625679
+c    0.307724
+dtype: float64}
+        one       two
+0  0.583443  0.692130
+1  0.743103  0.164697
+2       NaN  0.857449
+       one       two
+a  0.24425  0.654920
+b  0.48213  0.625679
+c      NaN  0.307724
+</code></pre><pre><code class="lang-python">print(&quot;创建方法三：通过二维数组直接创建&quot;)
+# index和colunms指定长度与原数组保持一致
+ar = np.random.rand(9).reshape(3,3)
+print(ar)
+df1 = pd.DataFrame(ar)
+df2 = pd.DataFrame(ar,index=[&#39;a&#39;,&#39;v&#39;,&#39;c&#39;],columns=[&#39;one&#39;,&#39;tow&#39;,&#39;three&#39;])
+print(df1)
+print(df2)
+</code></pre>
+<pre><code>创建方法三：通过二维数组直接创建
+[[0.36972013 0.95234904 0.1272267 ]
+ [0.88124423 0.67480024 0.22678015]
+ [0.232217   0.62060741 0.56844851]]
+          0         1         2
+0  0.369720  0.952349  0.127227
+1  0.881244  0.674800  0.226780
+2  0.232217  0.620607  0.568449
+        one       tow     three
+a  0.369720  0.952349  0.127227
+v  0.881244  0.674800  0.226780
+c  0.232217  0.620607  0.568449
+</code></pre><pre><code class="lang-python">print(&quot;创建方法四：由字典组成的列表创建&quot;)
+data = [{&#39;one&#39;:1,&#39;two&#39;:2},{&#39;one&#39;:5,&#39;two&#39;:10,&#39;three&#39;:20}]
+print(data)
+df1 = pd.DataFrame(data)
+df2 = pd.DataFrame(data,index=[&#39;a&#39;,&#39;b&#39;])
+df3 = pd.DataFrame(data,columns=[&#39;one&#39;,&#39;two&#39;])
+print(df1)
+print(df2)
+print(df3)
+</code></pre>
+<pre><code>创建方法四：由字典组成的列表创建
+[{&#39;one&#39;: 1, &#39;two&#39;: 2}, {&#39;one&#39;: 5, &#39;two&#39;: 10, &#39;three&#39;: 20}]
+   one  two  three
+0    1    2    NaN
+1    5   10   20.0
+   one  two  three
+a    1    2    NaN
+b    5   10   20.0
+   one  two
+0    1    2
+1    5   10
+</code></pre><pre><code class="lang-python">print(&quot;创建方法五：由字典组成的字典&quot;)
+# columns参数可以增加和减少现有列，如出现新的列，值为NaN
+# 不能改变原有index，如果指向新的标签，值为NaN （非常重要！）
+data = {&#39;Jack&#39;:{&#39;math&#39;:90,&#39;english&#39;:89,&#39;art&#39;:{&quot;one&quot;:1,&#39;two&#39;:2}},
+        &#39;Marry&#39;:{&#39;math&#39;:50,&#39;english&#39;:59,&#39;art&#39;:35},
+        &#39;Tom&#39;:{&#39;math&#39;:20,&#39;english&#39;:29,&#39;art&#39;:21}
+       }
+df1 = pd.DataFrame(data)
+print(df1)
+
+df2 = pd.DataFrame(data,columns=[&#39;Jack&#39;,&#39;Tom&#39;,&#39;Bob&#39;])
+df3 = pd.DataFrame(data,index=[&#39;math&#39;,&#39;v&#39;,&#39;c&#39;])
+print(df2)
+print(df3)
+</code></pre>
+<pre><code>创建方法五：由字典组成的字典
+                         Jack  Marry  Tom
+math                       90     50   20
+english                    89     59   29
+art      {&#39;one&#39;: 1, &#39;two&#39;: 2}     35   21
+                         Jack  Tom  Bob
+math                       90   20  NaN
+english                    89   29  NaN
+art      {&#39;one&#39;: 1, &#39;two&#39;: 2}   21  NaN
+      Jack  Marry   Tom
+math  90.0   50.0  20.0
+v      NaN    NaN   NaN
+c      NaN    NaN   NaN
+</code></pre><h3 id="3-2-索引"><a href="#3-2-索引" class="headerlink" title="3.2 索引"></a>3.2 索引</h3><ul>
+<li>DataFrame即有行索引也有列索引，可以看做由Series组成的字典</li>
+<li>选择列/选择行/切片/布尔判断</li>
+</ul>
+<pre><code class="lang-python">print(&quot;选择行与列&quot;)
+df = pd.DataFrame(np.random.rand(12).reshape(3,4)*100,
+                 index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;],
+                 columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&quot;按照列名选择列，只选择一列输出Series，选择多列输出Dataframe&quot;)
+data1 = df[&#39;a&#39;]
+data2 = df[[&#39;a&#39;,&#39;c&#39;]]
+print(&quot;data1:&quot;)
+print(data1)
+print(&quot;type(data1):&quot;)
+print(type(data1))
+print(&quot;data2:&quot;)
+print(data2)
+print(&quot;type(data2):&quot;)
+print(type(data2))
+print(&quot;按照index选择行，只选择一行输出Series，选择多行输出Dataframe&quot;)
+data3 = df.loc[&#39;one&#39;]
+data4 = df.loc[[&#39;one&#39;,&#39;two&#39;]]
+print(&quot;data3:&quot;)
+print(data3)
+print(&quot;type(data3):&quot;)
+print(type(data3))
+print(&quot;data4:&quot;)
+print(data4)
+print(&quot;type(data4):&quot;)
+print(type(data4))
+</code></pre>
+<pre><code>选择行与列
+               a          b          c          d
+one    34.515554  98.949577  43.898236   9.665055
+two     3.553410  13.477195  39.114289   7.865690
+three  24.351288  49.230077  22.481929  62.159299
+按照列名选择列，只选择一列输出Series，选择多列输出Dataframe
+data1:
+one      34.515554
+two       3.553410
+three    24.351288
+Name: a, dtype: float64
+type(data1):
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+data2:
+               a          c
+one    34.515554  43.898236
+two     3.553410  39.114289
+three  24.351288  22.481929
+type(data2):
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+按照index选择行，只选择一行输出Series，选择多行输出Dataframe
+data3:
+a    34.515554
+b    98.949577
+c    43.898236
+d     9.665055
+Name: one, dtype: float64
+type(data3):
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+data4:
+             a          b          c         d
+one  34.515554  98.949577  43.898236  9.665055
+two   3.553410  13.477195  39.114289  7.865690
+type(data4):
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+</code></pre><pre><code class="lang-python">print(&quot;df[]:[]里为列名选择列，[]为切片数字选择行且为DataFrame类型&quot;)
+# 不能带有不存在的标签进行索引
+df = pd.DataFrame(np.random.rand(12).reshape(3,4)*100,
+                 index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;],
+                 columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&quot;----------------------------------------------------------&quot;)
+data1 = df[&#39;a&#39;]
+data2 = df[[&#39;b&#39;,&#39;c&#39;]]
+print(data1)
+print(data2)
+print(&quot;----------------------------------------------------------&quot;)
+# data3 = df[2]
+# data3 = df[&#39;one&#39;]
+data3 = df[:2]
+print(data3)
+</code></pre>
+<pre><code>df[]:[]里为列名选择列，[]为切片数字选择行且为DataFrame类型
+               a          b          c          d
+one    83.198851   3.308012  36.786939  82.549339
+two    77.854744  60.662882  74.282610  66.435758
+three  64.264539  55.905489  75.796004  88.491406
+----------------------------------------------------------
+one      83.198851
+two      77.854744
+three    64.264539
+Name: a, dtype: float64
+               b          c
+one     3.308012  36.786939
+two    60.662882  74.282610
+three  55.905489  75.796004
+----------------------------------------------------------
+             a          b          c          d
+one  83.198851   3.308012  36.786939  82.549339
+two  77.854744  60.662882  74.282610  66.435758
+</code></pre><pre><code class="lang-python">print(&quot;df.loc[]用于一般的按index索引行&quot;)
+# 不能带有不存在的标签进行索引
+df1 = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+df2 = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df1)
+print(df2)
+print(&#39;-------------------------------------------------&#39;)
+print(&quot;单标签索引返回Series类型&quot;)
+data1 = df1.loc[&#39;one&#39;]
+data2 =df2.loc[1]
+print(data1)
+print(type(data1))
+print(data2)
+print(type(data2))
+print(&#39;-------------------------------------------------&#39;)
+print(&quot;多标签索引返回DataFrame类型&quot;)
+data3 = df1.loc[[&#39;two&#39;,&#39;three&#39;,]]
+data4 = df2.loc[[3,2,1]]
+print(data3)
+print(type(data3))
+print(data4)
+print(type(data4))
+print(&#39;-------------------------------------------------&#39;)
+print(&quot;行切片索引也使用loc&quot;)
+data5 = df1.loc[&#39;one&#39;:&#39;three&#39;]
+data6 = df2.loc[1:3]
+print(data5)
+print(data6)
+</code></pre>
+<pre><code>df.loc[]用于一般的按index索引行
+               a          b          c          d
+one     4.433433  18.488460   5.073606  77.901160
+two    28.299044  36.706668  55.477949  88.617636
+three  67.329849  41.235974  78.402812  65.005240
+four   78.509645  87.248411  88.946362  72.474774
+           a          b          c          d
+0  25.421173  86.974363  50.466541   5.346936
+1   2.100977  41.670700  95.095015  53.027283
+2  66.022038  66.276853  95.279613  15.745668
+3  97.756592  70.521653  42.338155  82.867693
+-------------------------------------------------
+单标签索引返回Series类型
+a     4.433433
+b    18.488460
+c     5.073606
+d    77.901160
+Name: one, dtype: float64
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+a     2.100977
+b    41.670700
+c    95.095015
+d    53.027283
+Name: 1, dtype: float64
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+-------------------------------------------------
+多标签索引返回DataFrame类型
+               a          b          c          d
+two    28.299044  36.706668  55.477949  88.617636
+three  67.329849  41.235974  78.402812  65.005240
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+           a          b          c          d
+3  97.756592  70.521653  42.338155  82.867693
+2  66.022038  66.276853  95.279613  15.745668
+1   2.100977  41.670700  95.095015  53.027283
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+-------------------------------------------------
+行切片索引也使用loc
+               a          b          c          d
+one     4.433433  18.488460   5.073606  77.901160
+two    28.299044  36.706668  55.477949  88.617636
+three  67.329849  41.235974  78.402812  65.005240
+           a          b          c          d
+1   2.100977  41.670700  95.095015  53.027283
+2  66.022038  66.276853  95.279613  15.745668
+3  97.756592  70.521653  42.338155  82.867693
+</code></pre><pre><code class="lang-python">print(&quot;df.iloc[]按整数位置(0-length)索引行&quot;)
+df = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;单位置索引(不可超过行数)返回Series类型&quot;)
+print(df.iloc[0])
+print(df.iloc[-1])
+print(type(df.iloc[0]))
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;多位置索引(不可超过行数)返回DataFrame类型&quot;)
+# 顺序可变
+print(df.iloc[[0,2]])
+print(df.iloc[[3,2,1]])
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;切片索引(不可超过行数)返回DataFrame类型&quot;)
+print(df.iloc[0:2])
+print(df.iloc[:-1])
+</code></pre>
+<pre><code>df.iloc[]按整数位置(0-length)索引行
+               a          b          c          d
+one    90.019311   7.982531  29.532628  93.410032
+two     6.744925   0.010697  76.843287  65.002500
+three  32.529591  27.465725  34.814478  30.768194
+four   10.434341  46.873697  80.104416  18.696060
+--------------------------------------------------
+单位置索引(不可超过行数)返回Series类型
+a    90.019311
+b     7.982531
+c    29.532628
+d    93.410032
+Name: one, dtype: float64
+a    10.434341
+b    46.873697
+c    80.104416
+d    18.696060
+Name: four, dtype: float64
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+--------------------------------------------------
+多位置索引(不可超过行数)返回DataFrame类型
+               a          b          c          d
+one    90.019311   7.982531  29.532628  93.410032
+three  32.529591  27.465725  34.814478  30.768194
+               a          b          c          d
+four   10.434341  46.873697  80.104416  18.696060
+three  32.529591  27.465725  34.814478  30.768194
+two     6.744925   0.010697  76.843287  65.002500
+--------------------------------------------------
+切片索引(不可超过行数)返回DataFrame类型
+             a         b          c          d
+one  90.019311  7.982531  29.532628  93.410032
+two   6.744925  0.010697  76.843287  65.002500
+               a          b          c          d
+one    90.019311   7.982531  29.532628  93.410032
+two     6.744925   0.010697  76.843287  65.002500
+three  32.529591  27.465725  34.814478  30.768194
+</code></pre><pre><code class="lang-python">print(&quot;布尔类型索引&quot;)
+df = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;每个元素判断生成布尔型并且索引&quot;)
+# 索引结果保留 所有数据：True返回原数据，False返回值为NaN
+b1 = df&lt;20
+print(b1)
+print(type(b1))
+print(df[b1])
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;单列判断生成布尔型并且索引&quot;)
+# 索引结果保留 单列判断为True的行数据，包括其他列
+b2 = df[&#39;a&#39;]&gt;50
+print(b2)
+print(type(b2))
+print(df[b2])
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;多列判断生成布尔型并且索引&quot;)
+# 索引结果保留 所有数据：True返回原数据，False返回值为NaN
+b3 = df[[&#39;a&#39;,&#39;b&#39;]]&gt;50
+print(b3)
+print(type(b3))
+print(df[b3])
+print(&#39;--------------------------------------------------&#39;)
+print(&quot;多行判断生成布尔型并且索引&quot;)
+# 索引结果保留 所有数据：True返回原数据，False返回值为NaN
+b4 = df.loc[[&#39;one&#39;,&#39;three&#39;]]&gt;50
+print(b4)
+print(type(b4))
+print(df[b4])
+</code></pre>
+<pre><code>布尔类型索引
+               a          b          c          d
+one    28.998578  41.329836  49.808520  20.614252
+two    69.983658  34.904093  89.407329  33.697769
+three  73.968437  13.572205  77.644312  82.873489
+four    3.867114  32.306858  35.811209  74.641972
+--------------------------------------------------
+每个元素判断生成布尔型并且索引
+           a      b      c      d
+one    False  False  False  False
+two    False  False  False  False
+three  False   True  False  False
+four    True  False  False  False
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+              a          b   c   d
+one         NaN        NaN NaN NaN
+two         NaN        NaN NaN NaN
+three       NaN  13.572205 NaN NaN
+four   3.867114        NaN NaN NaN
+--------------------------------------------------
+单列判断生成布尔型并且索引
+one      False
+two       True
+three     True
+four     False
+Name: a, dtype: bool
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+               a          b          c          d
+two    69.983658  34.904093  89.407329  33.697769
+three  73.968437  13.572205  77.644312  82.873489
+--------------------------------------------------
+多列判断生成布尔型并且索引
+           a      b
+one    False  False
+two     True  False
+three   True  False
+four   False  False
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+               a   b   c   d
+one          NaN NaN NaN NaN
+two    69.983658 NaN NaN NaN
+three  73.968437 NaN NaN NaN
+four         NaN NaN NaN NaN
+--------------------------------------------------
+多行判断生成布尔型并且索引
+           a      b      c      d
+one    False  False  False  False
+three   True  False   True   True
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+               a   b          c          d
+one          NaN NaN        NaN        NaN
+two          NaN NaN        NaN        NaN
+three  73.968437 NaN  77.644312  82.873489
+four         NaN NaN        NaN        NaN
+</code></pre><pre><code class="lang-python">print(&quot;多重索引：如同时索引行和列&quot;)
+print(&quot;布尔类型索引&quot;)
+df = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   index = [&#39;one&#39;,&#39;two&#39;,&#39;three&#39;,&#39;four&#39;],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&#39;--------------------------------------------------&#39;)
+print(df[&#39;a&#39;].loc[[&#39;one&#39;,&#39;three&#39;]])
+print(df[[&#39;b&#39;,&#39;c&#39;,&#39;d&#39;]].iloc[::2])
+print(df[df[&#39;a&#39;]&lt;50].iloc[:2])
+</code></pre>
+<pre><code>多重索引：如同时索引行和列
+布尔类型索引
+               a          b          c          d
+one    72.241830  32.478322  61.098307  41.233279
+two     0.578751   7.160494  23.428193  99.938190
+three  10.793854  16.929929  71.040860  35.324026
+four   19.334477   5.480799  54.711986  28.119088
+--------------------------------------------------
+one      72.241830
+three    10.793854
+Name: a, dtype: float64
+               b          c          d
+one    32.478322  61.098307  41.233279
+three  16.929929  71.040860  35.324026
+               a          b          c          d
+two     0.578751   7.160494  23.428193  99.938190
+three  10.793854  16.929929  71.040860  35.324026
+</code></pre><h3 id="3-3-基本技巧"><a href="#3-3-基本技巧" class="headerlink" title="3.3 基本技巧"></a>3.3 基本技巧</h3><ul>
+<li>数据查看、转置、添加、修改、删除、对齐、排序</li>
+</ul>
+<pre><code class="lang-python">print(&quot;查看数据：&quot;)
+df = pd.DataFrame(np.random.rand(8).reshape(4,2)*100,columns=[&#39;a&#39;,&#39;b&#39;])
+print(df)
+print(df.head(2))
+print(df.tail())
+print(&quot;DataFrame转置&quot;)
+print(df.T)
+</code></pre>
+<pre><code>查看数据：
+           a          b
+0  77.464431   1.602259
+1  82.486761  96.562392
+2  87.438763   2.651002
+3  94.637020  53.445543
+           a          b
+0  77.464431   1.602259
+1  82.486761  96.562392
+           a          b
+0  77.464431   1.602259
+1  82.486761  96.562392
+2  87.438763   2.651002
+3  94.637020  53.445543
+DataFrame转置
+           0          1          2          3
+a  77.464431  82.486761  87.438763  94.637020
+b   1.602259  96.562392   2.651002  53.445543
+</code></pre><pre><code class="lang-python">print(&quot;添加、修改数据(与Series类似)&quot;)
+print(&quot;添加前&quot;)
+print(df)
+df[&#39;e&#39;] = 10
+df.loc[4] = 20
+print(&quot;添加后&quot;)
+print(df)
+print(&quot;修改前&quot;)
+print(df)
+df[[&#39;a&#39;,&#39;b&#39;]]=1000
+print(&quot;修改后&quot;)
+print(df)
+</code></pre>
+<pre><code>添加、修改数据(与Series类似)
+添加前
+           a          b
+0  77.464431   1.602259
+1  82.486761  96.562392
+2  87.438763   2.651002
+3  94.637020  53.445543
+添加后
+           a          b   e
+0  77.464431   1.602259  10
+1  82.486761  96.562392  10
+2  87.438763   2.651002  10
+3  94.637020  53.445543  10
+4  20.000000  20.000000  20
+修改前
+           a          b   e
+0  77.464431   1.602259  10
+1  82.486761  96.562392  10
+2  87.438763   2.651002  10
+3  94.637020  53.445543  10
+4  20.000000  20.000000  20
+修改后
+      a     b   e
+0  1000  1000  10
+1  1000  1000  10
+2  1000  1000  10
+3  1000  1000  10
+4  1000  1000  20
+</code></pre><pre><code class="lang-python">print(&quot;删除，使用del or drop()：&quot;)
+df = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&quot;-----------------------------------------------&quot;)
+print(&quot;使用del删除列&quot;)
+del df[&#39;a&#39;]
+print(df)
+print(&quot;-----------------------------------------------&quot;)
+print(&quot;使用drop()删除行,inplace=False:不改变原数据&quot;)
+print(df.drop(0))
+print(df.drop([1,2]))
+print(&quot;-----------------------------------------------&quot;)
+print(&quot;使用drop()删除列要设置axis=1,inplace=False:不改变原数据&quot;)
+print(df.drop([&#39;d&#39;],axis=1))
+</code></pre>
+<pre><code>删除，使用del or drop()：
+           a          b          c          d
+0  97.807068  53.407032  88.333922  95.967187
+1   9.259551  85.246644  44.608161   4.634162
+2  88.149406  94.593139  50.604282  27.785226
+3  26.841337  30.868968  55.227238  68.527238
+-----------------------------------------------
+使用del删除列
+           b          c          d
+0  53.407032  88.333922  95.967187
+1  85.246644  44.608161   4.634162
+2  94.593139  50.604282  27.785226
+3  30.868968  55.227238  68.527238
+-----------------------------------------------
+使用drop()删除行,inplace=False:不改变原数据
+           b          c          d
+1  85.246644  44.608161   4.634162
+2  94.593139  50.604282  27.785226
+3  30.868968  55.227238  68.527238
+           b          c          d
+0  53.407032  88.333922  95.967187
+3  30.868968  55.227238  68.527238
+-----------------------------------------------
+使用drop()删除列要设置axis=1,inplace=False:不改变原数据
+           b          c
+0  53.407032  88.333922
+1  85.246644  44.608161
+2  94.593139  50.604282
+3  30.868968  55.227238
+</code></pre><pre><code class="lang-python">print(&quot;对齐：类似数据库的全连接&quot;)
+df1 = pd.DataFrame(np.random.randn(10, 4), columns=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;])
+df2 = pd.DataFrame(np.random.randn(7, 3), columns=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;])
+print(df1)
+print(df2)
+print(df1 + df2)
+</code></pre>
+<pre><code>对齐：类似数据库的全连接
+          A         B         C         D
+0 -0.055925 -0.319745 -0.946771  2.588141
+1 -0.671828  0.643480  1.305409  0.176569
+2  1.055132  0.691310 -1.766530 -2.074678
+3  1.138196 -0.286035  0.478995 -0.245323
+4 -0.596816  2.152932 -0.693077  0.757123
+5 -0.328919 -0.469229 -0.573841 -0.524454
+6  0.057870  1.602256 -0.498194 -3.019152
+7 -0.830605  2.210687 -0.392986 -1.665645
+8  0.362456  1.454338  1.206861  0.277026
+9  0.043931 -0.484493 -0.969698 -0.282779
+          A         B         C
+0 -0.582988 -0.276731  0.588420
+1  0.944057  2.445921 -1.516767
+2 -1.477689 -2.013599 -1.519106
+3  0.096133  0.299149 -0.041900
+4 -0.425194 -1.316385  1.458956
+5  0.260500  2.130911  0.586141
+6  1.134267  1.364988 -0.906205
+          A         B         C   D
+0 -0.638912 -0.596476 -0.358351 NaN
+1  0.272230  3.089401 -0.211358 NaN
+2 -0.422557 -1.322288 -3.285636 NaN
+3  1.234329  0.013114  0.437095 NaN
+4 -1.022010  0.836547  0.765879 NaN
+5 -0.068419  1.661682  0.012300 NaN
+6  1.192136  2.967244 -1.404399 NaN
+7       NaN       NaN       NaN NaN
+8       NaN       NaN       NaN NaN
+9       NaN       NaN       NaN NaN
+</code></pre><pre><code class="lang-python">print(&quot;排序1：按值排序 .sort_value&quot;)
+
+df1 = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df1)
+print(&quot;----------------------------------------------------&quot;)
+print(&quot;单列排序，ascending=True默认升序，反之降序&quot;)
+print(df1.sort_values([&#39;a&#39;],ascending=True))
+print(df1.sort_values([&#39;a&#39;],ascending=False))
+print(&quot;----------------------------------------------------&quot;)
+print(&quot;多列排序，ascending=True默认升序，反之降序&quot;)
+print(df1.sort_values([&#39;a&#39;,&#39;b&#39;],ascending=True))
+print(df1.sort_values([&#39;a&#39;,&#39;b&#39;],ascending=False))
+</code></pre>
+<pre><code>排序1：按值排序 .sort_value
+           a          b          c          d
+0   7.178633  91.743711  74.429973  16.972551
+1  19.380969  92.812296  63.897946  99.206019
+2  72.370776  93.850345  15.692439  40.838448
+3  81.406605  72.521177  16.108888  46.376406
+----------------------------------------------------
+单列排序，ascending=True默认升序，反之降序
+           a          b          c          d
+0   7.178633  91.743711  74.429973  16.972551
+1  19.380969  92.812296  63.897946  99.206019
+2  72.370776  93.850345  15.692439  40.838448
+3  81.406605  72.521177  16.108888  46.376406
+           a          b          c          d
+3  81.406605  72.521177  16.108888  46.376406
+2  72.370776  93.850345  15.692439  40.838448
+1  19.380969  92.812296  63.897946  99.206019
+0   7.178633  91.743711  74.429973  16.972551
+----------------------------------------------------
+多列排序，ascending=True默认升序，反之降序
+           a          b          c          d
+0   7.178633  91.743711  74.429973  16.972551
+1  19.380969  92.812296  63.897946  99.206019
+2  72.370776  93.850345  15.692439  40.838448
+3  81.406605  72.521177  16.108888  46.376406
+           a          b          c          d
+3  81.406605  72.521177  16.108888  46.376406
+2  72.370776  93.850345  15.692439  40.838448
+1  19.380969  92.812296  63.897946  99.206019
+0   7.178633  91.743711  74.429973  16.972551
+</code></pre><pre><code class="lang-python">print(&quot;排序2：索引排序 .sort_values&quot;)
+
+df1 = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                  index = [5,4,3,2],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+df2 = pd.DataFrame(np.random.rand(16).reshape(4,4)*100,
+                  index = [&#39;h&#39;,&#39;s&#39;,&#39;x&#39;,&#39;g&#39;],
+                   columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df1)
+print(df2)
+print(&quot;------------------------------------------------&quot;)
+print(df1.sort_index(ascending=True))
+print(df1.sort_index(ascending=False))
+print(df2.sort_index(ascending=True))
+print(df2.sort_index(ascending=False))
+</code></pre>
+<pre><code>排序2：索引排序 .sort_values
+           a          b          c          d
+5  32.302513   4.063405  92.012848  69.404665
+4  31.365644   6.941837  39.569200  95.199020
+3  60.919116  66.896067   3.784809  94.653845
+2  28.716530  86.753768  60.392612  41.607867
+           a          b          c          d
+h  18.838502   5.284545  65.303225  65.857055
+s  33.518432  82.303055  72.937504  13.445320
+x  38.611954  50.311829  93.052196   5.560826
+g  55.278087  45.968994  53.819673  24.982026
+------------------------------------------------
+           a          b          c          d
+2  28.716530  86.753768  60.392612  41.607867
+3  60.919116  66.896067   3.784809  94.653845
+4  31.365644   6.941837  39.569200  95.199020
+5  32.302513   4.063405  92.012848  69.404665
+           a          b          c          d
+5  32.302513   4.063405  92.012848  69.404665
+4  31.365644   6.941837  39.569200  95.199020
+3  60.919116  66.896067   3.784809  94.653845
+2  28.716530  86.753768  60.392612  41.607867
+           a          b          c          d
+g  55.278087  45.968994  53.819673  24.982026
+h  18.838502   5.284545  65.303225  65.857055
+s  33.518432  82.303055  72.937504  13.445320
+x  38.611954  50.311829  93.052196   5.560826
+           a          b          c          d
+x  38.611954  50.311829  93.052196   5.560826
+s  33.518432  82.303055  72.937504  13.445320
+h  18.838502   5.284545  65.303225  65.857055
+g  55.278087  45.968994  53.819673  24.982026
+</code></pre><pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Pandas/">Pandas</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/15/ML_Andrew_Pex4_Neural_Network_Learning/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">机器学习程序练习4:神经网络学习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/11/ML_Andrew_Pex3_Multi_class_Classification_and_Neural_Network%20/">
+                        <span class="hidden-mobile">机器学习程序练习3:多分类器和神经网络</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Pandas-Base-One&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

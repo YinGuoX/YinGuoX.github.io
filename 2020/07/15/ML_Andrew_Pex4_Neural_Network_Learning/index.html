@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>机器学习程序练习4:神经网络学习 - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/textbg.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 七月 15日 2020, 7:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    47
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="吴恩达机器学习程序练习4-神经网络学习"><a href="#吴恩达机器学习程序练习4-神经网络学习" class="headerlink" title="吴恩达机器学习程序练习4:神经网络学习"></a>吴恩达机器学习程序练习4:神经网络学习</h1><p>更多详细信息可参考同文件夹下的andrew_ml_ex45345</p>
+<h2 id="1-神经网络"><a href="#1-神经网络" class="headerlink" title="1. 神经网络"></a>1. 神经网络</h2><p>对于此练习，我们再次处理手写数字数据集，这次使用反向传播的前馈神经网络，自动学习神经网络的参数</p>
+<h3 id="1-1-数据可视化"><a href="#1-1-数据可视化" class="headerlink" title="1.1 数据可视化"></a>1.1 数据可视化</h3><p>这部分和ex3里是一样的，5000张20*20像素的手写数字数据集，以及对应的数字(0-9，0对应10)</p>
+<pre><code class="lang-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+from scipy.io import loadmat
+from sklearn.preprocessing import OneHotEncoder
+</code></pre>
+<pre><code class="lang-python">data = loadmat(&#39;./andrew_ml_ex45345/ex4data1.mat&#39;)
+print(type(data))
+data
+</code></pre>
+<pre><code>&lt;class &#39;dict&#39;&gt;
+
+
+
+
+
+{&#39;__header__&#39;: b&#39;MATLAB 5.0 MAT-file, Platform: GLNXA64, Created on: Sun Oct 16 13:09:09 2011&#39;,
+ &#39;__version__&#39;: &#39;1.0&#39;,
+ &#39;__globals__&#39;: [],
+ &#39;X&#39;: array([[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]]),
+ &#39;y&#39;: array([[10],
+        [10],
+        [10],
+        ...,
+        [ 9],
+        [ 9],
+        [ 9]], dtype=uint8)}
+</code></pre><pre><code class="lang-python">X = data[&#39;X&#39;]
+y = data[&#39;y&#39;]
+X.shape,y.shape
+</code></pre>
+<pre><code>((5000, 400), (5000, 1))
+</code></pre><pre><code class="lang-python">weight  = loadmat(&quot;./andrew_ml_ex45345/ex4weights.mat&quot;)
+# print(weight)
+theta1,theta2 = weight[&quot;Theta1&quot;],weight[&#39;Theta2&#39;]
+theta1.shape,theta2.shape
+</code></pre>
+<pre><code>((25, 401), (10, 26))
+</code></pre><pre><code class="lang-python"># 可视化数据集
+sample_idx = np.random.choice(np.arange(data[&#39;X&#39;].shape[0]),100)
+sample_images = data[&quot;X&quot;][sample_idx,:]
+fig,ax_array = plt.subplots(nrows=10,ncols=10,sharey=True,sharex=True,figsize=(12,12))
+for r in range(10):
+    for c in range(10):
+        ax_array[r,c].matshow(np.array(sample_images[10*r+c].reshape((20,20))).T,cmap=matplotlib.cm.binary)
+        plt.xticks(np.array([]))
+        plt.yticks(np.array([]))
+</code></pre>
+<p><img src="/img/ML_Andrew/4_1.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="1-2-模型展示"><a href="#1-2-模型展示" class="headerlink" title="1.2 模型展示"></a>1.2 模型展示</h3><p>与ex3采用相同的模型,25个隐藏层单元和10个输出层单元。<br><img src="/img/ML_Andrew/3_2.png" srcset="/img/loading.gif" alt=""></p>
+<h3 id="1-3-前向传播和代价函数"><a href="#1-3-前向传播和代价函数" class="headerlink" title="1.3 前向传播和代价函数"></a>1.3 前向传播和代价函数</h3><p>实现神经网络的代价函数和梯度函数要求：应该适用在任何数据集(任意数量的输入输出单元)</p>
+<h4 id="1-3-1-激活函数"><a href="#1-3-1-激活函数" class="headerlink" title="1.3.1 激活函数"></a>1.3.1 激活函数</h4><pre><code class="lang-python">def sigmoid(z):
+    return 1/(1+np.exp(-z))
+</code></pre>
+<h4 id="1-3-2-前向传播函数"><a href="#1-3-2-前向传播函数" class="headerlink" title="1.3.2 前向传播函数"></a>1.3.2 前向传播函数</h4><pre><code class="lang-python">def forward_propagate(X,theta1,theta2):
+    m = X.shape[0]
+    a1 = np.insert(X,0,values=np.ones(m),axis=1)
+    z2 = a1*theta1.T
+    a2 = np.insert(sigmoid(z2),0,values=np.ones(m),axis=1)
+    z3 = a2*theta2.T
+    h = sigmoid(z3)
+
+    return a1,z2,a2,z3,h
+</code></pre>
+<h4 id="1-3-3-代价函数"><a href="#1-3-3-代价函数" class="headerlink" title="1.3.3 代价函数"></a>1.3.3 代价函数</h4><p>m为训练集的样本个数，k为分类的类数</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m\sum_{k=1}^k[-y_k^{(i)}log(h_\theta(x^{(i)}))_k-(1-y_k^{(i)})log(1-(h_\theta(x^{(i)}))_k)]</script><pre><code class="lang-python">def cost(theta1,theta2,inpit_size,hidden_size,num_labels,X,y,learning_rate):
+    m = X.shape[0]
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+    a1,z2,a2,z3,h = forward_propagate(X,theta1,theta2)
+    # 计算代价函数
+    J = 0
+    for i in range(m):
+        first_term = np.multiply(-y[i,:],np.log(h[i,:]))
+        # second_term = np.multiply((1 - y[i,:]), np.log(1 - h[i,:]))
+        second_term = np.multiply((1 - y[i,:]),np.log(1-h[i,:]))
+        J += np.sum(first_term-second_term)
+    J = J/m
+    return J
+</code></pre>
+<h4 id="1-3-4-标签集转换"><a href="#1-3-4-标签集转换" class="headerlink" title="1.3.4 标签集转换"></a>1.3.4 标签集转换</h4><p>对y标签进行编码，因为一开始我们得到的y是5000*1维的向量，但是我们要将其编码成5000*10的矩阵。即：原始$y_0=2$,那么转换后的就是对应的[0,1,0,0,0,0,0,0,0,0]<br><br>Scikitlearn有一个内置编码函数，可以使用这个：</p>
+<pre><code class="lang-python">encoder = OneHotEncoder(sparse=False)
+y_onehot = encoder.fit_transform(y)
+y_onehot.shape
+</code></pre>
+<pre><code>(5000, 10)
+</code></pre><pre><code class="lang-python">print(y[2])
+print(y_onehot[2,:])
+</code></pre>
+<pre><code>[10]
+[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+</code></pre><pre><code class="lang-python"># 计算初始化theta的代价函数J
+input_size = 400
+hidden_size = 25
+num_labels = 10
+learning_rate = 1
+cost(theta1,theta2,input_size,hidden_size,num_labels,X,y_onehot,learning_rate)
+</code></pre>
+<pre><code>0.2876291651613188
+</code></pre><h3 id="1-4-正则化代价函数"><a href="#1-4-正则化代价函数" class="headerlink" title="1.4 正则化代价函数"></a>1.4 正则化代价函数</h3><p>防止过拟合，公式：</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{m}\sum_{i=1}^m\sum_{k=1}^k[-y_k^{(i)}log(h_\theta(x^{(i)}))_k-(1-y_k^{(i)})log(1-(h_\theta(x^{(i)}))_k)]+\frac{\lambda}{2m}[\sum_{j=1}^{25}\sum_{k=1}^{400}(\Theta_{j,k}^{(1)})^{2}+\sum_{j=1}^{10}\sum_{k=1}^{25}(\Theta_{j,k}^{(2)})^2]</script><p><strong>注：</strong>代码需要满足任意大小的$\Theta^{(1)}$和$\Theta^{(2)}$</p>
+<pre><code class="lang-python">def costReg(theta1,theta2,input_size,hidden_size,num_labels,X,y,learning_rate):
+    m = X.shape[0]
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+    a1,z2,a2,z3,h = forward_propagate(X,theta1,theta2)
+    # 计算代价
+    J = 0
+    for i in range(m):
+        first_term = np.multiply(-y[i,:], np.log(h[i,:]))
+        second_term = np.multiply((1 - y[i,:]), np.log(1 - h[i,:]))
+        J += np.sum(first_term - second_term)
+
+    J = J / m
+
+    # 加上正则化项
+    J += (float(learning_rate)/(2*m))*(np.sum(np.power(theta1[:,1:],2))+np.sum(np.power(theta2[:,1:],2)))
+    return J
+</code></pre>
+<pre><code class="lang-python">costReg(theta1,theta2,input_size,hidden_size,num_labels,X,y_onehot,learning_rate)
+</code></pre>
+<pre><code>0.38376985909092354
+</code></pre><h2 id="2-反向传播"><a href="#2-反向传播" class="headerlink" title="2 反向传播"></a>2 反向传播</h2><p>实现反向传播算法：计算神经网络代价函数的梯度，从而可以使用工具库来计算代价函数的最小值</p>
+<h3 id="2-1-sigmoid函数的梯度"><a href="#2-1-sigmoid函数的梯度" class="headerlink" title="2.1 sigmoid函数的梯度"></a>2.1 sigmoid函数的梯度</h3><p>sigmoid函数的梯度(导数)，推导公式如下：（自己草稿纸推导换元即可）</p>
+<script type="math/tex; mode=display">sigmoid(z)=g(z)=\frac{1}{1+e^{-z}}</script><script type="math/tex; mode=display">g^{'}(z)=\frac{\mathrm{d}}{\mathrm{d}z}g(z)=g(z)(1-g(z))</script><p>在绝对值较大的情况下，梯度应该接近0，当z=0时，设置梯度为0.25,此外当作用在向量以及矩阵上时，应该是计算每个元素的梯度。</p>
+<pre><code class="lang-python">def sigmoid_gradient(z):
+    # np.multiply()矩阵对应元素相乘，而不是矩阵的乘法
+    return np.multiply(sigmoid(z),(1-sigmoid(z)))
+</code></pre>
+<pre><code class="lang-python">sigmoid_gradient(0)
+</code></pre>
+<pre><code>0.25
+</code></pre><h3 id="2-2-随机初始化"><a href="#2-2-随机初始化" class="headerlink" title="2.2 随机初始化"></a>2.2 随机初始化</h3><p>当训练神经网络时，需要将$\Theta^{(l)}$初始化，一般将$\Theta^{(l)}$设定为${-\epsilon<em>{init},\epsilon</em>{init}}$之间的随机值，此处我们设定$\epsilon_{init}=0.12$,以保证参数足够小，使参数学习更高效</p>
+<pre><code class="lang-python">params = (np.random.random(size=hidden_size*(input_size+1)+num_labels*(hidden_size+1))-0.5)*0.24
+print(hidden_size*(input_size+1)+num_labels*(hidden_size+1))
+print(params.size)
+</code></pre>
+<pre><code>10285
+10285
+</code></pre><h3 id="2-3-反向传播"><a href="#2-3-反向传播" class="headerlink" title="2.3 反向传播"></a>2.3 反向传播</h3><p>2011年左右的说法(在Deep Learning已经更加直观)：<br><br>反向传播的步骤：给定训练集$(x^{(t)},y^{(t)})$</p>
+<ul>
+<li>先计算前向传播得出的$h_\theta(x)$。</li>
+<li>对应l层的每个节点j，计算误差项$\delta_j^{(l)}$,此数据衡量这个节点对最后输出的误差贡献了多少</li>
+<li>对于每个输出节点，直接结算与目标的差值，定义为$\delta_j^{(3)}$。</li>
+<li>对于每个隐藏节点，需要基于现有权重(l+1层的误差)，计算$\delta_j^{(l)}$，这也是为什么叫反向传播。</li>
+</ul>
+<pre><code class="lang-python">def backprop(params, input_size, hidden_size, num_labels, X, y, learning_rate):
+    m = X.shape[0]
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+
+    # 初始化theta1
+    theta1 = np.matrix(np.reshape(params[:hidden_size * (input_size + 1)], (hidden_size, (input_size + 1))))
+    theta2 = np.matrix(np.reshape(params[hidden_size * (input_size + 1):], (num_labels, (hidden_size + 1))))
+
+    # 进行一次前向传播
+    a1, z2, a2, z3, h = forward_propagate(X, theta1, theta2)
+    # 初始化梯度，误差
+    J = 0
+    delta1 = np.zeros(theta1.shape)
+    delta2 = np.zeros(theta2.shape)
+
+    # 计算代价函数
+    for i in range(m):
+        first_term = np.multiply(-y[i,:], np.log(h[i,:]))
+        second_term = np.multiply((1 - y[i,:]), np.log(1 - h[i,:]))
+        J += np.sum(first_term - second_term)
+
+    J = J / m
+    # 反向传播
+    # 对于每一个训练样本(一共m个训练样本)
+    # 计算其误差(导数)
+    for t in range(m):
+        a1t = a1[t,:] # (1,401)
+        z2t = z2[t,:] # (1,25)
+        a2t = a2[t,:] # (1,26)
+        ht = h[t,:] # (1,10)
+        yt = y[t,:] # (1,10)
+
+        # 计算的是dz3的导数(梯度)
+        d3t = ht-yt # (1,10)
+
+        # 计算的是dz2的导数(梯度)
+        z2t = np.insert(z2t,0,values=np.ones(1))
+        d2t = np.multiply((theta2.T*d3t.T).T,sigmoid_gradient(z2t))
+
+        # 计算的是theta1的导数(梯度)
+        delta1 = delta1 + (d2t[:,1:]).T*a1t
+
+        #计算的是theta2的导数(梯度)
+        delta2 = delta2 + d3t.T*a2t
+
+    delta1 = delta1/m
+    delta2 = delta2/m
+
+    return J,delta1,delta2
+</code></pre>
+<h3 id="2-4-梯度校验"><a href="#2-4-梯度校验" class="headerlink" title="2.4 梯度校验"></a>2.4 梯度校验</h3><p>将$\Theta^{(1)},\Theta^{(2)}$连接成一个长向量$\theta$，然后使用导数的基本定义来校验梯度。即：<script type="math/tex">\frac{\partial}{\partial \theta_i}j(\theta)=f_i(\theta)\approx\frac{J(\theta^{i+})-J(\theta^{(i-)})}{2\epsilon}</script><br>如果反向传播计算之前，则这个数字应该小于10e-9<br><strong>以下代码(我也不知道哪错了！！！(应该需要对每一个theta[ ][ ]计算梯度)待续)</strong></p>
+<pre><code class="lang-python">def backprop_test(params, input_size, hidden_size, num_labels, X, y, learning_rate):
+    m = X.shape[0]
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+    # 进行一次前向传播
+    a1, z2, a2, z3, h = forward_propagate(X, theta1, theta2)
+
+    # 初始化theta1
+    # theta1 = np.matrix(np.reshape(params[:hidden_size * (input_size + 1)], (hidden_size, (input_size + 1))))
+    # theta2 = np.matrix(np.reshape(params[hidden_size * (input_size + 1):], (num_labels, (hidden_size + 1))))
+
+
+    # 初始化梯度，误差
+    J = 0
+    delta1 = np.zeros(theta1.shape)
+    delta2 = np.zeros(theta2.shape)
+
+    # 计算代价函数
+    for i in range(m):
+        first_term = np.multiply(-y[i,:], np.log(h[i,:]))
+        second_term = np.multiply((1 - y[i,:]), np.log(1 - h[i,:]))
+        J += np.sum(first_term - second_term)
+
+    J = J / m
+    # 反向传播
+    # 对于每一个训练样本(一共m个训练样本)
+    # 计算其误差(导数)
+    for t in range(m):
+        a1t = a1[t,:] # (1,401)
+        z2t = z2[t,:] # (1,25)
+        a2t = a2[t,:] # (1,26)
+        ht = h[t,:] # (1,10)
+        yt = y[t,:] # (1,10)
+
+        # 计算的是dz3的导数(梯度)
+        d3t = ht-yt # (1,10)
+
+        # 计算的是dz2的导数(梯度)
+        z2t = np.insert(z2t,0,values=np.ones(1))
+        d2t = np.multiply((theta2.T*d3t.T).T,sigmoid_gradient(z2t))
+
+        # 计算的是theta1的导数(梯度)
+        delta1 = delta1 + (d2t[:,1:]).T*a1t
+
+        #计算的是theta2的导数(梯度)
+        delta2 = delta2 + d3t.T*a2t
+
+    delta1 = delta1/m
+    delta2 = delta2/m
+
+    return J,delta1,delta2
+</code></pre>
+<pre><code class="lang-python">def approx_theta_gradient():
+    epsilon = 0.024
+    print(theta1.shape)
+    theta1t1= theta1
+    theta1t1[0,0]=theta1t1[0,0]+epsilon
+    print(theta1)
+    print(theta1t1)
+    theta2t1 = theta2
+    theta2t1[0,0]=theta2t1[0,0]+epsilon
+    theta1h1 = theta1
+    theta1h1[0,0]=theta1h1[0,0]-epsilon
+    theta2h1 = theta2
+    theta2h1[0,0]=theta2h1[0,0]-epsilon
+    f1 = cost(theta1t1,theta2t1,input_size,hidden_size,num_labels,X,y_onehot,learning_rate)
+    f2 = cost(theta1h1,theta2h1,input_size,hidden_size,num_labels,X,y_onehot,learning_rate)
+    print(f1)
+    print(f2)
+    dthet1 = (f1-f2)/(2*epsilon)
+    j,delta1,delta2 = backprop_test(params, input_size, hidden_size, num_labels, X, y, learning_rate)
+    print(dthet1)
+    return dthet1-delta1
+</code></pre>
+<h3 id="2-5-正则化神经网络的反向传播"><a href="#2-5-正则化神经网络的反向传播" class="headerlink" title="2.5 正则化神经网络的反向传播"></a>2.5 正则化神经网络的反向传播</h3><p>计算带有正则化项的神经网络的反向传播</p>
+<pre><code class="lang-python">def backpropReg(params, input_size, hidden_size, num_labels, X, y, learning_rate):
+    m = X.shape[0]
+    X = np.matrix(X)
+    y = np.matrix(y)
+
+    # 初始化theta
+    theta1 = np.matrix(np.reshape(params[:hidden_size * (input_size + 1)], (hidden_size, (input_size + 1))))
+    theta2 = np.matrix(np.reshape(params[hidden_size * (input_size + 1):], (num_labels, (hidden_size + 1))))
+
+    # 进行前向传播
+    a1, z2, a2, z3, h = forward_propagate(X, theta1, theta2)
+
+    # 初始化J,d1,d2
+    J = 0
+    delta1 = np.zeros(theta1.shape)  # (25, 401)
+    delta2 = np.zeros(theta2.shape)  # (10, 26)
+
+   # 计算代价J
+    for i in range(m):
+        first_term = np.multiply(-y[i,:], np.log(h[i,:]))
+        second_term = np.multiply((1 - y[i,:]), np.log(1 - h[i,:]))
+        J += np.sum(first_term - second_term)
+
+    J = J / m
+
+    # 为代价函数添加正则化项
+    J += (float(learning_rate) / (2 * m)) * (np.sum(np.power(theta1[:,1:], 2)) + np.sum(np.power(theta2[:,1:], 2)))
+
+    # 反向传播
+    for t in range(m):
+        a1t = a1[t,:]  # (1, 401)
+        z2t = z2[t,:]  # (1, 25)
+        a2t = a2[t,:]  # (1, 26)
+        ht = h[t,:]  # (1, 10)
+        yt = y[t,:]  # (1, 10)
+
+        d3t = ht - yt  # (1, 10)
+
+        z2t = np.insert(z2t, 0, values=np.ones(1))  # (1, 26)
+        d2t = np.multiply((theta2.T * d3t.T).T, sigmoid_gradient(z2t))  # (1, 26)
+
+        delta1 = delta1 + (d2t[:,1:]).T * a1t
+        delta2 = delta2 + d3t.T * a2t
+
+    delta1 = delta1 / m
+    delta2 = delta2 / m
+
+    # 为theta1,theta2的导数添加求导后的正则化项
+    delta1[:,1:] = delta1[:,1:] + (theta1[:,1:] * learning_rate) / m
+    delta2[:,1:] = delta2[:,1:] + (theta2[:,1:] * learning_rate) / m
+
+    # 将梯度扁平化并且连接起来
+    grad = np.concatenate((np.ravel(delta1), np.ravel(delta2)))
+
+    return J, grad
+</code></pre>
+<h3 id="2-6-使用第三方工具库计算参数最优解"><a href="#2-6-使用第三方工具库计算参数最优解" class="headerlink" title="2.6 使用第三方工具库计算参数最优解"></a>2.6 使用第三方工具库计算参数最优解</h3><pre><code class="lang-python">from scipy.optimize import minimize
+import time
+ts = time.time()
+
+fmin = minimize(fun=backpropReg, x0=(params), args=(input_size, hidden_size, num_labels, X, y_onehot, learning_rate), 
+                method=&#39;TNC&#39;, jac=True, options={&#39;maxiter&#39;: 250})
+print(fmin)
+td = time.time()
+print((td-ts)/60,&#39;min&#39;)
+</code></pre>
+<pre><code>     fun: 0.3412497508385368
+     jac: array([ 1.18401994e-04, -2.19216211e-06,  2.21265574e-06, ...,
+       -3.42577606e-04, -2.89790391e-04, -6.89273558e-05])
+ message: &#39;Max. number of function evaluations reached&#39;
+    nfev: 251
+     nit: 21
+  status: 3
+ success: False
+       x: array([ 1.63284742, -0.01096081,  0.01106328, ...,  0.59476747,
+       -0.13515738, -2.62801714])
+5.895565982659658 min
+</code></pre><pre><code class="lang-python"># 获取计算后的最优参数
+X = np.matrix(X)
+thetafinal1 = np.matrix(np.reshape(fmin.x[:hidden_size * (input_size + 1)], (hidden_size, (input_size + 1))))
+thetafinal2 = np.matrix(np.reshape(fmin.x[hidden_size * (input_size + 1):], (num_labels, (hidden_size + 1))))
+# thetafinal1,thetafinal2
+</code></pre>
+<pre><code class="lang-python"># 使用优化后的theta进行预测
+a1, z2, a2, z3, h = forward_propagate(X, thetafinal1, thetafinal2 )
+y_pred = np.array(np.argmax(h, axis=1) + 1)
+y_pred
+</code></pre>
+<pre><code>array([[10],
+       [10],
+       [10],
+       ...,
+       [ 9],
+       [ 9],
+       [ 9]], dtype=int64)
+</code></pre><pre><code class="lang-python"># 查看精确度
+from sklearn.metrics import classification_report
+print(classification_report(y,y_pred))
+</code></pre>
+<pre><code>              precision    recall  f1-score   support
+
+           1       0.98      0.99      0.99       500
+           2       0.99      0.99      0.99       500
+           3       0.99      0.98      0.99       500
+           4       0.99      0.99      0.99       500
+           5       1.00      0.99      1.00       500
+           6       1.00      0.99      0.99       500
+           7       0.99      0.99      0.99       500
+           8       0.99      1.00      1.00       500
+           9       0.98      0.99      0.99       500
+          10       0.99      1.00      1.00       500
+
+    accuracy                           0.99      5000
+   macro avg       0.99      0.99      0.99      5000
+weighted avg       0.99      0.99      0.99      5000
+</code></pre><h2 id="3-可视化隐藏层"><a href="#3-可视化隐藏层" class="headerlink" title="3. 可视化隐藏层"></a>3. 可视化隐藏层</h2><pre><code class="lang-python">print(thetafinal1.shape)
+hidden_layer = thetafinal1[:,1:]
+hidden_layer.shape
+</code></pre>
+<pre><code>(25, 401)
+
+
+
+
+
+(25, 400)
+</code></pre><pre><code class="lang-python">fig,ax_array = plt.subplots(nrows=5,ncols=5,sharey=True,sharex=True,figsize=(12,12))
+for r in range(5):
+    for c in range(5):
+        ax_array[r,c].matshow(np.array(hidden_layer[5*r+c].reshape((20,20))),cmap=matplotlib.cm.binary)
+        plt.xticks(np.array([]))
+        plt.yticks(np.array([]))
+</code></pre>
+<p><img src="/img/ML_Andrew/4_2.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/">Programming</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/">ML</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ML/">ML</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming-Exercise/">Programming Exercise</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Andrew-Ng/">Andrew Ng</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/14/Code_One_Hour3/">
+                        <span class="hidden-mobile">Code One Hour：Pandas-Base-One</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "机器学习程序练习4:神经网络学习&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+      MathJax.Hub.Register.StartupHook("End Jax",function () {
+        var BROWSER = MathJax.Hub.Browser;
+        var jax = "HTML-CSS";
+        if (BROWSER.isMSIE && BROWSER.hasMathPlayer) jax = "NativeMML";
+        return MathJax.Hub.setRenderer(jax);
+      });
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

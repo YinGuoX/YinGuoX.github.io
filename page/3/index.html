@@ -147,6 +147,121 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/18/CprogrammingT7/">
+        <p class="h4 index-header">C语言编程T7</p>
+      </a>
+
+      <a href="/2020/04/18/CprogrammingT7/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T7思路:认真审题、看清题目要求和计算公式求对角线之和,注意可能会重叠
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 5
+int main()
+{
+    int a[N][N],i,j,s=0,t;
+    printf(&quot;Input a 5*5 matrix\n&quot;);
+    for(i=0;i&lt;N;i++)
+    {
+        for(j=0;j&lt;N;j++)
+        {
+            scanf(&quot;%d&quot;,&a</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-18&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/C/">C</a>&nbsp;
+          
+            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/C/">C</a>&nbsp;
+          
+            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/04/17/CorrectionT5/">
+        <p class="h4 index-header">C语言改错T5</p>
+      </a>
+
+      <a href="/2020/04/17/CorrectionT5/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言改错T5易错点:分清:dstStr是目的，即要输出的srcStr是源故字符串是dstStr+srcStr,即srcStr在dstStr后面指针地址的变化与指针指向值的变化！！！
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define N 80
+void MyStrcat(char *dstStr, char *srcStr);
+main() {
+    char s[N], t[N];
+    printf(&quot;Input a string:\n&quot;);
+    gets(s);
+    prin</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-17&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/C/">C</a>&nbsp;
+          
+            <a href="/categories/Programming/C/Correction/">Correction</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/Correction/">Correction</a>&nbsp;
+          
+            <a href="/tags/C/">C</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/17/CprogrammingT6/">
         <p class="h4 index-header">C语言编程T6</p>
       </a>
@@ -575,119 +690,6 @@ p[i]==*(p+i):也就是p[i]的地址！！！p[i][j] == *(p[i]+j) == *(*(p+i)+j) 
             <a href="/tags/Correction/">Correction</a>&nbsp;
           
             <a href="/tags/C/">C</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/11/CorrectionT2/">
-        <p class="h4 index-header">C语言改错T2</p>
-      </a>
-
-      <a href="/2020/04/11/CorrectionT2/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言改错T2易错点:1.认真核对输入、输出格式换行、空格到底要不要???(没有特殊提示应该不用吧~now)
-题目:
-答案:多了一个换行~
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-int mon[][13]=
-{
-    {0,31,28,31,30,31,30,31,31,30,31,30,31},
-    {0,31,29,31,30,31,30,31,31,30,31,30,31},
-};
-int  DayofYear(int year, int month, int day);
-void  MonthDay(int year</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Correction/">Correction</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/Correction/">Correction</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/11/CprogrammingT1/">
-        <p class="h4 index-header">C语言编程T1</p>
-      </a>
-
-      <a href="/2020/04/11/CprogrammingT1/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T1思路:思路一:采用gets()/scanf()直接输入字符串1.考虑符号和数字的分离、判断输入是否正确2.采用栈或者队列来进行运算综上所述:较为复杂！！！
-思路二:采用getchar()直接输入字符1.一个一个字符输入，故要进行分类计算(if),判断何时计算、何时停止2.通过代码顺序实现类似栈的操作可以一试！！！
-题目:
-答案:核心 : 在得到第二个运算符时，计算前一个运算符!!!
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-
-int main(void)
-{
-    int num, num1, op;
-    char</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-11&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
           
         
       </div>
