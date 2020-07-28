@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Matplotlib-Base-Three - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期五, 七月 24日 2020, 6:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.5k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    21
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Matplotlib使用-基础篇Three"><a href="#Matplotlib使用-基础篇Three" class="headerlink" title="Matplotlib使用-基础篇Three"></a>Matplotlib使用-基础篇Three</h1><p>(来源于莫凡PYTHON)</p>
+<h2 id="基本用法："><a href="#基本用法：" class="headerlink" title="基本用法："></a>基本用法：</h2><p>本篇知识点归纳如下：</p>
+<ul>
+<li>散点图：plt.scatter()</li>
+<li>柱状图：plt.bar()</li>
+<li>等高线图：plt.contourf()</li>
+<li>在等高线图中增加label：plt.clabel()</li>
+<li>矩阵画图：plt.imshow()</li>
+<li>在随机矩阵图中增加colorbar：plt.colorbar()</li>
+</ul>
+<h2 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a>散点图</h2><h3 id="数据生成"><a href="#数据生成" class="headerlink" title="数据生成"></a>数据生成</h3><p>生成1024个标准正态分布的二维数据组作为一个数据集，并且图形化这个数据集，每个点的颜色值用T来表示：</p>
+<pre><code class="lang-python">import matplotlib.pyplot as plt
+import numpy as np
+
+n = 1024
+X = np.random.normal(0,1,n)
+Y = np.random.normal(0,1,n)
+# print(X)
+# 求Y/X对应的tan的角度
+# arctan2是值值域为-pi到pi
+T = np.arctan2(Y,X)
+# print(T)
+</code></pre>
+<h3 id="画图"><a href="#画图" class="headerlink" title="画图"></a>画图</h3><p>数据集生成完成后，使用plt.scatter()画出这个点集：</p>
+<pre><code class="lang-python"># s=75：size=75
+# c=T：颜色为T
+# alpha=.5：透明度为50%
+plt.scatter(X,Y,s=75,c=T,alpha=0.5)
+
+plt.xlim(-1.5,1.5)
+# 隐藏x，y坐标轴
+plt.xticks(())
+plt.ylim(-1.5,1.5)
+plt.yticks(())
+
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh8_1.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="柱状图"><a href="#柱状图" class="headerlink" title="柱状图"></a>柱状图</h2><p>柱状图是在数据分析过程中最为常用的图标，折线图和饼图能够表达的信息柱状图都可以表达。因此在学术报告或工作场景下，尽量使用柱状图来代替折线图和饼图。</p>
+<h3 id="数据生成-1"><a href="#数据生成-1" class="headerlink" title="数据生成"></a>数据生成</h3><p>向上向下分别生成2组数据，X为0到11的整数 ，Y是相应的均匀分布的随机数据。</p>
+<pre><code class="lang-python">n = 12
+X = np.arange(n)
+Y1 = (1-X/float(n))*np.random.uniform(0.5,1.0,n)
+Y2 = Y1
+print(X)
+print(Y1)
+</code></pre>
+<pre><code>[ 0  1  2  3  4  5  6  7  8  9 10 11]
+[0.65655053 0.48966973 0.69249911 0.43484417 0.4676229  0.43183273
+ 0.26924631 0.31837679 0.18209083 0.16290861 0.16617777 0.05360242]
+</code></pre><h3 id="画图-1"><a href="#画图-1" class="headerlink" title="画图"></a>画图</h3><p>使用plt.bar()画出柱状图：参数为X,Y：X代表横坐标，即柱形的位置，Y代表纵坐标，即柱形的高度</p>
+<pre><code class="lang-python">plt.bar(X,Y1)
+plt.bar(X,-Y2)
+
+plt.xlim(-.5,n)
+plt.ylim(-1.25,1.25)
+
+plt.xticks(())
+plt.yticks(())
+
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh8_2.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="修改颜色和数据标签"><a href="#修改颜色和数据标签" class="headerlink" title="修改颜色和数据标签"></a>修改颜色和数据标签</h3><p>使用plt.bar()中的参数：</p>
+<ul>
+<li>facecolor参数：设置柱状图的主体颜色</li>
+<li>edgecolor参数：设置边框颜色</li>
+<li>plt.text():添加数值，ha=’center’设置横向居中对齐，va=’bottom’设置纵向底部对齐</li>
+</ul>
+<pre><code class="lang-python">plt.bar(X,+Y1,facecolor=&#39;#FFCCCC&#39;,edgecolor=&#39;black&#39;)
+plt.bar(X,-Y1,facecolor=&#39;blue&#39;,edgecolor=&#39;black&#39;)
+for x, y in zip(X, Y1):
+    # ha: horizontal alignment
+    # va: vertical alignment
+    print(x,y)
+    plt.text(x, y , &#39;%.2f&#39; % y, ha=&#39;center&#39;, va=&#39;bottom&#39;)
+
+for x, y in zip(X, Y2):
+    # ha: horizontal alignment
+    # va: vertical alignment
+    plt.text(x, -y , &#39;%.2f&#39; % y, ha=&#39;center&#39;, va=&#39;top&#39;)
+</code></pre>
+<pre><code>0 0.6565505262062139
+1 0.48966973329400176
+2 0.6924991100293401
+3 0.43484416808171067
+4 0.4676229003262946
+5 0.4318327315388382
+6 0.26924630866668936
+7 0.3183767861980128
+8 0.18209082573803367
+9 0.16290861441183235
+10 0.16617777347737073
+11 0.0536024200226529
+</code></pre><p><img src="/img/code_one_hour/coh8_3.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="等高线图"><a href="#等高线图" class="headerlink" title="等高线图"></a>等高线图</h2><h3 id="数据生成-2"><a href="#数据生成-2" class="headerlink" title="数据生成"></a>数据生成</h3><p>数据集即三维点:(x,y)和对应的高度值z，高度值使用height function f(x,y)生成。x, y 分别是在区间 [-3,3] 中均匀分布的256个值，并用meshgrid在二维平面中将每一个x和每一个y分别对应起来，编织成栅格:</p>
+<pre><code class="lang-python">def f(x,y):
+    # the height function
+    return (1 - x / 2 + x**5 + y**3) * np.exp(-x**2 -y**2)
+
+n = 256
+x = np.linspace(-3,3,n)
+y = np.linspace(-3,3,n)
+# 拓展成坐标矩阵
+X,Y = np.meshgrid(x,y)
+</code></pre>
+<h3 id="画图-2"><a href="#画图-2" class="headerlink" title="画图"></a>画图</h3><p>接下来进行颜色填充。使用函数plt.contourf把颜色加进去，</p>
+<ul>
+<li>位置参数分别为：X, Y, f(X,Y)。</li>
+<li>8代表等高线的密集程度，这里被分为10个部分。如果是0，则图像被一分为二。</li>
+<li>透明度为0.75，</li>
+<li>并将 f(X,Y) 的值对应到color map的RdBu组中寻找对应颜色。大家可能并不能直观理解 colormap ，它可以将颜色和数字进行映射。如果暂时不能理解的话也没有关系，我们可以将其想象成matplotlib为我们提供的配色方案。</li>
+</ul>
+<pre><code class="lang-python">plt.contourf(X, Y, f(X, Y), 20, alpha=.75, cmap=plt.cm.RdBu)
+</code></pre>
+<pre><code>&lt;matplotlib.contour.QuadContourSet at 0x12243b70&gt;
+</code></pre><p><img src="/img/code_one_hour/coh8_4.png" srcset="/img/loading.gif" alt="png"></p>
+<p>接下来进行等高线绘制。使用plt.contour函数划线。</p>
+<ul>
+<li>位置参数为：X, Y, f(X,Y)。</li>
+<li>颜色选黑色，</li>
+<li>线条宽度选0.5。<br><br>现在的结果如下图所示，只有颜色和线条，还没有数值Label：</li>
+</ul>
+<pre><code class="lang-python">plt.contourf(X, Y, f(X, Y), 20, alpha=.75, cmap=plt.cm.RdBu)
+C = plt.contour(X, Y, f(X, Y), 20, colors=&#39;black&#39;, linewidth=.5)
+</code></pre>
+<pre><code>d:\dl\minconda3\envs\ml_dl_andrewng\lib\site-packages\ipykernel_launcher.py:2: UserWarning: The following kwargs were not used by contour: &#39;linewidth&#39;
+</code></pre><p><img src="/img/code_one_hour/coh8_5.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="添加高度数值"><a href="#添加高度数值" class="headerlink" title="添加高度数值"></a>添加高度数值</h3><p>可以通过plt.clabel()在等高线上加入高度数值：</p>
+<ul>
+<li>inline参数：控制是否将label画在线里面</li>
+<li>fontsize参数：设置字体大小</li>
+</ul>
+<pre><code class="lang-python">plt.contourf(X,Y,f(X,Y),8,alpha=0.75,cmap=plt.cm.RdBu)
+C = plt.contour(X,Y,f(X,Y),8,colors=&#39;blue&#39;)
+plt.clabel(C,inline=False,fontsize=10)
+plt.xticks(())
+plt.yticks(())
+</code></pre>
+<pre><code>([], &lt;a list of 0 Text major ticklabel objects&gt;)
+</code></pre><p><img src="/img/code_one_hour/coh8_6.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="随机矩阵画图"><a href="#随机矩阵画图" class="headerlink" title="随机矩阵画图"></a>随机矩阵画图</h2><p>怎样在matplotlib中打印出图像。这里我们打印出的是纯粹的数字，而非自然图像。</p>
+<h3 id="数据生成-3"><a href="#数据生成-3" class="headerlink" title="数据生成"></a>数据生成</h3><p>生成一个 3x3 的 2D-array ，也就是三行三列的格子，array 中的每个值经过colormap与一个颜色对应并填充在格子中</p>
+<pre><code class="lang-python">a = np.array([0.313660827978, 0.365348418405, 0.423733120134,
+              0.365348418405, 0.439599930621, 0.525083754405,
+              0.423733120134, 0.525083754405, 0.651536351379]).reshape(3,3)
+</code></pre>
+<h3 id="画图-3"><a href="#画图-3" class="headerlink" title="画图"></a>画图</h3><p>之前选cmap的参数时用的是：cmap=plt.cmap.RdBu，而现在，我们可以直接用单引号传入参数。 origin=’lower’代表的就是选择的原点的位置。而 interpolation 表示画图方式，也可以从matplotlib官网上看到对于内插法的不同方法的描述。这里我们使用的是内插法中的 Nearest-neighbor 的方法，其他的方式也都可以随意取选。</p>
+<pre><code class="lang-python">plt.imshow(a, interpolation=&#39;nearest&#39;, cmap=&#39;RdBu&#39;, origin=&#39;lower&#39;)
+</code></pre>
+<pre><code>&lt;matplotlib.image.AxesImage at 0x122de828&gt;
+</code></pre><p><img src="/img/code_one_hour/coh8_7.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="增加colorbar"><a href="#增加colorbar" class="headerlink" title="增加colorbar"></a>增加colorbar</h3><p>添加一个colorbar ，它可以为我们显示不同颜色的区块所对应的具体数值。其中shrink参数可以用来调整 colorbar 的长度，这里我们使colorbar的长度变短为原来的92%，这样我们2D图像就创建完毕了：</p>
+<pre><code class="lang-python">plt.imshow(a, interpolation=&#39;nearest&#39;, cmap=&#39;RdBu&#39;, origin=&#39;lower&#39;)
+plt.colorbar(shrink=0.92)
+
+plt.xticks(())
+plt.yticks(())
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh8_8.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Matplotlib/">Matplotlib</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/26/Code_One_Hour9/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Code One Hour：Matplotlib-Base-Four</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/22/Code_One_Hour7/">
+                        <span class="hidden-mobile">Code One Hour：Matplotlib-Base-Two</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Matplotlib-Base-Three&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

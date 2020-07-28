@@ -147,6 +147,411 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/07/11/ML_Andrew_Pex3_Multi_class_Classification_and_Neural_Network%20/">
+        <p class="h4 index-header">机器学习程序练习3:多分类器和神经网络</p>
+      </a>
+
+      <a href="/2020/07/11/ML_Andrew_Pex3_Multi_class_Classification_and_Neural_Network%20/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">吴恩达机器学习程序练习3:多类别逻辑回归和神经网络更多详细信息可参考同文件夹下的andrew_ml_ex33507
+1. 多分类需要实现手写数字(0-9)的识别。需要扩展之前的逻辑回归，并且将其运用于一对多的分类
+1.1 数据集这是一个Matlab格式的.m文件，其中包含5000个20*20像素的手写图像，以及对应的数字。(注：数字0对应的y值为10)。用Python读取文件需要用到Scipy
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+from scipy.i</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-07-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/">ML</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/ML/">ML</a>&nbsp;
+          
+            <a href="/tags/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          
+            <a href="/tags/Andrew-Ng/">Andrew Ng</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/07/11/Code_One_Hour2/" target="_self">
+          <img src="/img/code_one_hour/title5.jpg" srcset="/img/loading.gif" alt="Code One Hour：Numpy-Advanced"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/07/11/Code_One_Hour2/">
+        <p class="h4 index-header">Code One Hour：Numpy-Advanced</p>
+      </a>
+
+      <a href="/2020/07/11/Code_One_Hour2/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">Numpy使用-进阶篇1. 广播法则(rule)广播法则可以使通用函数有意义的处理不具有相同形状的输入
+
+
+广播第一法则：如果所有的输入数组的维度数量不同，则小维度数量的数组的形状将会在最左边补1（添加一维），直至所有的数组具有相同的维度数量。
+广播第二法则：如果输入的数组的维度在任何一维都不匹配，则数组的形状会沿着维度为1的维度扩展以匹配另一个数组的形状
+广播第三法则：如果输入的数组的形状在任何维度上都不匹配并且没有任何一个维度为1，则会引发异常
+
+
+1.1 维度的数量、大小维度的数量：numpy中指定维度都是使用元组表示。如：np.zeros((2,3,2))的维度数量是三维的，np.ze</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-07-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Code-One-Hour/">Code One Hour</a>&nbsp;
+          
+            <a href="/categories/Code-One-Hour/Numpy/">Numpy</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/Code/">Code</a>&nbsp;
+          
+            <a href="/tags/Code-One-Huor/">Code One Huor</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/07/08/ML_Andrew_Pex2_Logistic_Regression/">
+        <p class="h4 index-header">机器学习程序练习2:逻辑回归和正则化</p>
+      </a>
+
+      <a href="/2020/07/08/ML_Andrew_Pex2_Logistic_Regression/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">吴恩达机器学习程序练习2:逻辑回归与正则化更多详细信息可参考同文件夹下的andrew_ml_ex22391
+1.逻辑回归构建一个逻辑回归模型来预测学生是否被大学录取假设你是大学相关的管理者，想通过申请学生两次测试的评分，来决定是否被录取，现在你拥有申请学生的可用于训练逻辑回归的训练样本集。对于每一个样本：两次测试的评分与最后是否被录取结果
+1.1 数据可视化import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+path = &#39;./andrew_ml_ex22391/ex2data1.txt&#39</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-07-08&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/">ML</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/ML/">ML</a>&nbsp;
+          
+            <a href="/tags/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          
+            <a href="/tags/Andrew-Ng/">Andrew Ng</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/06/27/Code_One_Hour1/" target="_self">
+          <img src="/img/code_one_hour/title5.jpg" srcset="/img/loading.gif" alt="Code One Hour：Numpy-Base"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/06/27/Code_One_Hour1/">
+        <p class="h4 index-header">Code One Hour：Numpy-Base</p>
+      </a>
+
+      <a href="/2020/06/27/Code_One_Hour1/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">Numpy使用-基础篇1.概述Numpy的主要对象是相同类型的多维数组，也即：所有元素都是一种类型、通过整数索引对应元素。在Numpy中维度(Dimensions)称为轴(axes、axis)轴的个数称为秩(rank)
+eg:[1,2,3]是一个一维(轴)数组，秩为1，轴的长度为3  [[1,2,3],[4,5,6]]是一个二维数组，轴为2，秩为2，第一维度长度为2，第二维度长度为3
+Numpy的数组类型称为ndarray，通常被称为数组。(numpy.array与标准python库中的array.array不同，后者只处理一维数组和提供一些功能)
+1.1 ndarray对象属性ndarray</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-27&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Code-One-Hour/">Code One Hour</a>&nbsp;
+          
+            <a href="/categories/Code-One-Hour/Numpy/">Numpy</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/Code/">Code</a>&nbsp;
+          
+            <a href="/tags/Code-One-Huor/">Code One Huor</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/06/20/ML_Andrew_Pex1_Linear_Regression%20/">
+        <p class="h4 index-header">机器学习程序练习1:线性回归</p>
+      </a>
+
+      <a href="/2020/06/20/ML_Andrew_Pex1_Linear_Regression%20/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">吴恩达机器学习程序练习1:线性回归更多详细信息可参考同文件夹下的andrew_ml_ex14179
+# 导入对应的第三方库
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+1.简单练习A = np.eye(6)
+A
+
+array([[1., 0., 0., 0., 0., 0.],
+       [0., 1., 0., 0., 0., 0.],
+       [0., 0., 1., 0., 0., 0.],
+       [0., 0., 0., 1., 0., 0.],
+       [0.,</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-20&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/">ML</a>&nbsp;
+          
+            <a href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/ML/">ML</a>&nbsp;
+          
+            <a href="/tags/Programming-Exercise/">Programming Exercise</a>&nbsp;
+          
+            <a href="/tags/Andrew-Ng/">Andrew Ng</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/05/11/CprogrammingT18/">
+        <p class="h4 index-header">C语言编程T18</p>
+      </a>
+
+      <a href="/2020/05/11/CprogrammingT18/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T18思路:空格处理要全面！
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 80
+int CountWords(char str[]);
+int main()
+{
+    char str[N+1];
+    printf(&quot;Input a string:&quot;);
+    gets(str);
+    printf(&quot;Numbers of words = %d\n&quot;,CountWords(str));
+    return 0;
+}
+int CountWor</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/C/">C</a>&nbsp;
+          
+            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/C/">C</a>&nbsp;
+          
+            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/05/11/CprogrammingT17/">
+        <p class="h4 index-header">C语言编程T17</p>
+      </a>
+
+      <a href="/2020/05/11/CprogrammingT17/" class="index-excerpt-wrap">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">C语言编程T17思路:注意边界
+题目:
+答案:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    int a[20]={2,4,6,8,10,12,14,16};
+    int i,j,x,len=8;
+    printf(&quot;Enter n:&quot;);
+    scanf(&quot;%d&quot;,&amp;x);
+    for(i=0;i&lt;len;i++)
+    {
+        if(a[0]&gt;x)
+        {
+            i=0;
+     </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Programming/">Programming</a>&nbsp;
+          
+            <a href="/categories/Programming/C/">C</a>&nbsp;
+          
+            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Programming/">Programming</a>&nbsp;
+          
+            <a href="/tags/C/">C</a>&nbsp;
+          
+            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/04/27/CorrectionT7/">
         <p class="h4 index-header">C语言改错T7</p>
       </a>
@@ -321,419 +726,11 @@ int main()
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/26/CprogrammingT14/">
-        <p class="h4 index-header">C语言编程T14</p>
-      </a>
-
-      <a href="/2020/04/26/CprogrammingT14/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T14思路:相等情况？？？每行情况？？？所以要有两个标记量
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define M 2
-#define N 6
-int main()
-{
-    int i,j,a[M][N],flag=0,flagz=0,max,min,row,col,k;
-    for(i=0;i&lt;M;i++)
-    {
-        for(j=0;j&lt;N;j++)
-        {
-            scanf(&quot;%d&quot;,&amp;a[i][j]);
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/26/CprogrammingT13/">
-        <p class="h4 index-header">C语言编程T13</p>
-      </a>
-
-      <a href="/2020/04/26/CprogrammingT13/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T13思路:四舍五入的函数是round()向下取整的函数是floor()注意 : 题目要求
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;math.h&gt;
-#define N 100
-int main()
-{
-    int saraly,houres,t,t1,i=0,g[N]={0};
-    float sh=0;
-    scanf(&quot;%d %d&quot;,&amp;saraly,&amp;houres);
-    sh=(float)saraly/houres;
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/25/CprogrammingT12/">
-        <p class="h4 index-header">C语言编程T12</p>
-      </a>
-
-      <a href="/2020/04/25/CprogrammingT12/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T12思路:约束条件很重要，不要越界！！！
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-int Isprime(long x);
-int main()
-{
-    long int c,d,total=0,i;
-    printf(&quot;please input c,d(c&gt;2):\n&quot;);
-    scanf( &quot;%ld,%ld&quot;,&amp;c,&amp;d);
-    //这里可以约束
-    for(i=c;i&lt;=d-2;i++)
-    {
-       </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/24/CprogrammingT11/">
-        <p class="h4 index-header">C语言编程T11</p>
-      </a>
-
-      <a href="/2020/04/24/CprogrammingT11/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T11思路:定积分的几何意义！！！
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-float Integral(float (*f)(float), float a, float b);
-float y1(float x);
-float y2(float x);
-int main()
-{
-    printf(&quot;y1=%f\ny2=%f\n&quot;,Integral(y1,0,1),Integral(y2,0,3));
-    return 0;
-}
-float y1(float x)
-{
-    /</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-24&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/23/CprogrammingT10/">
-        <p class="h4 index-header">C语言编程T10</p>
-      </a>
-
-      <a href="/2020/04/23/CprogrammingT10/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T10思路:floor()函数的应用:向下取整函数！！！
-题目:
-答案:#include &lt;stdio.h&gt;
-#include &lt;math.h&gt;
-float a[5] = {2.33, 2.56, 2.65, 2.66, 2.30};
-float t(float x, int n);
-float t(float x, int n)
-{
-    float x1, x2;
-    int i;
-    for (x1 = x, i = 0; i &lt; n - 1; i++)
-        x1 *= 10.0;
-    printf(&quot;x1=%f</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-23&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/21/CprogrammingT9/">
-        <p class="h4 index-header">C语言编程T9</p>
-      </a>
-
-      <a href="/2020/04/21/CprogrammingT9/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言编程T9思路:认真审题、注意英语的语法规范，i have a apple….太难了，注意名称前可能有冠词！！！
-题目:
-答案:##include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#define N 100
-int Length(char p[]);
-int IsAllDigit(char p[]);
-int main()
-{
-    char str[N];
-    int is;
-    printf(&quot;Please input a string:&quot;);
-    gets(str);
-    printf(&quo</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-21&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Cprogramming/">Cprogramming</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-            <a href="/tags/Cprogramming/">Cprogramming</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/04/19/CorrectionT6/">
-        <p class="h4 index-header">C语言改错T6</p>
-      </a>
-
-      <a href="/2020/04/19/CorrectionT6/" class="index-excerpt-wrap">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">C语言改错T6易错点:字符串赋值:‘\0’也占字符数组一个字节char str[6]={‘C’\,’h’\,’i’\,’n’\,’a’\,’\0’};char str[]={‘C’\,’h’\,’i’\,’n’\,’a’\,’\0’};char str[]=”China”;char *ptr=”China”;
-题目:
-答案:strcpy()也可以用来字符串赋值
-#include &lt;stdio.h&gt;
-
-main()
-{
-    int i = 0;
-    char str[6] = {&#39;C&#39;, &#39;h&#39;, &#39;i&#39;, &#39;n&#39</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-19&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Programming/">Programming</a>&nbsp;
-          
-            <a href="/categories/Programming/C/">C</a>&nbsp;
-          
-            <a href="/categories/Programming/C/Correction/">Correction</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Programming/">Programming</a>&nbsp;
-          
-            <a href="/tags/Correction/">Correction</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
     <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
     </span>
   </nav>
   

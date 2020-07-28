@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Matplotlib-Base-Two - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 七月 22日 2020, 8:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.7k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    28
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Matplotlib使用-基础篇Two"><a href="#Matplotlib使用-基础篇Two" class="headerlink" title="Matplotlib使用-基础篇Two"></a>Matplotlib使用-基础篇Two</h1><p>(来源于莫凡PYTHON)</p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>本章知识点归纳如下：</p>
+<ul>
+<li>添加图例：plt.legend()</li>
+<li>画点：plt.scatter()</li>
+<li>添加标注：plt.annotate()</li>
+<li>添加注释：plt.text()</li>
+</ul>
+<h2 id="添加图例"><a href="#添加图例" class="headerlink" title="添加图例"></a>添加图例</h2><p>图例可以更好的展示出每个数据对应的图像名称</p>
+<ul>
+<li>label=’’：设置曲线的名称</li>
+<li>plt.legend()：设置图例的显示，即获取代码中的label的信息，plt自动添加图例,参数loc决定图例的位置，best表示自动分配最佳位置。</li>
+<li>loc参数选择： ‘best’ : 0, ‘upper right’ : 1, ‘upper left’ : 2, ‘lower left’ : 3, ‘lower right’ : 4, ‘right’ : 5, ‘center left’ : 6, ‘center right’ : 7, ‘lower center’ : 8, ‘upper center’ : 9, ‘center’ : 10</li>
+</ul>
+<pre><code class="lang-python">import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-3,3,50)
+y1 = 2*x + 1
+y2 = x**2
+
+plt.figure()
+plt.xlim((-1,2))
+plt.ylim((-2,3))
+
+new_sticks = np.linspace(-1,2,5)
+plt.xticks(new_sticks)
+plt.yticks([-2, -1.8, -1, 1.22, 3],
+           [r&#39;$really\ bad$&#39;, r&#39;$bad$&#39;, r&#39;$normal$&#39;, r&#39;$good$&#39;, r&#39;$really\ good$&#39;])
+
+l1 = plt.plot(x,y1,label=&#39;linear line&#39;)
+l2 = plt.plot(x,y2,color=&#39;red&#39;,linewidth=3,linestyle=&#39;--&#39;,label=&#39;square line&#39;)
+plt.legend()
+</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend at 0x10708128&gt;
+</code></pre><p><img src="/img/code_one_hour/coh7_1.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">l1 = plt.plot(x, y1, label=&#39;linear line&#39;)
+l2 = plt.plot(x, y2, color=&#39;red&#39;, linewidth=1.0, linestyle=&#39;--&#39;, label=&#39;square line&#39;)
+plt.legend(loc=10)
+</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend at 0x5715940&gt;
+</code></pre><p><img src="/img/code_one_hour/coh7_2.png" srcset="/img/loading.gif" alt="png"></p>
+<p>同样可以通过设置 handles 参数来选择图例中显示的内容。首先，在上面的代码 plt.plot(x, y2, label=’linear line’) 和 plt.plot(x, y1, label=’square line’) 中用变量 l1 和 l2 分别存储起来，而且需要注意的是 l1, l2,要以逗号结尾, 因为plt.plot() 返回的是一个列表。然后将 l1,l2 这样的objects以列表的形式传递给 handles。另外，label 参数可以用来单独修改之前的 label 信息, 给不同类型的线条设置图例信息。</p>
+<pre><code class="lang-python">l1, = plt.plot(x,y1,label=&#39;linear line&#39;)
+l2, = plt.plot(x,y2,color=&#39;red&#39;,linewidth=1,linestyle=&#39;--&#39;,label=&#39;square line&#39;)
+print(type(l1,))
+plt.legend(handles=[l1,l2],labels=[&#39;up&#39;,&#39;down&#39;],loc=&#39;best&#39;)
+</code></pre>
+<pre><code>&lt;class &#39;matplotlib.lines.Line2D&#39;&gt;
+
+
+
+
+
+&lt;matplotlib.legend.Legend at 0x11a98be0&gt;
+</code></pre><p><img src="/img/code_one_hour/coh7_3.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="Annotation标注"><a href="#Annotation标注" class="headerlink" title="Annotation标注"></a>Annotation标注</h2><p>当图形中某些地方需要标注时，即使用annotation。两种方法，一种是用 plt 里面的 annotate，一种是直接用 plt 里面的 text 来写标注。</p>
+<pre><code class="lang-python">x = np.linspace(-3,3,50)
+y = 2*x +1
+plt.figure(num=1,figsize=(8,5))
+
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;,0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;,0))
+
+plt.plot(x,y)
+</code></pre>
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x1099a1d0&gt;]
+</code></pre><p><img src="/img/code_one_hour/coh7_4.png" srcset="/img/loading.gif" alt="png"></p>
+<p>然后标注出点(x0, y0)的位置信息。用plt.plot([x0, x0,], [0, y0,], ‘k—‘, linewidth=2.5) 画出一条垂直于x轴的虚线。其中，[x0, x0,], [0, y0,] 表示在图中画一条从点 (x0,y0) 到 (x0,0) 的直线，’k—‘ 表示直线的颜色为黑色(black)，线形为虚线。而 plt.scatter 函数可以在图中画点，此时我们画的点为 (x0,y0), 点的大小(size)为 50， 点的颜色为蓝色(blue),可简写为 b。</p>
+<pre><code class="lang-python">x = np.linspace(-3,3,50)
+y = 2*x +1
+plt.figure(num=1,figsize=(8,5))
+
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;,0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;,0))
+
+plt.plot(x,y)
+
+x0 = 1
+y0 = 2*x0 + 1
+plt.plot([x0,x0],[0,y0],&#39;k--&#39;,linewidth=2.5)
+
+plt.scatter(x0,y0,s=50,color=&#39;b&#39;)
+</code></pre>
+<pre><code>&lt;matplotlib.collections.PathCollection at 0x11c75e48&gt;
+</code></pre><p><img src="/img/code_one_hour/coh7_5.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="添加注释annotate"><a href="#添加注释annotate" class="headerlink" title="添加注释annotate"></a>添加注释annotate</h3><pre><code class="lang-python">plt.figure(num=1, figsize=(8, 5),)
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;, 0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;, 0))
+plt.plot(x, y,)
+
+x0 = 1
+y0 = 2*x0 + 1
+plt.plot([x0, x0,], [0, y0,], &#39;k--&#39;, linewidth=2.5)
+# set dot styles
+plt.scatter([x0, ], [y0, ], s=50, color=&#39;b&#39;)
+
+# &#39;2x+1=%s&#39;%y0：代表标注的内容
+# xycoords = &#39;data&#39;：基于数据的值来选择位置
+# xytext=(+30, -30) 和 textcoords=&#39;offset points&#39; ：对于标注位置的描述 和 xy 偏差值，
+# 即标注位置是 xy 位置向右移动 30，向下移动30
+#  arrowprops：对图中箭头类型和箭头弧度的设置，需要用 dict 形式传入。
+plt.annotate(&#39;2x+1=%s&#39;%y0, xy = (x0,y0),xycoords = &#39;data&#39;,xytext = (+30,-30),
+            textcoords=&#39;offset points&#39;,fontsize=16,
+            arrowprops=dict(arrowstyle=&#39;-&gt;&#39;,connectionstyle=&quot;arc3,rad=.2&quot;))
+</code></pre>
+<pre><code>Text(30, -30, &#39;2x+1=3&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh7_6.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="添加注释text"><a href="#添加注释text" class="headerlink" title="添加注释text"></a>添加注释text</h3><pre><code class="lang-python">plt.figure(num=1, figsize=(8, 5),)
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;, 0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;, 0))
+plt.plot(x, y,)
+
+x0 = 1
+y0 = 2*x0 + 1
+plt.plot([x0, x0,], [0, y0,], &#39;k--&#39;, linewidth=2.5)
+# set dot styles
+plt.scatter([x0, ], [y0, ], s=50, color=&#39;b&#39;)
+plt.annotate(r&#39;$2x+1=%s$&#39; % y0, xy=(x0, y0), xycoords=&#39;data&#39;, xytext=(+30, -30),
+             textcoords=&#39;offset points&#39;, fontsize=16,
+             arrowprops=dict(arrowstyle=&#39;-&gt;&#39;, connectionstyle=&quot;arc3,rad=.2&quot;))
+
+# -3.7, 3,:选择text的位置
+# r&#39;$This\ is\ the\ some\ text. \mu\ \sigma_i\ \alpha_t$&#39;：text的内容
+# 空格需要转义字符\才可打出
+# fondict :设置text的大小和颜色
+plt.text(-3.7, 3, r&#39;$This\ is\ the\ some\ text. \mu\ \sigma_i\ \alpha_t$&#39;,
+         fontdict={&#39;size&#39;: 16, &#39;color&#39;: &#39;r&#39;})
+</code></pre>
+<pre><code>Text(-3.7, 3, &#39;$This\\ is\\ the\\ some\\ text. \\mu\\ \\sigma_i\\ \\alpha_t$&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh7_7.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="tick-能见度"><a href="#tick-能见度" class="headerlink" title="tick 能见度"></a>tick 能见度</h2><p>当图片内容较多，相互遮盖时，可以通过设置相关内容的透明度来使图片更易观察</p>
+<ul>
+<li>.set_bbox()：可以调节图像信息</li>
+</ul>
+<pre><code class="lang-python">x = np.linspace(-3, 3, 50)
+y = 0.1*x
+
+plt.figure()
+# 在 plt 2.0.2 或更高的版本中, 设置 zorder 给 plot 在 z 轴方向排序，设置绘制的顺序
+plt.plot(x, y, linewidth=10, zorder=1)
+plt.ylim(-2, 2)
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;, 0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;, 0))
+</code></pre>
+<p><img src="/img/code_one_hour/coh7_8.png" srcset="/img/loading.gif" alt="png"></p>
+<p>对被遮挡的图像调节相关透明度，本例中设置 x轴 和 y轴 的刻度数字进行透明度设置。其中label.set_fontsize(12)重新调节字体大小，bbox设置目的内容的透明度相关参，facecolor调节 box 前景色，edgecolor 设置边框， 本处设置边框为无，alpha设置透明度. 最终结果如下:</p>
+<pre><code class="lang-python">plt.plot(x, y, linewidth=10, zorder=1)
+plt.ylim(-2, 2)
+ax = plt.gca()
+ax.spines[&#39;right&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.spines[&#39;top&#39;].set_color(&#39;none&#39;)
+ax.xaxis.set_ticks_position(&#39;bottom&#39;)
+ax.spines[&#39;bottom&#39;].set_position((&#39;data&#39;, 0))
+ax.yaxis.set_ticks_position(&#39;left&#39;)
+ax.spines[&#39;left&#39;].set_position((&#39;data&#39;, 0))
+for label in ax.get_xticklabels()+ax.get_yticklabels():
+    label.set_fontsize(12)
+    label.set_bbox(dict(facecolor=&#39;white&#39;,edgecolor=&#39;None&#39;,alpha=0.5,zorder=10))
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh7_9.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Matplotlib/">Matplotlib</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/24/Code_One_Hour8/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Code One Hour：Matplotlib-Base-Three</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/22/ML_Andrew_Pex6_Support_Vector_Machines/">
+                        <span class="hidden-mobile">机器学习程序练习6:支持向量机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Matplotlib-Base-Two&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>机器学习程序练习5:正则化线性回归和偏差、方差 - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/textbg.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 七月 18日 2020, 8:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.6k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    42
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="吴恩达机器学习程序练习5-正则化线性回归和偏差、方差"><a href="#吴恩达机器学习程序练习5-正则化线性回归和偏差、方差" class="headerlink" title="吴恩达机器学习程序练习5:正则化线性回归和偏差、方差"></a>吴恩达机器学习程序练习5:<br>正则化线性回归和偏差、方差</h1><p>更多详细信息可参考同文件夹下的andrew_ml_ex55139</p>
+<h2 id="1-正则化线性回归"><a href="#1-正则化线性回归" class="headerlink" title="1. 正则化线性回归"></a>1. 正则化线性回归</h2><p>对一个水库的流出水量以及水库水位进行正则化线性回归。</p>
+<h3 id="1-1-数据可视化"><a href="#1-1-数据可视化" class="headerlink" title="1.1 数据可视化"></a>1.1 数据可视化</h3><pre><code class="lang-python">import numpy as np
+import scipy.io as sio
+import scipy.optimize as opt
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+</code></pre>
+<pre><code class="lang-python">data = sio.loadmat(&#39;./andrew_ml_ex55139/ex5data1.mat&#39;)
+# print(data)
+X,y,Xval,yval,Xtest,ytest = map(np.ravel,[data[&#39;X&#39;],data[&#39;y&#39;],data[&#39;Xval&#39;],data[&#39;yval&#39;],data[&#39;Xtest&#39;],data[&#39;ytest&#39;]])
+X.shape,y.shape,Xval.shape,yval.shape,Xtest.shape,ytest.shape
+</code></pre>
+<pre><code>((12,), (12,), (21,), (21,), (21,), (21,))
+</code></pre><pre><code class="lang-python">fig, ax = plt.subplots(figsize=(12,8))
+ax.scatter(X, y)
+ax.set_xlabel(&#39;water_level&#39;)
+ax.set_ylabel(&#39;flow&#39;)
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_1.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="1-2-正则化线性回归代价函数"><a href="#1-2-正则化线性回归代价函数" class="headerlink" title="1.2 正则化线性回归代价函数"></a>1.2 正则化线性回归代价函数</h3><p>正则化线性回归代价函数公式：</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{2m}(\sum^m_{i=1}(h_\theta(x^{(i)})-y^{(i)})^2))+\frac{\lambda}{2m}(\sum_{j=1}^n\theta_j^2)</script><p>其中$\lambda$是正则化参数，控制了正则化的程度。正则化在原来的代价J上加了一个惩罚项。随着参数$\theta_j$的变大，惩罚项也会变大。此外，不需要正则化$\theta_0$</p>
+<pre><code class="lang-python"># 为训练集、交叉验证集、测试集插入常数项1
+# X = np.insert(X.reshape(X.shape[0],1),0,np.ones(X.shape[0]),axis = 1)
+# Xval = np.insert(Xval.reshape(Xval.shape[0],1),0, np.ones(Xval.shape[0]),axis = 1)
+# Xtest = np.insert(Xtest.reshape(Xtest.shape[0],1), 0 , np.ones(Xtest.shape[0]),axis = 1)
+# y = y.reshape(y.shape[0],1)
+X, Xval, Xtest = [np.insert(x.reshape(x.shape[0], 1), 0, np.ones(x.shape[0]), axis=1) for x in (X, Xval, Xtest)]
+X.shape,Xval.shape,Xtest.shape
+</code></pre>
+<pre><code>((12, 2), (21, 2), (21, 2))
+</code></pre><pre><code class="lang-python"># 维度：
+# X ： (m,n) m个训练集，n个特征
+# y : (m,1) m个训练集
+# h(x) = X*theta = y&#39;
+# theta : (n,1)
+def cost(theta,X,y):
+    m = X.shape[0]
+
+    inner = np.dot(X,theta) - y
+    square_sum = np.sum(inner**2)
+    cost = square_sum / (2*m)
+    return cost
+</code></pre>
+<pre><code class="lang-python"># 法一：
+def costReg(theta,X,y,reg=1):
+    m = X.shape[0]
+
+    inner = np.dot(X,theta) - y
+    square_sum = np.sum(inner**2)
+    cost = square_sum / (2*m) + reg/(2*m)*np.sum(theta[1:]**2)
+
+    return cost
+
+
+# 法二：
+def costReg1(theta,X,y,reg=1):
+    m = X.shape[0]
+
+    regularized_term = (reg / (2 *m)) * np.power(theta[1:],2).sum()
+
+    return cost(theta,X,y) + regularized_term
+</code></pre>
+<pre><code class="lang-python">theta = np.ones((X.shape[1]))
+print(theta)
+print(X)
+print(np.dot(X,theta).shape)
+print(y.shape)
+# print(np.dot(X,theta.T))
+costReg1(theta,X,y,1)
+</code></pre>
+<pre><code>[1. 1.]
+[[  1.         -15.93675813]
+ [  1.         -29.15297922]
+ [  1.          36.18954863]
+ [  1.          37.49218733]
+ [  1.         -48.05882945]
+ [  1.          -8.94145794]
+ [  1.          15.30779289]
+ [  1.         -34.70626581]
+ [  1.           1.38915437]
+ [  1.         -44.38375985]
+ [  1.           7.01350208]
+ [  1.          22.76274892]]
+(12,)
+(12,)
+
+
+
+
+
+303.9931922202643
+</code></pre><h3 id="1-3-正则化线性回归的梯度"><a href="#1-3-正则化线性回归的梯度" class="headerlink" title="1.3 正则化线性回归的梯度"></a>1.3 正则化线性回归的梯度</h3><script type="math/tex; mode=display">\frac{\partial J(\theta)}{\partial \theta_0} = \frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)},for j=0</script><script type="math/tex; mode=display">\frac{\partial J(\theta)}{\partial \theta_j} = \frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}+\frac{\lambda}{m}\theta_j,for j>0</script><pre><code class="lang-python">def gradient(theta,X,y):
+    m = X.shape[0]
+    inner = np.dot(X.T,(np.dot(X,theta)-y))
+    dtheta = inner/m
+    return dtheta
+</code></pre>
+<pre><code class="lang-python"># 法一：
+def gradientReg(theta,X,y,reg):
+    m = X.shape[0]
+    inner = np.dot(X.T,(np.dot(X,theta)-y))
+    dtheta = inner/m
+    dtheta[1:] = dtheta[1:]+ (reg / m) *theta[1:]
+    return dtheta
+
+# 法二：
+def gradientReg1(theta, X, y, reg):
+    m = X.shape[0]
+
+    regularized_term = theta.copy()  # same shape as theta
+    regularized_term[0] = 0  # don&#39;t regularize intercept theta
+
+    regularized_term = (reg / m) * regularized_term
+
+    return gradient(theta, X, y) + regularized_term
+</code></pre>
+<pre><code class="lang-python">gradientReg(theta,X,y,1)
+</code></pre>
+<pre><code>array([-15.30301567, 598.25074417])
+</code></pre><h3 id="1-4-拟合线性回归"><a href="#1-4-拟合线性回归" class="headerlink" title="1.4 拟合线性回归"></a>1.4 拟合线性回归</h3><p>调用工具库找到$\theta$的最优解，在此令$\lambda=0$：因为现在训练的是二维的$\theta$，正则化不会对这种低维的$\theta$有很大的帮助。<br><br><strong>注意：</strong>使用第三方工具库时，需要按照其参数要求和自定义函数的返回值(一般要求theta为一行向量，而不是列向量)的要求</p>
+<pre><code class="lang-python">theta = np.ones(X.shape[1])
+final_theta = opt.minimize(fun=costReg, x0=theta, args=(X, y, 0), method=&#39;tnc&#39;, jac=gradientReg, options={&#39;disp&#39;: True}).x
+final_theta
+</code></pre>
+<pre><code>array([13.08790362,  0.36777923])
+</code></pre><pre><code class="lang-python">b = final_theta[0]
+m = final_theta[1]
+
+fig,ax = plt.subplots(figsize=(12,8))
+plt.scatter(X[:,1],y,c=&#39;r&#39;,label=&quot;Traning data&quot;)
+plt.plot(X[:,1],X[:,1]*m+b,c=&#39;b&#39;,label = &quot;Prediction&quot;)
+ax.set_xlabel(&#39;water_level&#39;)
+ax.set_ylabel(&#39;flow&#39;)
+ax.legend()
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_2.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="2-方差和偏差"><a href="#2-方差和偏差" class="headerlink" title="2. 方差和偏差"></a>2. 方差和偏差</h2><p>偏差较大的模型会欠拟合<br><br>方差较的的模型会过拟合<br><br>所以如何判断是否存在偏差和方差？</p>
+<h3 id="2-1-学习曲线"><a href="#2-1-学习曲线" class="headerlink" title="2.1 学习曲线"></a>2.1 学习曲线</h3><ul>
+<li>使用训练集的子集来拟合模型</li>
+<li>在计算训练代价和验证集代价时，没有使用正则化</li>
+<li>使用相同的训练集子集来计算训练代价。<br>代价公式：<script type="math/tex; mode=display">J_{train}(\theta)=\frac{1}{m}[\sum_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})^2]</script></li>
+</ul>
+<pre><code class="lang-python">def linear_regression(X,y,l=1):
+    theta = np.ones(X.shape[1])
+    res = opt.minimize(fun = costReg,
+                      x0 = theta,
+                       args=(X,y,l),
+                       method=&#39;TNC&#39;,
+                       jac=gradientReg,
+                       options={&#39;disp&#39;:True}
+                      )
+    return res
+</code></pre>
+<pre><code class="lang-python">training_cost,cv_cost = [],[]
+</code></pre>
+<pre><code class="lang-python">m = X.shape[0]
+for i in range(1,m+1):
+    # 从0-m个训练集依次训练theta参数，并且计算对应的代价和验证集的代价
+    res = linear_regression(X[:i,:],y[:i],0)
+    tc = costReg(res.x,X[:i,:],y[:i],0)
+    cv = costReg(res.x,Xval,yval,0)
+    training_cost.append(tc)
+    cv_cost.append(cv)
+</code></pre>
+<pre><code class="lang-python">fig,ax = plt.subplots(figsize=(12,8))
+plt.plot(np.arange(1,m+1),training_cost,label=&#39;training cost&#39;)
+plt.plot(np.arange(1,m+1),cv_cost,label=&#39;cv cost&#39;)
+ax.set_xlabel(&#39;Number training sets m&#39;)
+ax.set_ylabel(&#39;cost/error&#39;)
+plt.legend()
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_3.png" srcset="/img/loading.gif" alt="png"></p>
+<p>If a learning algorithm is suffering from high bisa,getting more training data will not help much.<br><br>即：$J<em>{train}(\theta)$will be high,$J</em>{cv}(\theta)\approx J_{train}(\theta)$<br><br>根据图中可以得出，该模型拟合不太好，<strong>欠拟合了</strong></p>
+<h2 id="3-多项式回归"><a href="#3-多项式回归" class="headerlink" title="3. 多项式回归"></a>3. 多项式回归</h2><p>由于对于现有数据来说，进行线性回归太过简单，容易欠拟合。因此需要多添加一些特征。</p>
+<h3 id="3-1-特征映射"><a href="#3-1-特征映射" class="headerlink" title="3.1 特征映射"></a>3.1 特征映射</h3><pre><code class="lang-python"># 人为的添加新特征
+# 输入：原始X，幂的次数p
+# 返回：X的1-p次幂
+def poly_features(x,power,as_ndarray=False):
+    data = {&#39;f{}&#39;.format(i): np.power(x, i) for i in range(1, power + 1)}
+    # print(data)
+    df = pd.DataFrame(data)
+    # print(df)
+    return df.values if as_ndarray else df
+</code></pre>
+<pre><code class="lang-python">data = sio.loadmat(&#39;./andrew_ml_ex55139/ex5data1.mat&#39;)
+X, y, Xval, yval, Xtest, ytest = map(np.ravel,[data[&#39;X&#39;], data[&#39;y&#39;], data[&#39;Xval&#39;], data[&#39;yval&#39;], data[&#39;Xtest&#39;], data[&#39;ytest&#39;]])
+</code></pre>
+<pre><code class="lang-python">poly_features(X, power=3)
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>f1</th>
+      <th>f2</th>
+      <th>f3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-15.936758</td>
+      <td>253.980260</td>
+      <td>-4047.621971</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-29.152979</td>
+      <td>849.896197</td>
+      <td>-24777.006175</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>36.189549</td>
+      <td>1309.683430</td>
+      <td>47396.852168</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>37.492187</td>
+      <td>1405.664111</td>
+      <td>52701.422173</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-48.058829</td>
+      <td>2309.651088</td>
+      <td>-110999.127750</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-8.941458</td>
+      <td>79.949670</td>
+      <td>-714.866612</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>15.307793</td>
+      <td>234.328523</td>
+      <td>3587.052500</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-34.706266</td>
+      <td>1204.524887</td>
+      <td>-41804.560890</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.389154</td>
+      <td>1.929750</td>
+      <td>2.680720</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-44.383760</td>
+      <td>1969.918139</td>
+      <td>-87432.373590</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>7.013502</td>
+      <td>49.189211</td>
+      <td>344.988637</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>22.762749</td>
+      <td>518.142738</td>
+      <td>11794.353058</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h3 id="3-2-多项式回归"><a href="#3-2-多项式回归" class="headerlink" title="3.2 多项式回归"></a>3.2 多项式回归</h3><ul>
+<li>使用之前的代价函数和梯度函数</li>
+<li>扩展特征到8阶特征</li>
+<li>使用<strong>归一化</strong>来处理$x^n$</li>
+<li>不使用正则化,即设置$\lambda=0$</li>
+</ul>
+<pre><code class="lang-python"># 对特征进行归一化处理
+def normalize_feature(df):
+    return df.apply(lambda column: (column - column.mean()) / column.std())
+</code></pre>
+<pre><code class="lang-python"># 扩展特征
+&quot;&quot;&quot;
+    args: keep feeding in X, Xval, or Xtest
+        will return in the same order
+ &quot;&quot;&quot;
+def prepare_poly_data(*args, power):
+
+    def prepare(x):
+        # 扩展特征
+        df = poly_features(x, power=power)
+
+        # n归一化
+        ndarr = normalize_feature(df).values
+
+        # 插入常数项1
+        return np.insert(ndarr, 0, np.ones(ndarr.shape[0]), axis=1)
+
+    return [prepare(x) for x in args]
+</code></pre>
+<pre><code class="lang-python">X_poly, Xval_poly, Xtest_poly= prepare_poly_data(X, Xval, Xtest, power=8)
+X_poly[:3, :]
+</code></pre>
+<pre><code>array([[ 1.00000000e+00, -3.62140776e-01, -7.55086688e-01,
+         1.82225876e-01, -7.06189908e-01,  3.06617917e-01,
+        -5.90877673e-01,  3.44515797e-01, -5.08481165e-01],
+       [ 1.00000000e+00, -8.03204845e-01,  1.25825266e-03,
+        -2.47936991e-01, -3.27023420e-01,  9.33963187e-02,
+        -4.35817606e-01,  2.55416116e-01, -4.48912493e-01],
+       [ 1.00000000e+00,  1.37746700e+00,  5.84826715e-01,
+         1.24976856e+00,  2.45311974e-01,  9.78359696e-01,
+        -1.21556976e-02,  7.56568484e-01, -1.70352114e-01]])
+</code></pre><pre><code class="lang-python"># 画出学习曲线
+def plot_learning_curve(X, Xinit, y, Xval, yval, l=0):
+    training_cost,cv_cost=[],[]
+    m = X.shape[0]
+
+    for i in range(1,1+m):
+        # 不使用正则化
+        res = linear_regression(X[:i,:],y[:i],l)
+        # 因为正则化项只是用来训练参数theta，因此在计算误差时可以不需要计算正则化项
+        tc = cost(res.x, X[:i, :], y[:i])
+        cv = cost(res.x, Xval, yval)
+        training_cost.append(tc)
+        cv_cost.append(cv)
+
+    fig, ax = plt.subplots(2,  1, figsize=(12, 12))
+    ax[0].plot(np.arange(1, m + 1), training_cost, label=&#39;training cost&#39;)
+    ax[0].plot(np.arange(1, m + 1), cv_cost, label=&#39;cv cost&#39;)
+    ax[0].legend()
+    ax[0].set_xlabel(&#39;Number training sets m&#39;)
+    ax[0].set_ylabel(&#39;cost/error&#39;)
+
+    fitx = np.linspace(-50, 50, 100) 
+    fitxtmp = prepare_poly_data(fitx, power=8)
+    fity = np.dot(prepare_poly_data(fitx, power=8)[0], linear_regression(X, y, l).x.T)
+
+    ax[1].plot(fitx, fity, c=&#39;r&#39;, label=&#39;fitcurve&#39;)
+    ax[1].scatter(Xinit, y, c=&#39;b&#39;, label=&#39;initial_Xy&#39;)
+
+    ax[1].set_xlabel(&#39;water_level&#39;)
+    ax[1].set_ylabel(&#39;flow&#39;)
+</code></pre>
+<pre><code class="lang-python">plot_learning_curve(X_poly, X, y, Xval_poly, yval, l=0)
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_4.png" srcset="/img/loading.gif" alt="png"></p>
+<p>If a learning algorithm is suffering from high variance,getting more training data is likely to help.<br><br>即：$J<em>{train}(\theta)$will be high,$J</em>{cv}(\theta)\ll J_{train}(\theta)$<br><br>根据图中可以得出，看到训练的代价太低了，不真实. 这是<strong>过拟合了</strong></p>
+<h3 id="3-3-调整正则化系数"><a href="#3-3-调整正则化系数" class="headerlink" title="3.3 调整正则化系数"></a>3.3 调整正则化系数</h3><p>令$\lambda=1$，使用正则化项减轻过拟合</p>
+<pre><code class="lang-python"># 令lambda=1
+plot_learning_curve(X_poly, X, y, Xval_poly, yval, l=1)
+plt.show()
+</code></pre>
+<p><img src="output_42_0.png" srcset="/img/loading.gif" alt="png"></p>
+<p>如果令$\lambda=100$呢？<br>使正则化的惩罚太大，变成了欠拟合状态</p>
+<pre><code class="lang-python">plot_learning_curve(X_poly, X, y, Xval_poly, yval, l=100)
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_5.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="3-4-找到最佳的-lambda"><a href="#3-4-找到最佳的-lambda" class="headerlink" title="3.4 找到最佳的$\lambda$"></a>3.4 找到最佳的$\lambda$</h3><p>通过之前的实验，可以发现$\lambda$可以极大程度影响正则化多项式回归。因此此部分使用交叉验证集俩评价$\lambda$的表现好坏，然后选择表现最好的$\lambda$使用</p>
+<p>从[0, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10]中尝试$\lambda$的值</p>
+<pre><code class="lang-python">l_candidate = [0, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3,0.5,1, 3, 10]
+training_cost, cv_cost = [], []
+</code></pre>
+<pre><code class="lang-python">for l in l_candidate:
+    res = linear_regression(X_poly,y,l)
+     # 因为正则化项只是用来训练参数theta，因此在计算误差时可以不需要计算正则化项
+    tc = cost(res.x,X_poly,y)
+    cv = cost(res.x,Xval_poly,yval)
+
+    training_cost.append(tc)
+    cv_cost.append(cv)
+</code></pre>
+<pre><code class="lang-python"># print(training_cost)
+fig, ax = plt.subplots(figsize=(12,8))
+ax.plot(l_candidate,training_cost,label=&#39;training&#39;)
+ax.plot(l_candidate,cv_cost,label=&#39;cross validation&#39;)
+plt.legend()
+
+plt.xlabel(&#39;lambda&#39;)
+plt.ylabel(&#39;cost&#39;)
+plt.show()
+</code></pre>
+<p><img src="/img/ML_Andrew/pex5_6.png" srcset="/img/loading.gif" alt="png"></p>
+<p>可以看到，最小值在5左右，对应的$\lambda$的值约为0.3</p>
+<h3 id="3-5-计算测试集上的误差"><a href="#3-5-计算测试集上的误差" class="headerlink" title="3.5 计算测试集上的误差"></a>3.5 计算测试集上的误差</h3><p>实际上，为了获得一个更好的模型，需要把最终的模型用在一个从来没有在计算中出现过的测试集上，也即：需要再即没有被用作选择$\theta$也没有被用作选择$\lambda$的数据</p>
+<pre><code class="lang-python"># 使用测试集计算误差
+for l in l_candidate:
+    theta = linear_regression(X_poly,y,l).x
+    print(&#39;test cost(l={}) = {}&#39;.format(l, costReg(theta, Xtest_poly, ytest,l)))
+</code></pre>
+<pre><code>test cost(l=0) = 10.055426362410124
+test cost(l=0.001) = 11.036446361967528
+test cost(l=0.003) = 11.30996055923212
+test cost(l=0.01) = 10.974248212029881
+test cost(l=0.03) = 10.243474990625272
+test cost(l=0.1) = 9.194269309169977
+test cost(l=0.3) = 8.582242382060466
+test cost(l=0.5) = 8.858395797141128
+test cost(l=1) = 10.433118438156512
+test cost(l=3) = 17.91042362878564
+test cost(l=10) = 37.5893577595151
+</code></pre><p>调参后，$\lambda=0.3是最优选择$，这个时候测试代价最小</p>
+<pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/">Programming</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/">ML</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Programming/ML/Programming-Exercise/">Programming Exercise</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ML/">ML</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming-Exercise/">Programming Exercise</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Andrew-Ng/">Andrew Ng</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/18/Code_One_Hour5/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Code One Hour：Pandas-Base-Three</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/16/Code_One_Hour4/">
+                        <span class="hidden-mobile">Code One Hour：Pandas-Base-Two</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "机器学习程序练习5:正则化线性回归和偏差、方差&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+      MathJax.Hub.Register.StartupHook("End Jax",function () {
+        var BROWSER = MathJax.Hub.Browser;
+        var jax = "HTML-CSS";
+        if (BROWSER.isMSIE && BROWSER.hasMathPlayer) jax = "NativeMML";
+        return MathJax.Hub.setRenderer(jax);
+      });
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

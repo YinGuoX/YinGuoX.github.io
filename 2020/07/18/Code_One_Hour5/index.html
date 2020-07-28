@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Pandas-Base-Three - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 七月 18日 2020, 10:46 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    7.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    139
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Pandas使用-基础篇Three"><a href="#Pandas使用-基础篇Three" class="headerlink" title="Pandas使用-基础篇Three"></a>Pandas使用-基础篇Three</h1><h2 id="1-数值计算和统计基础"><a href="#1-数值计算和统计基础" class="headerlink" title="1. 数值计算和统计基础"></a>1. 数值计算和统计基础</h2><ul>
+<li>常用数学、统计方法</li>
+</ul>
+<pre><code class="lang-python">import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({&#39;key1&#39;:[4,5,3,np.nan,2],
+                 &#39;key2&#39;:[1,2,np.nan,4,5],
+                 &#39;key3&#39;:[1,2,3,&#39;j&#39;,&#39;k&#39;]},
+                 index = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;])
+print(df)
+print(df[&#39;key1&#39;].dtype,df[&#39;key2&#39;].dtype,df[&#39;key3&#39;].dtype)
+print(&#39;------------------------------------------------------&#39;)
+print(&quot;.mean()计算均值：只统计数字列(包括Nan),默认以列计算(axis=0)&quot;)
+m1 = df.mean()
+print(m1,type(m1))
+print(&#39;单独统计一列:&#39;,df[&#39;key1&#39;].mean())
+print(&quot;指定轴(行列方向)：axis=0以列来计算，axis=1以行来计算&quot;)
+m2 = df.mean(axis=1)
+print(m2)
+print(&quot;skipna参数：是否忽略NaN，默认True，如False，有NaN的列统计结果仍未NaN&quot;)
+m3 = df.mean(skipna=False)
+print(m3)
+</code></pre>
+<pre><code>   key1  key2 key3
+a   4.0   1.0    1
+b   5.0   2.0    2
+c   3.0   NaN    3
+d   NaN   4.0    j
+e   2.0   5.0    k
+float64 float64 object
+------------------------------------------------------
+.mean()计算均值：只统计数字列(包括Nan),默认以列计算(axis=0)
+key1    3.5
+key2    3.0
+dtype: float64 &lt;class &#39;pandas.core.series.Series&#39;&gt;
+单独统计一列: 3.5
+指定轴(行列方向)：axis=0以列来计算，axis=1以行来计算
+a    2.5
+b    3.5
+c    3.0
+d    4.0
+e    3.5
+dtype: float64
+skipna参数：是否忽略NaN，默认True，如False，有NaN的列统计结果仍未NaN
+key1   NaN
+key2   NaN
+dtype: float64
+</code></pre><pre><code class="lang-python">
+df = pd.DataFrame({&#39;key1&#39;:np.arange(10),
+                  &#39;key2&#39;:np.random.rand(10)*10})
+print(df)
+print(&#39;-----&#39;)
+
+print(df.count(),&#39;→ count统计非Na值的数量\n&#39;)
+print(df.min(),&#39;→ min统计最小值\n&#39;,df[&#39;key2&#39;].max(),&#39;→ max统计最大值\n&#39;)
+print(df.quantile(q=0.75),&#39;→ quantile统计分位数，参数q确定位置\n&#39;)
+print(df.sum(),&#39;→ sum求和\n&#39;)
+print(df.mean(),&#39;→ mean求平均值\n&#39;)
+print(df.median(),&#39;→ median求算数中位数，50%分位数\n&#39;)
+print(df.std(),&#39;\n&#39;,df.var(),&#39;→ std,var分别求标准差，方差\n&#39;)
+print(df.skew(),&#39;→ skew样本的偏度\n&#39;)
+print(df.kurt(),&#39;→ kurt样本的峰度\n&#39;)
+</code></pre>
+<pre><code>   key1      key2
+0     0  0.751955
+1     1  8.806183
+2     2  0.736947
+3     3  1.638833
+4     4  5.733971
+5     5  6.680922
+6     6  6.189423
+7     7  2.850479
+8     8  9.793569
+9     9  1.472623
+-----
+key1    10
+key2    10
+dtype: int64 → count统计非Na值的数量
+
+key1    0.000000
+key2    0.736947
+dtype: float64 → min统计最小值
+ 9.793568975290103 → max统计最大值
+
+key1    6.750000
+key2    6.558047
+Name: 0.75, dtype: float64 → quantile统计分位数，参数q确定位置
+
+key1    45.000000
+key2    44.654903
+dtype: float64 → sum求和
+
+key1    4.50000
+key2    4.46549
+dtype: float64 → mean求平均值
+
+key1    4.500000
+key2    4.292225
+dtype: float64 → median求算数中位数，50%分位数
+
+key1    3.027650
+key2    3.398808
+dtype: float64 
+ key1     9.166667
+key2    11.551893
+dtype: float64 → std,var分别求标准差，方差
+
+key1    0.000000
+key2    0.334036
+dtype: float64 → skew样本的偏度
+
+key1   -1.200000
+key2   -1.508633
+dtype: float64 → kurt样本的峰度
+</code></pre><pre><code class="lang-python">print(&quot;统计学方法：&quot;)
+
+df[&#39;key1_s&#39;] = df[&#39;key1&#39;].cumsum()
+df[&#39;key2_s&#39;] = df[&#39;key2&#39;].cumsum()
+print(df,&#39;→ cumsum样本的累计和\n&#39;)
+
+df[&#39;key1_p&#39;] = df[&#39;key1&#39;].cumprod()
+df[&#39;key2_p&#39;] = df[&#39;key2&#39;].cumprod()
+print(df,&#39;→ cumprod样本的累计积\n&#39;)
+
+print(df.cummax(),&#39;\n&#39;,df.cummin(),&#39;→ cummax,cummin分别求累计最大值，累计最小值\n&#39;)
+# 会填充key1，和key2的值
+</code></pre>
+<pre><code>统计学方法：
+   key1      key2  key1_s     key2_s
+0     0  0.751955       0   0.751955
+1     1  8.806183       1   9.558137
+2     2  0.736947       3  10.295084
+3     3  1.638833       6  11.933917
+4     4  5.733971      10  17.667888
+5     5  6.680922      15  24.348810
+6     6  6.189423      21  30.538232
+7     7  2.850479      28  33.388711
+8     8  9.793569      36  43.182280
+9     9  1.472623      45  44.654903 → cumsum样本的累计和
+
+   key1      key2  key1_s     key2_s  key1_p        key2_p
+0     0  0.751955       0   0.751955       0      0.751955
+1     1  8.806183       1   9.558137       0      6.621851
+2     2  0.736947       3  10.295084       0      4.879953
+3     3  1.638833       6  11.933917       0      7.997429
+4     4  5.733971      10  17.667888       0     45.857020
+5     5  6.680922      15  24.348810       0    306.367174
+6     6  6.189423      21  30.538232       0   1896.235888
+7     7  2.850479      28  33.388711       0   5405.180204
+8     8  9.793569      36  43.182280       0  52936.005148
+9     9  1.472623      45  44.654903       0  77954.788734 → cumprod样本的累计积
+
+   key1      key2  key1_s     key2_s  key1_p        key2_p
+0     0  0.751955       0   0.751955       0      0.751955
+1     1  8.806183       1   9.558137       0      6.621851
+2     2  8.806183       3  10.295084       0      6.621851
+3     3  8.806183       6  11.933917       0      7.997429
+4     4  8.806183      10  17.667888       0     45.857020
+5     5  8.806183      15  24.348810       0    306.367174
+6     6  8.806183      21  30.538232       0   1896.235888
+7     7  8.806183      28  33.388711       0   5405.180204
+8     8  9.793569      36  43.182280       0  52936.005148
+9     9  9.793569      45  44.654903       0  77954.788734 
+    key1      key2  key1_s    key2_s  key1_p    key2_p
+0     0  0.751955       0  0.751955       0  0.751955
+1     0  0.751955       0  0.751955       0  0.751955
+2     0  0.736947       0  0.751955       0  0.751955
+3     0  0.736947       0  0.751955       0  0.751955
+4     0  0.736947       0  0.751955       0  0.751955
+5     0  0.736947       0  0.751955       0  0.751955
+6     0  0.736947       0  0.751955       0  0.751955
+7     0  0.736947       0  0.751955       0  0.751955
+8     0  0.736947       0  0.751955       0  0.751955
+9     0  0.736947       0  0.751955       0  0.751955 → cummax,cummin分别求累计最大值，累计最小值
+</code></pre><pre><code class="lang-python">print(&quot;唯一值：.unique()&quot;)
+s = pd.Series(list(&#39;asdvasdcfgg&#39;))
+sq = s.unique()
+print(s)
+print(sq,type(sq))
+print(pd.Series(sq))
+# 得到一个唯一值数组
+# 通过pd.Series重新变成新的Series
+
+sq.sort()
+print(sq)
+# 重新排序
+</code></pre>
+<pre><code>唯一值：.unique()
+0     a
+1     s
+2     d
+3     v
+4     a
+5     s
+6     d
+7     c
+8     f
+9     g
+10    g
+dtype: object
+[&#39;a&#39; &#39;s&#39; &#39;d&#39; &#39;v&#39; &#39;c&#39; &#39;f&#39; &#39;g&#39;] &lt;class &#39;numpy.ndarray&#39;&gt;
+0    a
+1    s
+2    d
+3    v
+4    c
+5    f
+6    g
+dtype: object
+[&#39;a&#39; &#39;c&#39; &#39;d&#39; &#39;f&#39; &#39;g&#39; &#39;s&#39; &#39;v&#39;]
+</code></pre><pre><code class="lang-python">print(&quot;值计数：.value_counts()&quot;)
+sc = s.value_counts(sort = False)  # 也可以这样写：pd.value_counts(sc, sort = False)
+print(sc)
+# 得到一个新的Series，计算出不同值出现的频率
+# sort参数：排序，默认为True
+</code></pre>
+<pre><code>值计数：.value_counts()
+d    2
+a    2
+g    2
+f    1
+s    2
+c    1
+v    1
+dtype: int64
+</code></pre><pre><code class="lang-python">print(&quot;成员资格：.isin()&quot;)
+s = pd.Series(np.arange(10,15))
+df = pd.DataFrame({&#39;key1&#39;:list(&#39;asdcbvasd&#39;),
+                  &#39;key2&#39;:np.arange(4,13)})
+print(s)
+print(df)
+print(&#39;-----&#39;)
+
+print(s.isin([5,14]))
+print(df.isin([&#39;a&#39;,&#39;bc&#39;,&#39;10&#39;,8]))
+# 用[]表示
+# 得到一个布尔值的Series或者Dataframe
+</code></pre>
+<pre><code>成员资格：.isin()
+0    10
+1    11
+2    12
+3    13
+4    14
+dtype: int32
+  key1  key2
+0    a     4
+1    s     5
+2    d     6
+3    c     7
+4    b     8
+5    v     9
+6    a    10
+7    s    11
+8    d    12
+-----
+0    False
+1    False
+2    False
+3    False
+4     True
+dtype: bool
+    key1   key2
+0   True  False
+1  False  False
+2  False  False
+3  False  False
+4  False   True
+5  False  False
+6   True  False
+7  False  False
+8  False  False
+</code></pre><h2 id="2-文本数据"><a href="#2-文本数据" class="headerlink" title="2. 文本数据"></a>2. 文本数据</h2><ul>
+<li>Pandas针对字符串匹配的一套方法，使其易于对数组的每个元素进行操作</li>
+</ul>
+<pre><code class="lang-python">print(&quot;通过str访问，且自动排除丢失/ NA值&quot;)
+
+s = pd.Series([&#39;A&#39;,&#39;b&#39;,&#39;C&#39;,&#39;bbhello&#39;,&#39;123&#39;,np.nan,&#39;hj&#39;])
+df = pd.DataFrame({&#39;key1&#39;:list(&#39;abcdef&#39;),
+                  &#39;key2&#39;:[&#39;hee&#39;,&#39;fv&#39;,&#39;w&#39;,&#39;hija&#39;,&#39;123&#39;,np.nan]})
+print(s)
+print(df)
+print(&#39;-------------------------------------------&#39;)
+print(&quot;直接通过.str调用字符串方法&quot;)
+print(s.str.count(&#39;b&#39;))
+print(df[&#39;key2&#39;].str.upper())
+print(&#39;-------------------------------------------&#39;)
+print(&quot;df.columns是一个Index对象，也可使用.str&quot;)
+df.columns = df.columns.str.upper()
+print(df)
+</code></pre>
+<pre><code>通过str访问，且自动排除丢失/ NA值
+0          A
+1          b
+2          C
+3    bbhello
+4        123
+5        NaN
+6         hj
+dtype: object
+  key1  key2
+0    a   hee
+1    b    fv
+2    c     w
+3    d  hija
+4    e   123
+5    f   NaN
+-------------------------------------------
+直接通过.str调用字符串方法
+0    0.0
+1    1.0
+2    0.0
+3    2.0
+4    0.0
+5    NaN
+6    0.0
+dtype: float64
+0     HEE
+1      FV
+2       W
+3    HIJA
+4     123
+5     NaN
+Name: key2, dtype: object
+-------------------------------------------
+df.columns是一个Index对象，也可使用.str
+  KEY1  KEY2
+0    a   hee
+1    b    fv
+2    c     w
+3    d  hija
+4    e   123
+5    f   NaN
+</code></pre><pre><code class="lang-python">print(&quot;字符串常用方法1：lower，upper，len，startswith，endswith&quot;)
+
+s = pd.Series([&#39;A&#39;,&#39;b&#39;,&#39;bbhello&#39;,&#39;123&#39;,np.nan])
+
+print(s.str.lower(),&#39;→ lower小写\n&#39;)
+print(s.str.upper(),&#39;→ upper大写\n&#39;)
+print(s.str.len(),&#39;→ len字符长度\n&#39;)
+print(s.str.startswith(&#39;b&#39;),&#39;→ 判断起始是否为a\n&#39;)
+print(s.str.endswith(&#39;3&#39;),&#39;→ 判断结束是否为3\n&#39;)
+</code></pre>
+<pre><code>字符串常用方法1：lower，upper，len，startswith，endswith
+0          a
+1          b
+2    bbhello
+3        123
+4        NaN
+dtype: object → lower小写
+
+0          A
+1          B
+2    BBHELLO
+3        123
+4        NaN
+dtype: object → upper大写
+
+0    1.0
+1    1.0
+2    7.0
+3    3.0
+4    NaN
+dtype: float64 → len字符长度
+
+0    False
+1     True
+2     True
+3    False
+4      NaN
+dtype: object → 判断起始是否为a
+
+0    False
+1    False
+2    False
+3     True
+4      NaN
+dtype: object → 判断结束是否为3
+</code></pre><pre><code class="lang-python">print(&quot;符串常用方法2: strip()去除空格&quot;)
+s = pd.Series([&#39; jack&#39;, &#39;jill &#39;, &#39; jesse &#39;, &#39;frank&#39;])
+df = pd.DataFrame(np.random.randn(3, 2), columns=[&#39; Column A &#39;, &#39; Column B &#39;],
+                  index=range(3))
+print(s)
+print(df)
+print(&#39;-----------------------------------&#39;)
+print(s.str.strip())  # 去除字符串中的空格
+print(s.str.lstrip())  # 去除字符串中的左空格
+print(s.str.rstrip())  # 去除字符串中的右空格
+# 这里去掉了columns的前后空格，但没有去掉中间空格
+df.columns = df.columns.str.strip()
+print(df)
+</code></pre>
+<pre><code>符串常用方法2: strip()去除空格
+0       jack
+1      jill 
+2     jesse 
+3      frank
+dtype: object
+    Column A    Column B 
+0   -0.845667   -0.826947
+1    0.362077   -1.435738
+2   -0.260095   -0.465580
+-----------------------------------
+0     jack
+1     jill
+2    jesse
+3    frank
+dtype: object
+0      jack
+1     jill 
+2    jesse 
+3     frank
+dtype: object
+0      jack
+1      jill
+2     jesse
+3     frank
+dtype: object
+   Column A  Column B
+0 -0.845667 -0.826947
+1  0.362077 -1.435738
+2 -0.260095 -0.465580
+</code></pre><pre><code class="lang-python">print(&quot;字符串常用方法3: replace()替换字符&quot;)
+
+df = pd.DataFrame(np.random.randn(3, 2), columns=[&#39; Column A &#39;, &#39; Column B &#39;],
+                  index=range(3))
+df.columns = df.columns.str.replace(&#39; &#39;,&#39;-&#39;)
+print(df)
+# n：替换个数
+df.columns = df.columns.str.replace(&#39;-&#39;,&#39;hehe&#39;,n=3)
+print(df)
+</code></pre>
+<pre><code>字符串常用方法3: replace()替换字符
+   -Column-A-  -Column-B-
+0   -1.349258    1.928732
+1   -0.623833    1.861807
+2   -0.379427    0.178919
+   heheColumnheheAhehe  heheColumnheheBhehe
+0            -1.349258             1.928732
+1            -0.623833             1.861807
+2            -0.379427             0.178919
+</code></pre><pre><code class="lang-python">print(&quot;字符串常用方法4：split()、rsplit()分割字符串&quot;)
+s = pd.Series([&#39;a,b,c&#39;,&#39;1,2,3&#39;,[&#39;a,,,c&#39;],np.nan])
+print(s)
+print(&#39;---------------------------------------&#39;)
+print(s.str.split(&#39;,&#39;))
+print(s.str.split(&#39;,&#39;)[0])
+print(&#39;---------------------------------------&#39;)
+print(&quot;可以使用get或[]符号访问拆分列表中的元素&quot;)
+print(s.str.split(&#39;,&#39;).str[0])
+print(s.str.split(&#39;,&#39;).str.get(1))
+print(&#39;---------------------------------------&#39;)
+print(&quot;可以使用expand可以轻松扩展此操作以返回DataFrame, n参数限制分割数&quot;)
+print(s.str.split(&#39;,&#39;, expand=True))
+print(s.str.split(&#39;,&#39;, expand=True, n = 1))
+print(s.str.rsplit(&#39;,&#39;, expand=True, n = 1))
+print(&#39;---------------------------------------&#39;)
+print(&quot;rsplit类似于split，反向工作，即从字符串的末尾到字符串的开头&quot;)
+print(&#39;---------------------------------------&#39;)
+print(&quot;Dataframe使用split&quot;)
+df = pd.DataFrame({&#39;key1&#39;:[&#39;a,b,c&#39;,&#39;1,2,3&#39;,[&#39;:,., &#39;]],
+                  &#39;key2&#39;:[&#39;a-b-c&#39;,&#39;1-2-3&#39;,[&#39;:-.- &#39;]]})
+print(df)
+print(&quot;-----------&quot;)
+print(df[&#39;key2&#39;].str.split(&#39;-&#39;))
+</code></pre>
+<pre><code>字符串常用方法4：split()、rsplit()分割字符串
+0      a,b,c
+1      1,2,3
+2    [a,,,c]
+3        NaN
+dtype: object
+---------------------------------------
+0    [a, b, c]
+1    [1, 2, 3]
+2          NaN
+3          NaN
+dtype: object
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+---------------------------------------
+可以使用get或[]符号访问拆分列表中的元素
+0      a
+1      1
+2    NaN
+3    NaN
+dtype: object
+0      b
+1      2
+2    NaN
+3    NaN
+dtype: object
+---------------------------------------
+可以使用expand可以轻松扩展此操作以返回DataFrame, n参数限制分割数
+     0    1    2
+0    a    b    c
+1    1    2    3
+2  NaN  NaN  NaN
+3  NaN  NaN  NaN
+     0    1
+0    a  b,c
+1    1  2,3
+2  NaN  NaN
+3  NaN  NaN
+     0    1
+0  a,b    c
+1  1,2    3
+2  NaN  NaN
+3  NaN  NaN
+---------------------------------------
+rsplit类似于split，反向工作，即从字符串的末尾到字符串的开头
+---------------------------------------
+Dataframe使用split
+      key1     key2
+0    a,b,c    a-b-c
+1    1,2,3    1-2-3
+2  [:,., ]  [:-.- ]
+-----------
+0    [a, b, c]
+1    [1, 2, 3]
+2          NaN
+Name: key2, dtype: object
+</code></pre><pre><code class="lang-python">print(&quot;字符串常用方法5：字符串索引&quot;)
+s = pd.Series([&#39;A&#39;,&#39;b&#39;,&#39;C&#39;,&#39;bbhello&#39;,&#39;123&#39;,np.nan,&#39;hj&#39;])
+df = pd.DataFrame({&#39;key1&#39;:list(&#39;abcdef&#39;),
+                  &#39;key2&#39;:[&#39;hee&#39;,&#39;fv&#39;,&#39;w&#39;,&#39;hija&#39;,&#39;123&#39;,np.nan]})
+print(s)
+print(df)
+print(&quot;------------------------------&quot;)
+print(s.str[0])  # 取第一个字符串
+print(s.str[:2])  # 取前两个字符串
+print(df[&#39;key2&#39;].str[0]) 
+# str之后和字符串本身索引方式相同
+</code></pre>
+<pre><code>字符串常用方法5：字符串索引
+0          A
+1          b
+2          C
+3    bbhello
+4        123
+5        NaN
+6         hj
+dtype: object
+  key1  key2
+0    a   hee
+1    b    fv
+2    c     w
+3    d  hija
+4    e   123
+5    f   NaN
+------------------------------
+0      A
+1      b
+2      C
+3      b
+4      1
+5    NaN
+6      h
+dtype: object
+0      A
+1      b
+2      C
+3     bb
+4     12
+5    NaN
+6     hj
+dtype: object
+0      h
+1      f
+2      w
+3      h
+4      1
+5    NaN
+Name: key2, dtype: object
+</code></pre><h2 id="3-合并-merge、join"><a href="#3-合并-merge、join" class="headerlink" title="3. 合并(merge、join)"></a>3. 合并(merge、join)</h2><ul>
+<li>Pandas具有全功能、高性能内存中连接操作，与SQL等关系数据库非常类似</li>
+</ul>
+<pre><code class="lang-python">print(&quot;merge合并 → 类似excel的vlookup&quot;)
+# left：第一个df
+# right：第二个df
+# on：参考键
+df1 = pd.DataFrame({&#39;key&#39;: [&#39;K0&#39;, &#39;K1&#39;, &#39;K2&#39;, &#39;K3&#39;],
+                     &#39;A&#39;: [&#39;A0&#39;, &#39;A1&#39;, &#39;A2&#39;, &#39;A3&#39;],
+                     &#39;B&#39;: [&#39;B0&#39;, &#39;B1&#39;, &#39;B2&#39;, &#39;B3&#39;]})
+df2 = pd.DataFrame({&#39;key&#39;: [&#39;K0&#39;, &#39;K1&#39;, &#39;K2&#39;, &#39;K3&#39;],
+                      &#39;C&#39;: [&#39;C0&#39;, &#39;C1&#39;, &#39;C2&#39;, &#39;C3&#39;],
+                      &#39;D&#39;: [&#39;D0&#39;, &#39;D1&#39;, &#39;D2&#39;, &#39;D3&#39;]})
+df3 = pd.DataFrame({&#39;key1&#39;: [&#39;K0&#39;, &#39;K0&#39;, &#39;K1&#39;, &#39;K2&#39;],
+                    &#39;key2&#39;: [&#39;K0&#39;, &#39;K1&#39;, &#39;K0&#39;, &#39;K1&#39;],
+                    &#39;A&#39;: [&#39;A0&#39;, &#39;A1&#39;, &#39;A2&#39;, &#39;A3&#39;],
+                    &#39;B&#39;: [&#39;B0&#39;, &#39;B1&#39;, &#39;B2&#39;, &#39;B3&#39;]})
+df4 = pd.DataFrame({&#39;key1&#39;: [&#39;K0&#39;, &#39;K1&#39;, &#39;K1&#39;, &#39;K2&#39;],
+                    &#39;key2&#39;: [&#39;K0&#39;, &#39;K0&#39;, &#39;K0&#39;, &#39;K0&#39;],
+                    &#39;C&#39;: [&#39;C0&#39;, &#39;C1&#39;, &#39;C2&#39;, &#39;C3&#39;],
+                    &#39;D&#39;: [&#39;D0&#39;, &#39;D1&#39;, &#39;D2&#39;, &#39;D3&#39;]})
+print(pd.merge(df1, df2, on=&#39;key&#39;))
+print(&quot;----------------------------------&quot;)
+# 多个链接键
+print(pd.merge(df3, df4, on=[&#39;key1&#39;,&#39;key2&#39;]))
+print(&quot;----------------------------------&quot;)
+print(&quot;参数how → 合并方式&quot;)
+# inner：默认，取交集
+# outer：取并集，数据缺失范围NaN
+# left：按照df3为参考合并，数据缺失范围NaN
+# right：按照df4为参考合并，数据缺失范围NaN
+print(pd.merge(df3, df4,on=[&#39;key1&#39;,&#39;key2&#39;], how = &#39;inner&#39;))  
+print(pd.merge(df3, df4, on=[&#39;key1&#39;,&#39;key2&#39;], how = &#39;outer&#39;))  
+print(pd.merge(df3, df4, on=[&#39;key1&#39;,&#39;key2&#39;], how = &#39;left&#39;))  
+print(pd.merge(df3, df4, on=[&#39;key1&#39;,&#39;key2&#39;], how = &#39;right&#39;))  
+print(&quot;----------------------------------&quot;)
+print(&quot;参数 left_on, right_on, left_index, right_index → 当键不为一个列时，可以单独设置左键与右键&quot;)
+df1 = pd.DataFrame({&#39;lkey&#39;:list(&#39;bbacaab&#39;),
+                   &#39;data1&#39;:range(7)})
+df2 = pd.DataFrame({&#39;rkey&#39;:list(&#39;abd&#39;),
+                   &#39;date2&#39;:range(3)})
+print(pd.merge(df1, df2, left_on=&#39;lkey&#39;, right_on=&#39;rkey&#39;))
+print(&#39;------&#39;)
+# df1以‘lkey’为键，df2以‘rkey’为键
+df1 = pd.DataFrame({&#39;key&#39;:list(&#39;abcdfeg&#39;),
+                   &#39;data1&#39;:range(7)})
+df2 = pd.DataFrame({&#39;date2&#39;:range(100,105)},
+                  index = list(&#39;abcde&#39;))
+print(pd.merge(df1, df2, left_on=&#39;key&#39;, right_index=True))
+# df1以‘key’为键，df2以index为键
+# left_index：为True时，第一个df以index为键，默认False
+# right_index：为True时，第二个df以index为键，默认False
+
+# 所以left_on, right_on, left_index, right_index可以相互组合：
+# left_on + right_on, left_on + right_index, left_index + right_on, left_index + right_index
+</code></pre>
+<pre><code>merge合并 → 类似excel的vlookup
+  key   A   B   C   D
+0  K0  A0  B0  C0  D0
+1  K1  A1  B1  C1  D1
+2  K2  A2  B2  C2  D2
+3  K3  A3  B3  C3  D3
+----------------------------------
+  key1 key2   A   B   C   D
+0   K0   K0  A0  B0  C0  D0
+1   K1   K0  A2  B2  C1  D1
+2   K1   K0  A2  B2  C2  D2
+----------------------------------
+参数how → 合并方式
+  key1 key2   A   B   C   D
+0   K0   K0  A0  B0  C0  D0
+1   K1   K0  A2  B2  C1  D1
+2   K1   K0  A2  B2  C2  D2
+  key1 key2    A    B    C    D
+0   K0   K0   A0   B0   C0   D0
+1   K0   K1   A1   B1  NaN  NaN
+2   K1   K0   A2   B2   C1   D1
+3   K1   K0   A2   B2   C2   D2
+4   K2   K1   A3   B3  NaN  NaN
+5   K2   K0  NaN  NaN   C3   D3
+  key1 key2   A   B    C    D
+0   K0   K0  A0  B0   C0   D0
+1   K0   K1  A1  B1  NaN  NaN
+2   K1   K0  A2  B2   C1   D1
+3   K1   K0  A2  B2   C2   D2
+4   K2   K1  A3  B3  NaN  NaN
+  key1 key2    A    B   C   D
+0   K0   K0   A0   B0  C0  D0
+1   K1   K0   A2   B2  C1  D1
+2   K1   K0   A2   B2  C2  D2
+3   K2   K0  NaN  NaN  C3  D3
+----------------------------------
+参数 left_on, right_on, left_index, right_index → 当键不为一个列时，可以单独设置左键与右键
+  lkey  data1 rkey  date2
+0    b      0    b      1
+1    b      1    b      1
+2    b      6    b      1
+3    a      2    a      0
+4    a      4    a      0
+5    a      5    a      0
+------
+  key  data1  date2
+0   a      0    100
+1   b      1    101
+2   c      2    102
+3   d      3    103
+5   e      5    104
+</code></pre><pre><code class="lang-python">print(&quot;merge()参数：sort()&quot;)
+df1 = pd.DataFrame({&#39;key&#39;:list(&#39;bbacaab&#39;),
+                   &#39;data1&#39;:[1,3,2,4,5,9,7]})
+df2 = pd.DataFrame({&#39;key&#39;:list(&#39;abd&#39;),
+                   &#39;date2&#39;:[11,2,33]})
+x1 = pd.merge(df1,df2, on = &#39;key&#39;, how = &#39;outer&#39;)
+x2 = pd.merge(df1,df2, on = &#39;key&#39;, sort=True, how = &#39;outer&#39;)
+print(x1)
+print(x2)
+print(&#39;------&#39;)
+# sort：按照字典顺序通过 连接键 对结果DataFrame进行排序。默认为False，设置为False会大幅提高性能
+
+print(x2.sort_values(&#39;data1&#39;))
+# 也可直接用Dataframe的排序方法：sort_values，sort_index
+</code></pre>
+<pre><code>merge()参数：sort()
+  key  data1  date2
+0   b    1.0    2.0
+1   b    3.0    2.0
+2   b    7.0    2.0
+3   a    2.0   11.0
+4   a    5.0   11.0
+5   a    9.0   11.0
+6   c    4.0    NaN
+7   d    NaN   33.0
+  key  data1  date2
+0   a    2.0   11.0
+1   a    5.0   11.0
+2   a    9.0   11.0
+3   b    1.0    2.0
+4   b    3.0    2.0
+5   b    7.0    2.0
+6   c    4.0    NaN
+7   d    NaN   33.0
+------
+  key  data1  date2
+3   b    1.0    2.0
+0   a    2.0   11.0
+4   b    3.0    2.0
+6   c    4.0    NaN
+1   a    5.0   11.0
+5   b    7.0    2.0
+2   a    9.0   11.0
+7   d    NaN   33.0
+</code></pre><pre><code class="lang-python">print(&quot;pd.join()：通过索引连接&quot;)
+left = pd.DataFrame({&#39;A&#39;: [&#39;A0&#39;, &#39;A1&#39;, &#39;A2&#39;],
+                     &#39;B&#39;: [&#39;B0&#39;, &#39;B1&#39;, &#39;B2&#39;]},
+                    index=[&#39;K0&#39;, &#39;K1&#39;, &#39;K2&#39;])
+right = pd.DataFrame({&#39;C&#39;: [&#39;C0&#39;, &#39;C2&#39;, &#39;C3&#39;],
+                      &#39;D&#39;: [&#39;D0&#39;, &#39;D2&#39;, &#39;D3&#39;]},
+                     index=[&#39;K0&#39;, &#39;K2&#39;, &#39;K3&#39;])
+print(left)
+print(right)
+print(left.join(right))
+print(left.join(right, how=&#39;outer&#39;))  
+print(&#39;-----&#39;)
+# 等价于：pd.merge(left, right, left_index=True, right_index=True, how=&#39;outer&#39;)
+
+df1 = pd.DataFrame({&#39;key&#39;:list(&#39;bbacaab&#39;),
+                   &#39;data1&#39;:[1,3,2,4,5,9,7]})
+df2 = pd.DataFrame({&#39;key&#39;:list(&#39;abd&#39;),
+                   &#39;date2&#39;:[11,2,33]})
+print(df1)
+print(df2)
+print(pd.merge(df1, df2, left_index=True, right_index=True, suffixes=(&#39;_1&#39;, &#39;_2&#39;)))  
+print(df1.join(df2[&#39;date2&#39;]))
+print(&#39;-----&#39;)
+# suffixes=(&#39;_x&#39;, &#39;_y&#39;)默认
+
+left = pd.DataFrame({&#39;A&#39;: [&#39;A0&#39;, &#39;A1&#39;, &#39;A2&#39;, &#39;A3&#39;],
+                     &#39;B&#39;: [&#39;B0&#39;, &#39;B1&#39;, &#39;B2&#39;, &#39;B3&#39;],
+                     &#39;key&#39;: [&#39;K0&#39;, &#39;K1&#39;, &#39;K0&#39;, &#39;K1&#39;]})
+right = pd.DataFrame({&#39;C&#39;: [&#39;C0&#39;, &#39;C1&#39;],
+                      &#39;D&#39;: [&#39;D0&#39;, &#39;D1&#39;]},
+                     index=[&#39;K0&#39;, &#39;K1&#39;])
+print(left)
+print(right)
+print(left.join(right, on = &#39;key&#39;))
+# 等价于pd.merge(left, right, left_on=&#39;key&#39;, right_index=True, how=&#39;left&#39;, sort=False);
+# left的‘key’和right的index
+</code></pre>
+<pre><code>pd.join()：通过索引连接
+     A   B
+K0  A0  B0
+K1  A1  B1
+K2  A2  B2
+     C   D
+K0  C0  D0
+K2  C2  D2
+K3  C3  D3
+     A   B    C    D
+K0  A0  B0   C0   D0
+K1  A1  B1  NaN  NaN
+K2  A2  B2   C2   D2
+      A    B    C    D
+K0   A0   B0   C0   D0
+K1   A1   B1  NaN  NaN
+K2   A2   B2   C2   D2
+K3  NaN  NaN   C3   D3
+-----
+  key  data1
+0   b      1
+1   b      3
+2   a      2
+3   c      4
+4   a      5
+5   a      9
+6   b      7
+  key  date2
+0   a     11
+1   b      2
+2   d     33
+  key_1  data1 key_2  date2
+0     b      1     a     11
+1     b      3     b      2
+2     a      2     d     33
+  key  data1  date2
+0   b      1   11.0
+1   b      3    2.0
+2   a      2   33.0
+3   c      4    NaN
+4   a      5    NaN
+5   a      9    NaN
+6   b      7    NaN
+-----
+    A   B key
+0  A0  B0  K0
+1  A1  B1  K1
+2  A2  B2  K0
+3  A3  B3  K1
+     C   D
+K0  C0  D0
+K1  C1  D1
+    A   B key   C   D
+0  A0  B0  K0  C0  D0
+1  A1  B1  K1  C1  D1
+2  A2  B2  K0  C0  D0
+3  A3  B3  K1  C1  D1
+</code></pre><h2 id="4-连接与修补-concat、combine-first"><a href="#4-连接与修补-concat、combine-first" class="headerlink" title="4. 连接与修补(concat、combine_first)"></a>4. 连接与修补(concat、combine_first)</h2><ul>
+<li>连接 - 沿轴执行连接操作</li>
+</ul>
+<pre><code class="lang-python">print(&quot;连接：pd.concat()&quot;)
+s1 = pd.Series([1,2,3])
+s2 = pd.Series([2,3,4])
+s3 = pd.Series([1,2,3],index = [&#39;a&#39;,&#39;c&#39;,&#39;h&#39;])
+s4 = pd.Series([2,3,4],index = [&#39;b&#39;,&#39;e&#39;,&#39;d&#39;])
+print(pd.concat([s1,s2]))
+print(pd.concat([s3,s4]).sort_index())
+print(&#39;-----&#39;)
+# 默认axis=0，行+行
+
+print(pd.concat([s3,s4], axis=1))
+print(&#39;-----&#39;)
+# axis=1,列+列，成为一个Dataframe
+</code></pre>
+<pre><code>连接：pd.concat()
+0    1
+1    2
+2    3
+0    2
+1    3
+2    4
+dtype: int64
+a    1
+b    2
+c    2
+d    4
+e    3
+h    3
+dtype: int64
+-----
+     0    1
+a  1.0  NaN
+c  2.0  NaN
+h  3.0  NaN
+b  NaN  2.0
+e  NaN  3.0
+d  NaN  4.0
+-----
+</code></pre><pre><code class="lang-python">print(&quot;pd.concat()参数：连接方式：join，join_axes&quot;)
+
+s5 = pd.Series([1,2,3],index = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;])
+s6 = pd.Series([2,3,4],index = [&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(pd.concat([s5,s6], axis= 1))
+print(pd.concat([s5,s6], axis= 1, join=&#39;inner&#39;))
+
+# join：{&#39;inner&#39;，&#39;outer&#39;}，默认为“outer”。如何处理其他轴上的索引。outer为联合和inner为交集。
+</code></pre>
+<pre><code>pd.concat()参数：连接方式：join，join_axes
+     0    1
+a  1.0  NaN
+b  2.0  2.0
+c  3.0  3.0
+d  NaN  4.0
+   0  1
+b  2  2
+c  3  3
+</code></pre><pre><code class="lang-python">print(&quot;pd.concat()参数：覆盖列名：axis=1&quot;)
+sre = pd.concat([s5,s6], keys = [&#39;one&#39;,&#39;two&#39;])
+print(sre,type(sre))
+print(sre.index)
+print(&#39;-----&#39;)
+# keys：序列，默认值无。使用传递的键作为最外层构建层次索引
+
+sre = pd.concat([s5,s6], axis=1, keys = [&#39;one&#39;,&#39;two&#39;])
+print(sre,type(sre))
+# axis = 1, 覆盖列名
+</code></pre>
+<pre><code>pd.concat()参数：覆盖列名：axis=1
+one  a    1
+     b    2
+     c    3
+two  b    2
+     c    3
+     d    4
+dtype: int64 &lt;class &#39;pandas.core.series.Series&#39;&gt;
+MultiIndex([(&#39;one&#39;, &#39;a&#39;),
+            (&#39;one&#39;, &#39;b&#39;),
+            (&#39;one&#39;, &#39;c&#39;),
+            (&#39;two&#39;, &#39;b&#39;),
+            (&#39;two&#39;, &#39;c&#39;),
+            (&#39;two&#39;, &#39;d&#39;)],
+           )
+-----
+   one  two
+a  1.0  NaN
+b  2.0  2.0
+c  3.0  3.0
+d  NaN  4.0 &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+</code></pre><pre><code class="lang-python">print(&quot;pd.combine_first():修补&quot;)
+df1 = pd.DataFrame([[np.nan, 3., 5.], [-4.6, np.nan, np.nan],[np.nan, 7., np.nan]])
+df2 = pd.DataFrame([[-42.6, np.nan, -8.2], [-5., 1.6, 4]],index=[1, 2])
+print(df1)
+print(df2)
+print(df1.combine_first(df2))
+print(&#39;-----&#39;)
+# 根据index，df1的空值被df2替代
+# 如果df2的index多于df1，则更新到df1上，比如index=[&#39;a&#39;,1]
+
+df1.update(df2)
+print(df1)
+# update，直接df2覆盖df1，相同index位置
+</code></pre>
+<pre><code>pd.combine_first():修补
+     0    1    2
+0  NaN  3.0  5.0
+1 -4.6  NaN  NaN
+2  NaN  7.0  NaN
+      0    1    2
+1 -42.6  NaN -8.2
+2  -5.0  1.6  4.0
+     0    1    2
+0  NaN  3.0  5.0
+1 -4.6  NaN -8.2
+2 -5.0  7.0  4.0
+-----
+      0    1    2
+0   NaN  3.0  5.0
+1 -42.6  NaN -8.2
+2  -5.0  1.6  4.0
+</code></pre><h2 id="去重以及替换-duplicated-replace"><a href="#去重以及替换-duplicated-replace" class="headerlink" title="去重以及替换(duplicated/replace)"></a>去重以及替换(duplicated/replace)</h2><pre><code class="lang-python">print(&quot;去重：.duplicated&quot;)
+
+# 判断是否重复
+# 通过布尔判断，得到不重复的值
+s = pd.Series([1,1,1,1,2,2,2,3,4,5,5,5,5])
+print(s.duplicated())
+print(s[s.duplicated() == False])
+print(&#39;-----&#39;)
+
+# drop.duplicates移除重复
+# inplace参数：是否替换原值，默认False
+s_re = s.drop_duplicates()
+print(s_re)
+print(&#39;-----&#39;)
+# Dataframe中使用duplicated
+df = pd.DataFrame({&#39;key1&#39;:[&#39;a&#39;,&#39;a&#39;,3,4,5],
+                  &#39;key2&#39;:[&#39;a&#39;,&#39;a&#39;,&#39;b&#39;,&#39;b&#39;,&#39;c&#39;]})
+print(df.duplicated())
+print(df[&#39;key2&#39;].duplicated())
+</code></pre>
+<pre><code>去重：.duplicated
+0     False
+1      True
+2      True
+3      True
+4     False
+5      True
+6      True
+7     False
+8     False
+9     False
+10     True
+11     True
+12     True
+dtype: bool
+0    1
+4    2
+7    3
+8    4
+9    5
+dtype: int64
+-----
+0    1
+4    2
+7    3
+8    4
+9    5
+dtype: int64
+-----
+0    False
+1     True
+2    False
+3    False
+4    False
+dtype: bool
+0    False
+1     True
+2    False
+3     True
+4    False
+Name: key2, dtype: bool
+</code></pre><pre><code class="lang-python">print(&quot;# 替换 .replace&quot;)
+# 可一次性替换一个值或多个值
+# 可传入列表或字典
+s = pd.Series(list(&#39;ascaazsd&#39;))
+print(s.replace(&#39;a&#39;, np.nan))
+print(s.replace([&#39;a&#39;,&#39;s&#39;] ,np.nan))
+print(s.replace({&#39;a&#39;:&#39;hello world!&#39;,&#39;s&#39;:123}))
+</code></pre>
+<h2 id="6-数据分组-groupby"><a href="#6-数据分组-groupby" class="headerlink" title="6.数据分组(groupby())"></a>6.数据分组(groupby())</h2><p>分组统计 - groupby功能</p>
+<p>① 根据某些条件将数据拆分成组 ② 对每个组独立应用函数 ③ 将结果合并到一个数据结构中</p>
+<p>Dataframe在行（axis=0）或列（axis=1）上进行分组，将一个函数应用到各个分组并产生一个新值，然后函数执行结果被合并到最终的结果对象中。</p>
+<pre><code class="lang-python">print(&quot;分组&quot;)
+df = pd.DataFrame({&#39;A&#39; : [&#39;foo&#39;, &#39;bar&#39;, &#39;foo&#39;, &#39;bar&#39;,&#39;foo&#39;, &#39;bar&#39;, &#39;foo&#39;, &#39;foo&#39;],
+                   &#39;B&#39; : [&#39;one&#39;, &#39;one&#39;, &#39;two&#39;, &#39;three&#39;, &#39;two&#39;, &#39;two&#39;, &#39;one&#39;, &#39;three&#39;],
+                   &#39;C&#39; : np.random.randn(8),
+                   &#39;D&#39; : np.random.randn(8)})
+print(df)
+print(&#39;------&#39;)
+
+print(df.groupby(&#39;A&#39;), type(df.groupby(&#39;A&#39;)))
+print(&#39;------&#39;)
+# 直接分组得到一个groupby对象，是一个中间数据，没有进行计算
+
+a = df.groupby(&#39;A&#39;).mean()
+b = df.groupby([&#39;A&#39;,&#39;B&#39;]).mean()
+c = df.groupby([&#39;A&#39;])[&#39;D&#39;].mean()  # 以A分组，算D的平均值
+print(a,type(a),&#39;\n&#39;,a.columns)
+print(b,type(b),&#39;\n&#39;,b.columns)
+print(c,type(c))
+# 通过分组后的计算，得到一个新的dataframe
+# 默认axis = 0，以行来分组
+# 可单个或多个（[]）列分组
+</code></pre>
+<pre><code>分组
+     A      B         C         D
+0  foo    one -0.099397 -1.771895
+1  bar    one -1.512472  1.102647
+2  foo    two -0.744870  0.211268
+3  bar  three -0.350660 -2.412759
+4  foo    two  1.215143  0.210292
+5  bar    two  0.217097  0.352341
+6  foo    one  0.187242  0.643459
+7  foo  three  0.367878 -0.136878
+------
+&lt;pandas.core.groupby.generic.DataFrameGroupBy object at 0x0000000004FA33C8&gt; &lt;class &#39;pandas.core.groupby.generic.DataFrameGroupBy&#39;&gt;
+------
+            C         D
+A                      
+bar -0.548679 -0.319257
+foo  0.185199 -0.168751 &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt; 
+ Index([&#39;C&#39;, &#39;D&#39;], dtype=&#39;object&#39;)
+                  C         D
+A   B                        
+bar one   -1.512472  1.102647
+    three -0.350660 -2.412759
+    two    0.217097  0.352341
+foo one    0.043923 -0.564218
+    three  0.367878 -0.136878
+    two    0.235136  0.210780 &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt; 
+ Index([&#39;C&#39;, &#39;D&#39;], dtype=&#39;object&#39;)
+A
+bar   -0.319257
+foo   -0.168751
+Name: D, dtype: float64 &lt;class &#39;pandas.core.series.Series&#39;&gt;
+</code></pre><pre><code class="lang-python">print(&quot;分组 - 可迭代对象&quot;)
+df = pd.DataFrame({&#39;X&#39; : [&#39;A&#39;, &#39;B&#39;, &#39;A&#39;, &#39;B&#39;], &#39;Y&#39; : [1, 4, 3, 2]})
+print(df)
+print(df.groupby(&#39;X&#39;), type(df.groupby(&#39;X&#39;)))
+print(&#39;-----&#39;)
+
+print(list(df.groupby(&#39;X&#39;)), &#39;→ 可迭代对象，直接生成list\n&#39;)
+print(list(df.groupby(&#39;X&#39;))[0], &#39;→ 以元祖形式显示\n&#39;)
+for n,g in df.groupby(&#39;X&#39;):
+    print(n)
+    print(g)
+    print(&#39;###&#39;)
+print(&#39;-----&#39;)
+# n是组名，g是分组后的Dataframe
+
+print(df.groupby([&#39;X&#39;]).get_group(&#39;A&#39;),&#39;\n&#39;)
+print(df.groupby([&#39;X&#39;]).get_group(&#39;B&#39;),&#39;\n&#39;)
+print(&#39;-----&#39;)
+# .get_group()提取分组后的组
+
+grouped = df.groupby([&#39;X&#39;])
+print(grouped.groups)
+print(grouped.groups[&#39;A&#39;])  # 也可写：df.groupby(&#39;X&#39;).groups[&#39;A&#39;]
+print(&#39;-----&#39;)
+# .groups：将分组后的groups转为dict
+# 可以字典索引方法来查看groups里的元素
+
+sz = grouped.size()
+print(sz,type(sz))
+print(&#39;-----&#39;)
+# .size()：查看分组后的长度
+
+df = pd.DataFrame({&#39;A&#39; : [&#39;foo&#39;, &#39;bar&#39;, &#39;foo&#39;, &#39;bar&#39;,&#39;foo&#39;, &#39;bar&#39;, &#39;foo&#39;, &#39;foo&#39;],
+                   &#39;B&#39; : [&#39;one&#39;, &#39;one&#39;, &#39;two&#39;, &#39;three&#39;, &#39;two&#39;, &#39;two&#39;, &#39;one&#39;, &#39;three&#39;],
+                   &#39;C&#39; : np.random.randn(8),
+                   &#39;D&#39; : np.random.randn(8)})
+grouped = df.groupby([&#39;A&#39;,&#39;B&#39;]).groups
+print(df)
+print(grouped)
+print(grouped[(&#39;foo&#39;, &#39;three&#39;)])
+# 按照两个列进行分组
+</code></pre>
+<pre><code>分组 - 可迭代对象
+   X  Y
+0  A  1
+1  B  4
+2  A  3
+3  B  2
+&lt;pandas.core.groupby.generic.DataFrameGroupBy object at 0x0000000004FA3198&gt; &lt;class &#39;pandas.core.groupby.generic.DataFrameGroupBy&#39;&gt;
+-----
+[(&#39;A&#39;,    X  Y
+0  A  1
+2  A  3), (&#39;B&#39;,    X  Y
+1  B  4
+3  B  2)] → 可迭代对象，直接生成list
+
+(&#39;A&#39;,    X  Y
+0  A  1
+2  A  3) → 以元祖形式显示
+
+A
+   X  Y
+0  A  1
+2  A  3
+###
+B
+   X  Y
+1  B  4
+3  B  2
+###
+-----
+   X  Y
+0  A  1
+2  A  3 
+
+   X  Y
+1  B  4
+3  B  2 
+
+-----
+{&#39;A&#39;: Int64Index([0, 2], dtype=&#39;int64&#39;), &#39;B&#39;: Int64Index([1, 3], dtype=&#39;int64&#39;)}
+Int64Index([0, 2], dtype=&#39;int64&#39;)
+-----
+X
+A    2
+B    2
+dtype: int64 &lt;class &#39;pandas.core.series.Series&#39;&gt;
+-----
+     A      B         C         D
+0  foo    one  0.180591 -1.882844
+1  bar    one  1.155047  0.249811
+2  foo    two  0.080034 -0.039713
+3  bar  three  0.221933  1.221382
+4  foo    two -1.127785 -0.075553
+5  bar    two  0.219877  0.389210
+6  foo    one -0.550236 -1.114279
+7  foo  three  0.910438  0.923003
+{(&#39;bar&#39;, &#39;one&#39;): Int64Index([1], dtype=&#39;int64&#39;), (&#39;bar&#39;, &#39;three&#39;): Int64Index([3], dtype=&#39;int64&#39;), (&#39;bar&#39;, &#39;two&#39;): Int64Index([5], dtype=&#39;int64&#39;), (&#39;foo&#39;, &#39;one&#39;): Int64Index([0, 6], dtype=&#39;int64&#39;), (&#39;foo&#39;, &#39;three&#39;): Int64Index([7], dtype=&#39;int64&#39;), (&#39;foo&#39;, &#39;two&#39;): Int64Index([2, 4], dtype=&#39;int64&#39;)}
+Int64Index([7], dtype=&#39;int64&#39;)
+</code></pre><pre><code class="lang-python">print(&quot;其他轴上的分组&quot;)
+df = pd.DataFrame({&#39;data1&#39;:np.random.rand(2),
+                  &#39;data2&#39;:np.random.rand(2),
+                  &#39;key1&#39;:[&#39;a&#39;,&#39;b&#39;],
+                  &#39;key2&#39;:[&#39;one&#39;,&#39;two&#39;]})
+print(df)
+print(df.dtypes)
+print(&#39;-----&#39;)
+for n,p in df.groupby(df.dtypes, axis=1):
+    print(n)
+    print(p)
+    print(&#39;##&#39;)
+# 按照值类型分列
+</code></pre>
+<pre><code>其他轴上的分组
+      data1     data2 key1 key2
+0  0.068436  0.198071    a  one
+1  0.191372  0.821277    b  two
+data1    float64
+data2    float64
+key1      object
+key2      object
+dtype: object
+-----
+float64
+      data1     data2
+0  0.068436  0.198071
+1  0.191372  0.821277
+##
+object
+  key1 key2
+0    a  one
+1    b  two
+##
+</code></pre><pre><code class="lang-python">print(&quot;通过字典或者Series分组&quot;)
+df = pd.DataFrame(np.arange(16).reshape(4,4),
+                  columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;])
+print(df)
+print(&#39;-----&#39;)
+
+mapping = {&#39;a&#39;:&#39;one&#39;,&#39;b&#39;:&#39;one&#39;,&#39;c&#39;:&#39;two&#39;,&#39;d&#39;:&#39;two&#39;,&#39;e&#39;:&#39;three&#39;}
+by_column = df.groupby(mapping, axis = 1)
+print(by_column.sum())
+print(&#39;-----&#39;)
+# mapping中，a、b列对应的为one，c、d列对应的为two，以字典来分组
+
+s = pd.Series(mapping)
+print(s,&#39;\n&#39;)
+print(s.groupby(s).count())
+# s中，index中a、b对应的为one，c、d对应的为two，以Series来分组
+</code></pre>
+<pre><code>通过字典或者Series分组
+    a   b   c   d
+0   0   1   2   3
+1   4   5   6   7
+2   8   9  10  11
+3  12  13  14  15
+-----
+   one  two
+0    1    5
+1    9   13
+2   17   21
+3   25   29
+-----
+a      one
+b      one
+c      two
+d      two
+e    three
+dtype: object 
+
+one      2
+three    1
+two      2
+dtype: int64
+</code></pre><pre><code class="lang-python">print(&quot;分组计算函数方法&quot;)
+s = pd.Series([1, 2, 3, 10, 20, 30], index = [1, 2, 3, 1, 2, 3])
+grouped = s.groupby(level=0)  # 唯一索引用.groupby(level=0)，将同一个index的分为一组
+print(grouped)
+print(grouped.first(),&#39;→ first：非NaN的第一个值\n&#39;)
+print(grouped.last(),&#39;→ last：非NaN的最后一个值\n&#39;)
+print(grouped.sum(),&#39;→ sum：非NaN的和\n&#39;)
+print(grouped.mean(),&#39;→ mean：非NaN的平均值\n&#39;)
+print(grouped.median(),&#39;→ median：非NaN的算术中位数\n&#39;)
+print(grouped.count(),&#39;→ count：非NaN的值\n&#39;)
+print(grouped.min(),&#39;→ min、max：非NaN的最小值、最大值\n&#39;)
+print(grouped.std(),&#39;→ std，var：非NaN的标准差和方差\n&#39;)
+print(grouped.prod(),&#39;→ prod：非NaN的积\n&#39;)
+</code></pre>
+<pre><code>分组计算函数方法
+&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x000000000570C7B8&gt;
+1    1
+2    2
+3    3
+dtype: int64 → first：非NaN的第一个值
+
+1    10
+2    20
+3    30
+dtype: int64 → last：非NaN的最后一个值
+
+1    11
+2    22
+3    33
+dtype: int64 → sum：非NaN的和
+
+1     5.5
+2    11.0
+3    16.5
+dtype: float64 → mean：非NaN的平均值
+
+1     5.5
+2    11.0
+3    16.5
+dtype: float64 → median：非NaN的算术中位数
+
+1    2
+2    2
+3    2
+dtype: int64 → count：非NaN的值
+
+1    1
+2    2
+3    3
+dtype: int64 → min、max：非NaN的最小值、最大值
+
+1     6.363961
+2    12.727922
+3    19.091883
+dtype: float64 → std，var：非NaN的标准差和方差
+
+1    10
+2    40
+3    90
+dtype: int64 → prod：非NaN的积
+</code></pre><pre><code class="lang-python">print(&quot;多函数计算：agg()&quot;)
+df = pd.DataFrame({&#39;a&#39;:[1,1,2,2],
+                  &#39;b&#39;:np.random.rand(4),
+                  &#39;c&#39;:np.random.rand(4),
+                  &#39;d&#39;:np.random.rand(4),})
+print(df)
+print(df.groupby(&#39;a&#39;).agg([&#39;mean&#39;,np.sum]))
+df.groupby(&#39;a&#39;).agg(result1 = pd.NamedAgg(column = &#39;b&#39;,aggfunc = &#39;mean&#39;),result2 = pd.NamedAgg(column = &#39;b&#39;,aggfunc = &#39;sum&#39;))
+# 函数写法可以用str，或者np.方法
+# 可以通过list，dict传入，当用dict时，key名为columns
+</code></pre>
+<pre><code>多函数计算：agg()
+   a         b         c         d
+0  1  0.126467  0.164106  0.486138
+1  1  0.896358  0.570124  0.067494
+2  2  0.423401  0.041686  0.343926
+3  2  0.932132  0.627672  0.746086
+          b                   c                   d          
+       mean       sum      mean       sum      mean       sum
+a                                                            
+1  0.511412  1.022825  0.367115  0.734230  0.276816  0.553631
+2  0.677766  1.355533  0.334679  0.669358  0.545006  1.090012
+</code></pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>result1</th>
+      <th>result2</th>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.511412</td>
+      <td>1.022825</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.677766</td>
+      <td>1.355533</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h2 id="7-分组转换及一般性“拆分-应用-合并”"><a href="#7-分组转换及一般性“拆分-应用-合并”" class="headerlink" title="7. 分组转换及一般性“拆分-应用-合并”"></a>7. 分组转换及一般性“拆分-应用-合并”</h2><ul>
+<li>transform / apply</li>
+</ul>
+<h2 id="8-透视表及交叉表"><a href="#8-透视表及交叉表" class="headerlink" title="8.透视表及交叉表"></a>8.透视表及交叉表</h2><ul>
+<li>类似excel数据透视 - pivot table / crosstab</li>
+</ul>
+<h2 id="9-数据读取"><a href="#9-数据读取" class="headerlink" title="9.数据读取"></a>9.数据读取</h2><ul>
+<li>核心：read_table, read_csv, read_excel</li>
+</ul>
+<h1 id="实在看不下去了-有缘再续"><a href="#实在看不下去了-有缘再续" class="headerlink" title="实在看不下去了(有缘再续)"></a>实在看不下去了(有缘再续)</h1>
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Pandas/">Pandas</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/20/Code_One_Hour6/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Code One Hour：Matplotlib-Base-One</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/18/ML_Andrew_Pex5_Regularized_Linear_Regression_and_Bais_Vs_Variance/">
+                        <span class="hidden-mobile">机器学习程序练习5:正则化线性回归和偏差、方差</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Pandas-Base-Three&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

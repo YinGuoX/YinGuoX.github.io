@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="King">
+  <meta name="keywords" content="">
+  <title>Code One Hour：Matplotlib-Base-Four - 因果</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>因果</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">现今</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">旧日</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/code_one_hour/title5.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期日, 七月 26日 2020, 8:45 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                    
+                    
+                    17
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="Matplotlib使用-基础篇Four"><a href="#Matplotlib使用-基础篇Four" class="headerlink" title="Matplotlib使用-基础篇Four"></a>Matplotlib使用-基础篇Four</h1><p>(来源于莫凡PYTHON)</p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>本节知识点如下：</p>
+<ul>
+<li>实现多图：<ul>
+<li>plt.subplot()</li>
+<li>plt.subplot2grid()</li>
+<li>gridspec.GridSpec()</li>
+</ul>
+</li>
+<li>plt.subplots()</li>
+<li>图中图：fig.add_axes()、plt.axes()</li>
+<li>次坐标轴：ax.twinx()</li>
+</ul>
+<h2 id="Subplot实现多图"><a href="#Subplot实现多图" class="headerlink" title="Subplot实现多图"></a>Subplot实现多图</h2><h3 id="均匀多图"><a href="#均匀多图" class="headerlink" title="均匀多图"></a>均匀多图</h3><pre><code class="lang-python">import matplotlib.pyplot as plt
+plt.figure()
+
+# 将整个图像窗口分为2行2列
+# 当前位置为1
+plt.subplot(2,2,1)
+plt.plot([0,1],[0,1])
+
+# 将整个图像窗口分为2行2列
+# 当前位置为2
+plt.subplot(2,2,2)
+plt.plot([0,1],[0,2])
+
+# 将整个图像窗口分为2行2列
+# 当前位置为3
+plt.subplot(223)
+plt.plot([0,1],[0,3])
+
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh9_1.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="不均匀多图"><a href="#不均匀多图" class="headerlink" title="不均匀多图"></a>不均匀多图</h3><pre><code class="lang-python">plt.subplot(2,1,1)
+plt.plot([0,1],[0,1])
+
+plt.subplot(2,3,4)
+plt.plot([0,1],[0,2])
+
+plt.subplot(248)
+plt.plot([0,1],[0,6])
+</code></pre>
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x10ddbb38&gt;]
+</code></pre><p><img src="/img/code_one_hour/coh9_2.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="Subplot2grid实现多图"><a href="#Subplot2grid实现多图" class="headerlink" title="Subplot2grid实现多图"></a>Subplot2grid实现多图</h2><pre><code class="lang-python"># (3,3) : 将整个图像窗口分成3行3列
+# (0,0):表示从第0行第0列开始作图
+# colspan = 3 : 表示列的跨度为3
+# rowspan = 1 : 表示行的跨度为1
+# 一般跨度缺省默认为1
+ax1 = plt.subplot2grid((3,3),(0,0),colspan=3)
+ax1.plot([1,2],[1,2])
+# 设置小图的标题  区别于大图的标题plt.title()
+ax1.set_title(&#39;ax1_title&#39;)
+</code></pre>
+<pre><code>Text(0.5, 1.0, &#39;ax1_title&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh9_3.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">plt.figure(figsize=(8,6))
+ax1 = plt.subplot2grid((3,3),(0,0),colspan=3)
+ax1.plot([1,2],[1,2])
+ax1.set_title(&#39;ax1_title&#39;)
+
+ax2 = plt.subplot2grid((3,3),(1,0),colspan=2)
+ax3 = plt.subplot2grid((3,3),(1,2),rowspan=2)
+ax4 = plt.subplot2grid((3,3),(2,0))
+ax5 = plt.subplot2grid((3,3),(2,1))
+
+ax4.scatter([1,1],[1,2])
+ax4.set_xlabel(&#39;ax4_x&#39;)
+ax4.set_ylabel(&#39;ax4_y&#39;)
+</code></pre>
+<pre><code>Text(0, 0.5, &#39;ax4_y&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh9_4.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="gridspec实现多图"><a href="#gridspec实现多图" class="headerlink" title="gridspec实现多图"></a>gridspec实现多图</h2><p>gridspec允许使用索引的方式指定小图的大小和位置</p>
+<pre><code class="lang-python">import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+</code></pre>
+<pre><code class="lang-python">plt.figure(figsize=(8,8))
+# 将整个图像窗口分成3行3列
+gs = gridspec.GridSpec(3,3)
+
+# 该图占第0行的所有列
+ax6 = plt.subplot(gs[0,:])
+
+# 该图占第1行的0到2列(不包括2)
+ax7 = plt.subplot(gs[1,:2])
+
+# 该图占第1行到最后一行的第2列
+ax8 = plt.subplot(gs[1:,2])
+
+# 该图占倒数第一行的第0列 
+ax9 = plt.subplot(gs[-1,0])
+
+# 该图占倒数第一行的倒数第二列
+ax10 = plt.subplot(gs[-1,-2])
+</code></pre>
+<p><img src="/img/code_one_hour/coh9_5.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="Subplots伪图中图"><a href="#Subplots伪图中图" class="headerlink" title="Subplots伪图中图"></a>Subplots伪图中图</h2><p>subplots 不同于 subplot, 它允许我们将图像窗口集合在一起表示。</p>
+<pre><code class="lang-python">
+# 创建一个2行2列的图像窗口
+# sharex.sharey = True表示共享图像窗口
+f, ((ax11, ax12), (ax13, ax14)) = plt.subplots(2, 2, sharex=True, sharey=True)
+ax11.scatter([1,2], [1,2])
+# 紧凑显示图像
+plt.tight_layout()
+</code></pre>
+<p><img src="/img/code_one_hour/coh9_6.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="图中图"><a href="#图中图" class="headerlink" title="图中图"></a>图中图</h2><h3 id="生成数据"><a href="#生成数据" class="headerlink" title="生成数据"></a>生成数据</h3><pre><code class="lang-python">x = [1, 2, 3, 4, 5, 6, 7]
+y = [1, 3, 4, 2, 5, 8, 6]
+</code></pre>
+<h3 id="绘制大图"><a href="#绘制大图" class="headerlink" title="绘制大图"></a>绘制大图</h3><pre><code class="lang-python">left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+
+fig = plt.figure()
+
+ax1 = fig.add_axes([left,bottom,width,height])
+ax1.plot(x,y,&#39;r&#39;)
+ax1.set_xlabel(&#39;x&#39;)
+ax1.set_ylabel(&#39;y&#39;)
+ax1.set_title(&#39;title&#39;)
+</code></pre>
+<pre><code>Text(0.5, 1.0, &#39;title&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh9_7.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="fig-add-axes-方式绘制小图"><a href="#fig-add-axes-方式绘制小图" class="headerlink" title="fig.add_axes()方式绘制小图"></a>fig.add_axes()方式绘制小图</h3><pre><code class="lang-python">fig = plt.figure()
+
+# 如果figure的大小为10x10
+# 则大图在 (1,1)开始绘制
+left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+ax1 = fig.add_axes([left, bottom, width, height])
+ax1.plot(x, y, &#39;r&#39;)
+ax1.set_xlabel(&#39;x&#39;)
+ax1.set_ylabel(&#39;y&#39;)
+ax1.set_title(&#39;title&#39;)
+
+left, bottom, width, height = 0.2, 0.6, 0.25, 0.25
+ax2 = fig.add_axes([left, bottom, width, height])
+ax2.plot(y, x, &#39;b&#39;)
+ax2.set_xlabel(&#39;x&#39;)
+ax2.set_ylabel(&#39;y&#39;)
+ax2.set_title(&#39;title inside 1&#39;)
+</code></pre>
+<pre><code>Text(0.5, 1.0, &#39;title inside 1&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh9_8.png" srcset="/img/loading.gif" alt="png"></p>
+<h3 id="plt-axes-方式绘制小图"><a href="#plt-axes-方式绘制小图" class="headerlink" title="plt.axes()方式绘制小图"></a>plt.axes()方式绘制小图</h3><pre><code class="lang-python">fig = plt.figure()
+
+left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+ax1 = fig.add_axes([left, bottom, width, height])
+ax1.plot(x, y, &#39;r&#39;)
+ax1.set_xlabel(&#39;x&#39;)
+ax1.set_ylabel(&#39;y&#39;)
+ax1.set_title(&#39;title&#39;)
+
+left, bottom, width, height = 0.2, 0.6, 0.25, 0.25
+ax2 = fig.add_axes([left, bottom, width, height])
+ax2.plot(y, x, &#39;b&#39;)
+ax2.set_xlabel(&#39;x&#39;)
+ax2.set_ylabel(&#39;y&#39;)
+ax2.set_title(&#39;title inside 1&#39;)
+
+plt.axes([0.6, 0.2, 0.25, 0.25])
+plt.plot(y[::-1], x, &#39;g&#39;) # 注意对y进行了逆序处理
+plt.xlabel(&#39;x&#39;)
+plt.ylabel(&#39;y&#39;)
+plt.title(&#39;title inside 2&#39;)
+
+plt.show()
+</code></pre>
+<p><img src="/img/code_one_hour/coh9_9.png" srcset="/img/loading.gif" alt="png"></p>
+<h2 id="次坐标轴"><a href="#次坐标轴" class="headerlink" title="次坐标轴"></a>次坐标轴</h2><p>有时可能用到次坐标轴，即同一个图上有第二个y轴存在。</p>
+<h3 id="数据生成"><a href="#数据生成" class="headerlink" title="数据生成"></a>数据生成</h3><pre><code class="lang-python">import numpy as np
+x = np.arange(0,10,0.1)
+y1 = 0.05*x**2
+y2 = -1*y1*2
+</code></pre>
+<h3 id="设置两个坐标系并且画图"><a href="#设置两个坐标系并且画图" class="headerlink" title="设置两个坐标系并且画图"></a>设置两个坐标系并且画图</h3><pre><code class="lang-python">fig, ax1 = plt.subplots()
+# 产生一个ax1的镜面坐标
+ax2 = ax1.twinx()
+
+ax1.plot(x,y1,&#39;g-&#39;)
+ax1.set_xlabel(&#39;X data&#39;)
+ax1.set_ylabel(&#39;Y1 data&#39;,color = &#39;g&#39;)
+
+ax2.plot(x,y2,&#39;b-&#39;)
+ax2.set_ylabel(&#39;Y2 data&#39;,color =&#39;b&#39;)
+</code></pre>
+<pre><code>Text(0, 0.5, &#39;Y2 data&#39;)
+</code></pre><p><img src="/img/code_one_hour/coh9_10.png" srcset="/img/loading.gif" alt="png"></p>
+<pre><code class="lang-python">
+
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/">Code One Hour</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/Code-One-Hour/Matplotlib/">Matplotlib</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Programming/">Programming</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code/">Code</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Code-One-Huor/">Code One Huor</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/24/Code_One_Hour8/">
+                        <span class="hidden-mobile">Code One Hour：Matplotlib-Base-Three</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+  <script defer src="https://utteranc.es/client.js"
+          repo="YinGuoX/commit-utterance"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+	  <div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "已仰望星空：&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  </div>
+
+
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').each(function () {
+        const pre = $(this);
+        if (pre.find('code.mermaid').length > 0) {
+          return;
+        }
+        pre.addClass('prettyprint  linenums');
+      });
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Code One Hour：Matplotlib-Base-Four&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
